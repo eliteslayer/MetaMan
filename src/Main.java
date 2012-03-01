@@ -15,7 +15,12 @@ public class Main {
 		JFileChooser fc = new JFileChooser();
 		fc.showOpenDialog(null);
 		AudioFile f = AudioFileIO.read(fc.getSelectedFile());
-		//System.out.println(f.getTag().toString());
-		System.out.println(f.getTag().getFields(FieldKey.ARTIST).toString());
+
+		System.out.println("Artist: " + f.getTag().getFirst(FieldKey.ARTIST).toString());
+		System.out.println("Album: " + f.getTag().getFirst(FieldKey.ALBUM).toString());
+		System.out.println("Title: " + f.getTag().getFirst(FieldKey.TITLE).toString());
+		System.out.println("Year: " + f.getTag().getFirst(FieldKey.YEAR).toString());
+		System.out.println("Track: " + f.getTag().getFirst(FieldKey.TRACK).toString());
+		
 	}
 }
