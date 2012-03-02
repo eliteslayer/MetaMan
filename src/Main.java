@@ -12,6 +12,8 @@ import org.jaudiotagger.tag.TagException;
 
 public class Main {
 	public static void main(String[] args) throws CannotReadException, IOException, TagException, ReadOnlyFileException, InvalidAudioFrameException {
+		
+		
 		JFileChooser fc = new JFileChooser();
 		fc.showOpenDialog(null);
 		AudioFile f = AudioFileIO.read(fc.getSelectedFile());
