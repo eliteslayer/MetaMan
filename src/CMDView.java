@@ -42,42 +42,43 @@ public class CMDView {
 	private void pwd() {
 		println(controller.pwd());
 	}
-	
-//	private void printTable(String title, String[] headers, List<AudioFile> files){
-//		println();
-//		printSpace((headers.length * 10) - (title.length()/2));
-//		println();
-//		print(title);
-//		printSpace((headers.length * 10) - (title.length()/2));
-//		println();
-//		printDash(headers.length * 10);
-//		println();
-//		print("#");
-//		for(String s : headers){
-//			print(s);
-//			printSpace(10-s.length());
-//		}
-//		println();
-//		printDash(headers.length * 10);
-//		println();
-//		
-//		int count = 0;
-//		for(AudioFile f : files){
-//			
-//			
-//			print(count + "");
-//			String count_s = count + "";
-//			printSpace(10 - count_s.length());
-//			println(f.toString());
-//			count++;
-//
-//			println();
-//			
-//			
-//			
-//		}
-//		println();
-//	}
+
+	// private void printTable(String title, String[] headers, List<AudioFile>
+	// files){
+	// println();
+	// printSpace((headers.length * 10) - (title.length()/2));
+	// println();
+	// print(title);
+	// printSpace((headers.length * 10) - (title.length()/2));
+	// println();
+	// printDash(headers.length * 10);
+	// println();
+	// print("#");
+	// for(String s : headers){
+	// print(s);
+	// printSpace(10-s.length());
+	// }
+	// println();
+	// printDash(headers.length * 10);
+	// println();
+	//
+	// int count = 0;
+	// for(AudioFile f : files){
+	//
+	//
+	// print(count + "");
+	// String count_s = count + "";
+	// printSpace(10 - count_s.length());
+	// println(f.toString());
+	// count++;
+	//
+	// println();
+	//
+	//
+	//
+	// }
+	// println();
+	// }
 
 	private void ls() {
 		println();
@@ -85,122 +86,120 @@ public class CMDView {
 		println("------------------------------");
 		println("#         NAME           TYPE");
 		println("------------------------------");
-		
+
 		try {
 			int count = 0;
-			for(File f : controller.ls()){
-				if(f.isDirectory()){
+			for (File f : controller.ls()) {
+				if (f.isDirectory()) {
 					print(count + "");
 					String count_s = count + "";
 					printSpace(10 - count_s.length());
 					String name = f.getName();
-					if(name.length() > 10){
-						name = name.substring(0, 10)+"...";
+					if (name.length() > 10) {
+						name = name.substring(0, 10) + "...";
 					}
 					print(name);
 					printSpace(15 - name.length());
 					print("DIR");
 					print("\n");
-				}
-				else{
+				} else {
 					print(count + "");
 					String count_s = count + "";
 					printSpace(10 - count_s.length());
 					String name = f.getName();
-					if(name.length() > 10){
-						name = name.substring(0, 10)+"...";
+					if (name.length() > 10) {
+						name = name.substring(0, 10) + "...";
 					}
 					print(name);
 					printSpace(15 - name.length());
-					print(f.getName().substring(f.getName().lastIndexOf('.')).toUpperCase().substring(1));
+					print(f.getName().substring(f.getName().lastIndexOf('.'))
+							.toUpperCase().substring(1));
 					print("\n");
 				}
 				count++;
-			}	
+			}
 		} catch (CorruptedFileException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (StringIndexOutOfBoundsException e) {
+			// Do nothing
 		}
-		catch (StringIndexOutOfBoundsException e){
-			//Do nothing
-		}
-		
+
 		println();
 		println();
 	}
-	
-	private void lsdo(){
-		
+
+	private void lsdo() {
+
 		println();
 		println("     DIRECTORIES");
 		println("------------------------------");
 		println("#         NAME           ");
 		println("------------------------------");
-		
+
 		try {
 			int count = 0;
-			for(File f : controller.lsdo()){
-				if(f.isDirectory()){
+			for (File f : controller.lsdo()) {
+				if (f.isDirectory()) {
 					print(count + "");
 					String count_s = count + "";
 					printSpace(10 - count_s.length());
 					String name = f.getName();
-					if(name.length() > 10){
-						name = name.substring(0, 10)+"...";
+					if (name.length() > 10) {
+						name = name.substring(0, 10) + "...";
 					}
 					print(name);
 					printSpace(15 - name.length());
 					print("\n");
 				}
 				count++;
-			}	
+			}
+		} catch (StringIndexOutOfBoundsException e) {
+			// Do nothing
 		}
-		catch (StringIndexOutOfBoundsException e){
-			//Do nothing
-		}
-		println(); 
+		println();
 
 	}
 
 	private void lsao() {
 
-//		try {
-//			printTable("SUPORTED FILES/DIRS", new String[]{"NAME", "TYPE"}, controller.lsao());
-//		} catch (CorruptedFileException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-		
+		// try {
+		// printTable("SUPORTED FILES/DIRS", new String[]{"NAME", "TYPE"},
+		// controller.lsao());
+		// } catch (CorruptedFileException e1) {
+		// // TODO Auto-generated catch block
+		// e1.printStackTrace();
+		// }
+
 		println();
 		println("     SUPORTED FILES/DIRS");
 		println("------------------------------");
 		println("#         TITLE          ARTIST");
 		println("------------------------------");
-		
+
 		try {
 			int count = 0;
-			for(AudioFile f : controller.lsao()){
-					print(count + "");
-					String count_s = count + "";
-					printSpace(10 - count_s.length());
-					String name = f.get(FieldKey.TITLE);
-					if(name.length() > 10){
-						name = name.substring(0, 10)+"...";
-					}
-					print(name);
-					printSpace(15 - name.length());
-					print(f.get(FieldKey.ARTIST));
-					print("\n");
+			for (AudioFile f : controller.lsao()) {
+				print(count + "");
+				String count_s = count + "";
+				printSpace(10 - count_s.length());
+				String name = f.get(FieldKey.TITLE);
+				if (name.length() > 10) {
+					name = name.substring(0, 10) + "...";
+				}
+				print(name);
+				printSpace(15 - name.length());
+				print(f.get(FieldKey.ARTIST));
+				print("\n");
 				count++;
-			}	
+			}
 		} catch (CorruptedFileException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} catch (StringIndexOutOfBoundsException e) {
+			// Do nothing
 		}
-		catch (StringIndexOutOfBoundsException e){
-			//Do nothing
-		}
-	
+
 		println();
 
 	}
@@ -243,14 +242,21 @@ public class CMDView {
 		println("LSDO:");
 		println("     Lists all the directorys within the current directory");
 		println();
-		
+
 	}
 
 	private void mod() throws CorruptedFileException {
-			ArrayList<AudioFile> changedFiles = (ArrayList<AudioFile>) controller.mod(userParams[0], Integer.parseInt(userParams[1]),
-					Integer.parseInt(userParams[2]), userParams[3]);
-			println(changedFiles.size() + " files where modified successfully");
-			println();
+		String element = "";
+		for (int i = 3; i < userParams.length; i++) {
+			element += userParams[i] + " ";
+		}
+		element.trim();
+		
+		ArrayList<AudioFile> changedFiles = (ArrayList<AudioFile>) controller
+				.mod(userParams[0], Integer.parseInt(userParams[1]),
+						Integer.parseInt(userParams[2]), element);
+		println(changedFiles.size() + " files where modified successfully");
+		println();
 	}
 
 	private String welcomeMessage() {
@@ -311,25 +317,25 @@ public class CMDView {
 				mod();
 			if (operation_map.get(userCmd).equals("lsdo"))
 				lsdo();
-		} 
-		
+		}
+
 		catch (Exception e) {
 			unknownCmd();
-			//e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
-	
-	private void printSpace(int count){
+
+	private void printSpace(int count) {
 		printChar(count, ' ');
 	}
-	
-	private void printDash(int count){
+
+	private void printDash(int count) {
 		printChar(count, '-');
 	}
-	
-	private void printChar(int count, char x){
-		for(int i = 0 ; i < count ; i++){
-			print(x+"");
+
+	private void printChar(int count, char x) {
+		for (int i = 0; i < count; i++) {
+			print(x + "");
 		}
 	}
 

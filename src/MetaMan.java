@@ -6,6 +6,12 @@ import java.util.List;
 public class MetaMan {
 
 	public boolean cd(String dir) {
+		File f = new File(dir);
+		if (f.exists()) {
+			wd = f;
+			return true;
+		}
+
 		String oldValue = wd.getAbsolutePath();
 		wd = new File(wd + "\\" + dir);
 		if (wd.exists())
@@ -81,7 +87,7 @@ public class MetaMan {
 			return name.endsWith(ext);
 		}
 	}
-	
+
 	private final File HOME_DIR = new File(System.getProperty("user.home"));
 	private File wd = HOME_DIR;
 
