@@ -12,18 +12,26 @@ public class FileNavigator {
 	 * Creates a FileNavigator whose current file is the path
 	 * 
 	 * @param path
+	 * @throws FileNotFoundException 
 	 */
-	public FileNavigator(String path) {
+	public FileNavigator(String path) throws FileNotFoundException {
 		currentFile = new File(path);
+		if(!currentFile.exists()){
+			throw new FileNotFoundException("File not found: " + path);
+		}
 	}
 
 	/**
 	 * Create a FileNavigator whose current file is file
 	 * 
 	 * @param file
+	 * @throws FileNotFoundException 
 	 */
-	public FileNavigator(File file) {
+	public FileNavigator(File file) throws FileNotFoundException {
 		currentFile = file;
+		if(!currentFile.exists()){
+			throw new FileNotFoundException("File not found: " + file.getAbsolutePath());
+		}
 	}
 
 	/**
@@ -132,7 +140,8 @@ public class FileNavigator {
 
 	/**
 	 * Sets the currentFile using the selected file from a JFileChoser
-	 * @return true if a file was choosen
+	 * 
+	 * @return true if a file was chosen
 	 */
 	public boolean setCurrentFileByFileChooser() {
 		JFileChooser fc = new JFileChooser();
