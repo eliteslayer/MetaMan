@@ -9,7 +9,7 @@ import org.jaudiotagger.tag.FieldKey;
 public class CMDView {
 
 	private List<AudioFile> lsaoAsOfLastCall;
-
+	
 	public CMDView(MetaManController metaManController) {
 		this.controller = metaManController;
 		populateOperationMap();
