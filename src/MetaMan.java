@@ -62,15 +62,14 @@ public class MetaMan {
 
 	}
 
-	public List<AudioFile> mod(String key, int start, int end, String newValue)
+	public List<AudioFile> modao(List<AudioFile> toMod, String key, int start, int end, String newValue)
 			throws CorruptedFileException {
-		ArrayList<AudioFile> list = (ArrayList<AudioFile>) lsao();
 		ArrayList<AudioFile> toReturn = new ArrayList<AudioFile>();
-		for (int i = 0; i < list.size(); i++) {
+		for (int i = 0; i < toMod.size(); i++) {
 			if (i >= start && i <= end) {
-				list.get(i).set(key, newValue);
-				list.get(i).save();
-				toReturn.add(list.get(i));
+				toMod.get(i).set(key, newValue);
+				toMod.get(i).save();
+				toReturn.add(toMod.get(i));
 			}
 		}
 		return toReturn;

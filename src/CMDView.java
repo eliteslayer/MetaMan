@@ -8,6 +8,8 @@ import org.jaudiotagger.tag.FieldKey;
 
 public class CMDView {
 
+	private List<AudioFile> lsaoAsOfLastCall;
+
 	public CMDView(MetaManController metaManController) {
 		this.controller = metaManController;
 		populateOperationMap();
@@ -42,43 +44,6 @@ public class CMDView {
 	private void pwd() {
 		println(controller.pwd());
 	}
-
-	// private void printTable(String title, String[] headers, List<AudioFile>
-	// files){
-	// println();
-	// printSpace((headers.length * 10) - (title.length()/2));
-	// println();
-	// print(title);
-	// printSpace((headers.length * 10) - (title.length()/2));
-	// println();
-	// printDash(headers.length * 10);
-	// println();
-	// print("#");
-	// for(String s : headers){
-	// print(s);
-	// printSpace(10-s.length());
-	// }
-	// println();
-	// printDash(headers.length * 10);
-	// println();
-	//
-	// int count = 0;
-	// for(AudioFile f : files){
-	//
-	//
-	// print(count + "");
-	// String count_s = count + "";
-	// printSpace(10 - count_s.length());
-	// println(f.toString());
-	// count++;
-	//
-	// println();
-	//
-	//
-	//
-	// }
-	// println();
-	// }
 
 	private void ls() {
 		println();
@@ -179,7 +144,8 @@ public class CMDView {
 
 		try {
 			int count = 0;
-			for (AudioFile f : controller.lsao()) {
+			this.lsaoAsOfLastCall = controller.lsao();
+			for (AudioFile f : this.lsaoAsOfLastCall) {
 				print(count + "");
 				String count_s = count + "";
 				printSpace(10 - count_s.length());
@@ -230,8 +196,8 @@ public class CMDView {
 		println();
 		println("Support MetaMan Commands:");
 		println();
-		println("MOD {tag} {startIndex} {endIndex} {newName}:");
-		println("     Modifies meta data info");
+		println("MODAO {tag} {startIndex} {endIndex} {newName}:");
+		println("     Modifies meta data info for audio files in the current directory");
 		println();
 		println("PWD:");
 		println("     Prints out the current working directory");
@@ -245,7 +211,7 @@ public class CMDView {
 
 	}
 
-	private void mod() throws CorruptedFileException {
+	private void modao() throws CorruptedFileException {
 		String element = "";
 		for (int i = 3; i < userParams.length; i++) {
 			element += userParams[i] + " ";
@@ -253,7 +219,7 @@ public class CMDView {
 		element.trim();
 		
 		ArrayList<AudioFile> changedFiles = (ArrayList<AudioFile>) controller
-				.mod(userParams[0], Integer.parseInt(userParams[1]),
+				.modao(lsaoAsOfLastCall, userParams[0], Integer.parseInt(userParams[1]),
 						Integer.parseInt(userParams[2]), element);
 		println(changedFiles.size() + " files where modified successfully");
 		println();
@@ -294,7 +260,7 @@ public class CMDView {
 		this.operation_map.put("help", "help");
 		this.operation_map.put("lsao", "lsao");
 		this.operation_map.put("lsdo", "lsdo");
-		this.operation_map.put("mod", "mod");
+		this.operation_map.put("modao", "modao");
 	}
 
 	private void executeUserCommand() {
@@ -313,8 +279,8 @@ public class CMDView {
 				help();
 			if (operation_map.get(userCmd).equals("lsao"))
 				lsao();
-			if (operation_map.get(userCmd).equals("mod"))
-				mod();
+			if (operation_map.get(userCmd).equals("modao"))
+				modao();
 			if (operation_map.get(userCmd).equals("lsdo"))
 				lsdo();
 		}
@@ -327,10 +293,6 @@ public class CMDView {
 
 	private void printSpace(int count) {
 		printChar(count, ' ');
-	}
-
-	private void printDash(int count) {
-		printChar(count, '-');
 	}
 
 	private void printChar(int count, char x) {

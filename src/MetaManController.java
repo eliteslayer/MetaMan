@@ -64,8 +64,8 @@ public class MetaManController {
 		return metaMan.lsdo();
 	}
 	
-	public List<AudioFile> mod(String key, int start, int end, String newValue) throws CorruptedFileException{
-		return metaMan.mod(key, start, end, newValue);
+	public List<AudioFile> modao(List<AudioFile> toMod, String key, int start, int end, String newValue) throws CorruptedFileException{
+		return metaMan.modao(toMod, key, start, end, newValue);
 	}
 	
 	private final MetaMan metaMan;
