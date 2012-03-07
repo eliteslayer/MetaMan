@@ -149,13 +149,13 @@ public class CMDView {
 				print(count + "");
 				String count_s = count + "";
 				printSpace(10 - count_s.length());
-				String name = f.get(FieldKey.TITLE);
+				String name = f.getMetaData("TITLE");
 				if (name.length() > 10) {
 					name = name.substring(0, 10) + "...";
 				}
 				print(name);
 				printSpace(15 - name.length());
-				print(f.get(FieldKey.ARTIST));
+				print(f.getMetaData("ARTIST"));
 				print("\n");
 				count++;
 			}

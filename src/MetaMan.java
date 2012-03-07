@@ -8,30 +8,30 @@ public class MetaMan {
 	public boolean cd(String dir) {
 		File f = new File(dir);
 		if (f.exists()) {
-			wd = f;
+			workingDirectory = f;
 			return true;
 		}
 
-		String oldValue = wd.getAbsolutePath();
-		wd = new File(wd + "\\" + dir);
-		if (wd.exists())
+		String oldValue = workingDirectory.getAbsolutePath();
+		workingDirectory = new File(workingDirectory + "\\" + dir);
+		if (workingDirectory.exists())
 			return true;
 		else {
-			wd = new File(oldValue);
+			workingDirectory = new File(oldValue);
 			return false;
 		}
 	}
 
 	public boolean up() {
-		if (wd.getParentFile() == null)
+		if (workingDirectory.getParentFile() == null)
 			return false;
-		wd = wd.getParentFile();
+		workingDirectory = workingDirectory.getParentFile();
 		return true;
 
 	}
 
 	public String pwd() {
-		return wd.getAbsolutePath();
+		return workingDirectory.getAbsolutePath();
 	}
 
 	public List<File> ls() throws CorruptedFileException {
@@ -44,7 +44,7 @@ public class MetaMan {
 	public List<AudioFile> lsao() throws CorruptedFileException {
 		ArrayList<AudioFile> list = new ArrayList<AudioFile>();
 
-		for (File f : wd.listFiles(new OnlyExt("mp3"))) {
+		for (File f : workingDirectory.listFiles(new OnlyExt("mp3"))) {
 			list.add(new AudioFile(f.getAbsolutePath()));
 		}
 		return list;
@@ -54,8 +54,8 @@ public class MetaMan {
 	public List<File> lsdo() {
 		ArrayList<File> list = new ArrayList<File>();
 
-		for (File f : wd.listFiles()) {
-			if (wd.isDirectory())
+		for (File f : workingDirectory.listFiles()) {
+			if (workingDirectory.isDirectory())
 				list.add(new File(f.getAbsolutePath()));
 		}
 		return list;
@@ -67,8 +67,8 @@ public class MetaMan {
 		ArrayList<AudioFile> toReturn = new ArrayList<AudioFile>();
 		for (int i = 0; i < toMod.size(); i++) {
 			if (i >= start && i <= end) {
-				toMod.get(i).set(key, newValue);
-				toMod.get(i).save();
+				toMod.get(i).setMetaData(key, newValue);
+				toMod.get(i).saveMetaData();
 				toReturn.add(toMod.get(i));
 			}
 		}
@@ -88,6 +88,6 @@ public class MetaMan {
 	}
 
 	private final File HOME_DIR = new File(System.getProperty("user.home"));
-	private File wd = HOME_DIR;
+	private File workingDirectory = HOME_DIR;
 
 }
