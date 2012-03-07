@@ -43,8 +43,8 @@ public class MetaMan {
 
 	public List<AudioFile> lsao() throws CorruptedFileException {
 		ArrayList<AudioFile> list = new ArrayList<AudioFile>();
-
-		for (File f : workingDirectory.listFiles(new OnlyExt("mp3"))) {
+		//TODO: 
+		for (File f : workingDirectory.listFiles(new AudioFileFilter())) {
 			list.add(new AudioFile(f.getAbsolutePath()));
 		}
 		return list;

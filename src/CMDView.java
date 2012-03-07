@@ -9,7 +9,7 @@ import org.jaudiotagger.tag.FieldKey;
 public class CMDView {
 
 	private List<AudioFile> lsaoAsOfLastCall;
-	
+
 	public CMDView(MetaManController metaManController) {
 		this.controller = metaManController;
 		populateOperationMap();
@@ -159,11 +159,11 @@ public class CMDView {
 				print("\n");
 				count++;
 			}
+		} catch (StringIndexOutOfBoundsException e) {
+			// Do nothing
 		} catch (CorruptedFileException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (StringIndexOutOfBoundsException e) {
-			// Do nothing
 		}
 
 		println();
@@ -217,9 +217,10 @@ public class CMDView {
 			element += userParams[i] + " ";
 		}
 		element.trim();
-		
+
 		ArrayList<AudioFile> changedFiles = (ArrayList<AudioFile>) controller
-				.modao(lsaoAsOfLastCall, userParams[0], Integer.parseInt(userParams[1]),
+				.modao(lsaoAsOfLastCall, userParams[0],
+						Integer.parseInt(userParams[1]),
 						Integer.parseInt(userParams[2]), element);
 		println(changedFiles.size() + " files where modified successfully");
 		println();
@@ -278,6 +279,7 @@ public class CMDView {
 			if (operation_map.get(userCmd).equals("help"))
 				help();
 			if (operation_map.get(userCmd).equals("lsao"))
+				//lsaoAsOfLastCall = controller.lsao();
 				lsao();
 			if (operation_map.get(userCmd).equals("modao"))
 				modao();
