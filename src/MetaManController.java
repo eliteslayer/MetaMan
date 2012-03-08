@@ -30,7 +30,7 @@ public class MetaManController {
 	 * @return - A list of files/directories in the current directory
 	 * @throws CorruptedFileException
 	 */
-	public List<File> ls() throws CorruptedFileException{
+	public List<File> ls(){
 		return metaMan.ls();
 	}
 	
@@ -56,7 +56,7 @@ public class MetaManController {
 	 * @return
 	 * @throws CorruptedFileException
 	 */
-	public List<AudioFile> lsao() throws CorruptedFileException{
+	public List<AudioFile> lsao(){
 		return metaMan.lsao();
 	}
 	
@@ -64,17 +64,17 @@ public class MetaManController {
 		return metaMan.lsdo();
 	}
 	
-	public List<AudioFile> modao(String key, String newValue) throws CorruptedFileException{
-		return metaMan.modao(key, newValue);
+	public List<AudioFile> modao(List<AudioFile> toMod, String key, String newValue){
+		return metaMan.modao(toMod, key, newValue);
 	}
 	
-	public boolean addToSelectedAudioFiles(List<AudioFile> toSelect){
-		return this.metaMan.addToSelectedAudioFiles(toSelect);
-	}
-	
-	public void clearSelectedAudioFiles(){
-		this.metaMan.clearSelectedAudioFiles();
-	}
+//	public boolean addToSelectedAudioFiles(List<AudioFile> toSelect){
+//		return this.metaMan.addToSelectedAudioFiles(toSelect);
+//	}
+//	
+//	public void clearSelectedAudioFiles(){
+//		this.metaMan.clearSelectedAudioFiles();
+//	}
 	
 	private final MetaMan metaMan;
 }

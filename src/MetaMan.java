@@ -6,11 +6,11 @@ import java.util.List;
 public class MetaMan {
 	
 	public MetaMan(){
-		this.selectedAudioFiles = new ArrayList<AudioFile>();
+		
 	}
 
 	public boolean cd(String dir) {
-		this.selectedAudioFiles.clear();
+
 		
 		File f = new File(dir);
 		if (f.exists()) {
@@ -29,7 +29,6 @@ public class MetaMan {
 	}
 
 	public boolean up() {
-		this.selectedAudioFiles.clear();
 		
 		if (workingDirectory.getParentFile() == null)
 			return false;
@@ -42,14 +41,14 @@ public class MetaMan {
 		return workingDirectory.getAbsolutePath();
 	}
 
-	public List<File> ls() throws CorruptedFileException {
+	public List<File> ls() {
 		ArrayList<File> list = new ArrayList<File>();
 		list.addAll(lsao());
 		list.addAll(lsdo());
 		return list;
 	}
 
-	public List<AudioFile> lsao() throws CorruptedFileException {
+	public List<AudioFile> lsao() {
 		ArrayList<AudioFile> list = new ArrayList<AudioFile>();
 		for (File f : workingDirectory.listFiles(new AudioFileFilter())) {
 			list.add(new AudioFile(f.getAbsolutePath()));
@@ -69,26 +68,26 @@ public class MetaMan {
 
 	}
 	
-	public boolean addToSelectedAudioFiles(List<AudioFile> toSelect){
-		return this.selectedAudioFiles.addAll(toSelect);
-	}
-	
-	public void clearSelectedAudioFiles(){
-		this.selectedAudioFiles.clear();
-	}
+//	public boolean addToSelectedAudioFiles(List<AudioFile> toSelect){
+//		return this.selectedAudioFiles.addAll(toSelect);
+//	}
+//	
+//	public void clearSelectedAudioFiles(){
+//		this.selectedAudioFiles.clear();
+//	}
 
-	public List<AudioFile> modao(String key, String newValue) throws CorruptedFileException {
+	public List<AudioFile> modao(List<AudioFile> toMod, String key, String newValue) {
 		ArrayList<AudioFile> toReturn = new ArrayList<AudioFile>();
-		for (int i = 0; i < this.selectedAudioFiles.size(); i++) {
-				this.selectedAudioFiles.get(i).setMetaData(key, newValue);
-				this.selectedAudioFiles.get(i).saveMetaData();
-				toReturn.add(this.selectedAudioFiles.get(i));
+		for (int i = 0; i < toMod.size(); i++) {
+				toMod.get(i).setMetaData(key, newValue);
+				toMod.get(i).saveMetaData();
+				toReturn.add(toMod.get(i));
 		}
 		return toReturn;
 	}
 
 	private final File HOME_DIR = new File(System.getProperty("user.home"));
 	private File workingDirectory = HOME_DIR;
-	private List<AudioFile> selectedAudioFiles;
+	//private List<AudioFile> selectedAudioFiles;
 
 }

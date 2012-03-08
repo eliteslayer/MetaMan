@@ -17,7 +17,7 @@ public class AudioFile extends MetaManFile{
 
 	private org.jaudiotagger.audio.AudioFile metaData;
 	
-	public AudioFile(String pathname) throws CorruptedFileException {
+	public AudioFile(String pathname) {
 		super(pathname);
 		try {
 			this.metaData = AudioFileIO.read(this);
@@ -34,8 +34,7 @@ public class AudioFile extends MetaManFile{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvalidAudioFrameException e) {
-			// TODO Auto-generated catch block
-			throw new CorruptedFileException(this);
+			e.printStackTrace();
 		}
 	}
 	
@@ -76,6 +75,15 @@ public class AudioFile extends MetaManFile{
 			return FieldKey.ARTIST;
 		} else if (key.toUpperCase().equals("TITLE")) {
 			return FieldKey.TITLE;
+		}
+		else if (key.toUpperCase().equals("ALBUM")) {
+			return FieldKey.ALBUM;
+		}
+		else if (key.toUpperCase().equals("TRACK")) {
+			return FieldKey.TRACK;
+		}
+		else if (key.toUpperCase().equals("YEAR")) {
+			return FieldKey.YEAR;
 		}
 		throw new KeyNotFoundException();
 	}

@@ -4,24 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
-import java.awt.Desktop;
-
-
-import org.jaudiotagger.tag.FieldKey;
 
 public class CMDView {
 
-	private List<AudioFile> lsaoAsOfLastCall;
-
+	
 	public CMDView(MetaManController metaManController) {
 		this.controller = metaManController;
-		populateOperationMap();
-		try {
-			this.lsaoAsOfLastCall = controller.lsao();
-		} catch (CorruptedFileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.workingDirectoryCache = controller.lsao();	
+		this.populateOperationMap();
 	}
 
 	public void startup() {
@@ -49,6 +39,7 @@ public class CMDView {
 
 		}
 	}
+	
 
 	private void pwd() {
 		println(controller.pwd());
@@ -92,9 +83,6 @@ public class CMDView {
 				}
 				count++;
 			}
-		} catch (CorruptedFileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (StringIndexOutOfBoundsException e) {
 			// Do nothing
 		}
@@ -145,8 +133,8 @@ public class CMDView {
 
 		try {
 			int count = 0;
-			this.lsaoAsOfLastCall = controller.lsao();
-			for (AudioFile f : this.lsaoAsOfLastCall) {
+			this.workingDirectoryCache = controller.lsao();
+			for (AudioFile f : this.workingDirectoryCache) {
 				print(count + "");
 				String count_s = count + "";
 				printSpace(10 - count_s.length());
@@ -162,9 +150,6 @@ public class CMDView {
 			}
 		} catch (StringIndexOutOfBoundsException e) {
 			// Do nothing
-		} catch (CorruptedFileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 		println();
@@ -176,6 +161,7 @@ public class CMDView {
 	}
 
 	private void cd(String newPath) {
+		//lsao();
 		if (!controller.cd(newPath))
 			println("MetaMan could not find the path given.");
 		println();
@@ -212,7 +198,7 @@ public class CMDView {
 
 	}
 
-	private void modao() throws CorruptedFileException {
+	private void modao() {
 		String element = "";
 		for (int i = 3; i < userParams.length; i++) {
 			element += userParams[i] + " ";
@@ -222,12 +208,12 @@ public class CMDView {
 		ArrayList<AudioFile> toSelect = new ArrayList<AudioFile>();
 		
 		for(int i = Integer.parseInt(userParams[1]) ; i <= Integer.parseInt(userParams[2]) ; i++ ){
-			toSelect.add(this.lsaoAsOfLastCall.get(i));
+			toSelect.add(this.workingDirectoryCache.get(i));
 		}
 		
-		controller.addToSelectedAudioFiles(toSelect);
+		
 		ArrayList<AudioFile> changedFiles = (ArrayList<AudioFile>) controller
-				.modao(userParams[0], element);
+				.modao(this.workingDirectoryCache, userParams[0], element);
 		
 		println(changedFiles.size() + " files where modified successfully");
 		println();
@@ -274,40 +260,35 @@ public class CMDView {
 	}
 
 	private void executeUserCommand() {
-		try {
 			if (operation_map.get(userCmd).equals("pwd"))
 				pwd();
-			if (operation_map.get(userCmd).equals("exit"))
+			else if (operation_map.get(userCmd).equals("exit"))
 				exit();
-			if (operation_map.get(userCmd).equals("ls"))
+			else if (operation_map.get(userCmd).equals("ls"))
 				ls();
-			if (operation_map.get(userCmd).equals("up"))
+			else if (operation_map.get(userCmd).equals("up"))
 				up();
-			if (operation_map.get(userCmd).equals("cd"))
+			else if (operation_map.get(userCmd).equals("cd"))
 				cd(userParams[0]);
-			if (operation_map.get(userCmd).equals("help"))
+			else if (operation_map.get(userCmd).equals("help"))
 				help();
-			if (operation_map.get(userCmd).equals("lsao"))
-				//lsaoAsOfLastCall = controller.lsao();
+			else if (operation_map.get(userCmd).equals("lsao"))
 				lsao();
-			if (operation_map.get(userCmd).equals("modao"))
+			else if (operation_map.get(userCmd).equals("modao"))
 				modao();
-			if (operation_map.get(userCmd).equals("lsdo"))
+			else if (operation_map.get(userCmd).equals("lsdo"))
 				lsdo();
-			if (operation_map.get(userCmd).equals("view"))
+			else if (operation_map.get(userCmd).equals("view"))
 				view();
-			if (operation_map.get(userCmd).equals("open"))
+			else if (operation_map.get(userCmd).equals("open"))
 				open();
-		}
-
-		catch (Exception e) {
-			//unknownCmd();
-			 e.printStackTrace();
-		}
+			else{
+				this.unknownCmd();
+			}
 	}
 
 	private void view() {
-		controller.clearSelectedAudioFiles();
+		
 		String element = "";
 		for (int i = 3; i < userParams.length; i++) {
 			element += userParams[i] + " ";
@@ -317,24 +298,36 @@ public class CMDView {
 		ArrayList<AudioFile> toSelect = new ArrayList<AudioFile>();
 		
 		for(int i = Integer.parseInt(userParams[0]) ; i <= Integer.parseInt(userParams[1]) ; i++ ){
-			AudioFile f = this.lsaoAsOfLastCall.get(i);
+			AudioFile f = this.workingDirectoryCache.get(i);
 			println("*****************************");
 			println("TITLE: " + f.getMetaData("TITLE"));
 			println("ARTIST: " + f.getMetaData("ARTIST"));
-			println("FILENAME" + f.getName());
+			println("FILENAME: " + f.getName());
+			println("TRACK: " + f.getMetaData("TRACK"));
+			println("YEAR: " + f.getMetaData("YEAR"));
+			println("ALBUM: " + f.getMetaData("ALBUM"));
 			println("*****************************");
 		}
 		
 		println();
 	}
 	
-	private void open() throws IOException{
-		AudioFile file = this.lsaoAsOfLastCall.get(Integer.parseInt(userParams[0]));
-		println("OPENING: " + file.getMetaData("TITLE") + " ...");
-		  Desktop d = Desktop.getDesktop();
-	         File f = new File("D:\\Music\\_NSYNC\\No Strings Attached\\01 Bye Bye Bye 1.mp3");
-	         Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ file); 
+	private void open(){
+		AudioFile file = this.workingDirectoryCache.get(Integer.parseInt(userParams[0]));
+		ArrayList<AudioFile> list = new ArrayList<AudioFile>();
+		list.add(file);
+		//this.controller.clearSelectedAudioFiles();
+		//this.controller.addToSelectedAudioFiles(list);
+		
+		println("OPENING: " + file.getMetaData("TITLE") + " ...");    
+	    try {
+			Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+	
 
 	private void printSpace(int count) {
 		printChar(count, ' ');
@@ -360,5 +353,7 @@ public class CMDView {
 			userCmd = userCmd.toLowerCase().trim();
 		}
 	}
+	
+	private List<AudioFile> workingDirectoryCache;
 
 }
