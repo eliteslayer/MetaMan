@@ -77,4 +77,21 @@ public class MetaManController {
 //	}
 	
 	private final MetaMan metaMan;
+
+	public void selectAudioFile(int i) {
+		AudioFile selectedAudioFile = this.metaMan.lsao().get(i);
+		this.metaMan.setSelectedAudioFile(selectedAudioFile);
+	}
+
+	public AudioFile getSelectedFile() {
+		return this.metaMan.getSelectedAudioFile();
+	}
+
+	public void openSelectedAudioFile() {
+		this.metaMan.openSelectedAudioFile();
+	}
+
+	public boolean modSelectedAudio(String key, String newValue) {
+		return this.metaMan.modSelectedFile(key, newValue);
+	}
 }

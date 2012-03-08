@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +89,29 @@ public class MetaMan {
 
 	private final File HOME_DIR = new File(System.getProperty("user.home"));
 	private File workingDirectory = HOME_DIR;
+	private AudioFile selectedAudioFile;
 	//private List<AudioFile> selectedAudioFiles;
+	public void setSelectedAudioFile(AudioFile selectedAudioFile) {
+		this.selectedAudioFile = selectedAudioFile;
+	}
+
+	public AudioFile getSelectedAudioFile() {
+		return this.selectedAudioFile;
+	}
+
+	public void openSelectedAudioFile() {   
+	    try {
+			Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ this.selectedAudioFile);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+	public boolean modSelectedFile(String key, String newValue) {
+		this.selectedAudioFile.setMetaData(key, newValue);
+		return true;
+	}
 
 }

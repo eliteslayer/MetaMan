@@ -217,6 +217,21 @@ public class CMDView {
 		
 		println(changedFiles.size() + " files where modified successfully");
 		println();
+		
+		
+
+	}
+	
+	private void modAudioFileRange(List<Integer> range, String key, String newValue){
+		int nSuccessfulChanges = 0;
+		for(int i : range){
+			this.controller.selectAudioFile(i);
+			this.controller.modSelectedAudio(key, newValue);
+			nSuccessfulChanges++;
+		}
+		println(nSuccessfulChanges + " file(s) where modified successfully");
+		println();
+		
 	}
 
 	private String welcomeMessage() {
@@ -274,14 +289,26 @@ public class CMDView {
 				help();
 			else if (operation_map.get(userCmd).equals("lsao"))
 				lsao();
-			else if (operation_map.get(userCmd).equals("modao"))
-				modao();
+			else if (operation_map.get(userCmd).equals("modao")){
+				int start = Integer.parseInt(userParams[0]);
+			    int end = Integer.parseInt(userParams[1]);
+				ArrayList<Integer> range = new ArrayList<Integer>();
+				for(int i = start ; i <= end ; i++){
+					range.add(i);
+				}
+				this.modAudioFileRange(range, userParams[2], userParams[3]);
+			}
 			else if (operation_map.get(userCmd).equals("lsdo"))
 				lsdo();
-			else if (operation_map.get(userCmd).equals("view"))
-				view();
-			else if (operation_map.get(userCmd).equals("open"))
-				open();
+			else if (operation_map.get(userCmd).equals("view")){
+				this.selectAudioFile(Integer.parseInt(userParams[0]));
+				this.view();
+			}	
+			else if (operation_map.get(userCmd).equals("open")){
+				this.selectAudioFile(Integer.parseInt(userParams[0]));
+				this.open();
+			}
+				
 			else{
 				this.unknownCmd();
 			}
@@ -289,43 +316,37 @@ public class CMDView {
 
 	private void view() {
 		
-		String element = "";
-		for (int i = 3; i < userParams.length; i++) {
-			element += userParams[i] + " ";
-		}
-		element.trim();
-
-		ArrayList<AudioFile> toSelect = new ArrayList<AudioFile>();
+		AudioFile selectedFile = this.controller.getSelectedFile();
 		
-		for(int i = Integer.parseInt(userParams[0]) ; i <= Integer.parseInt(userParams[1]) ; i++ ){
-			AudioFile f = this.workingDirectoryCache.get(i);
-			println("*****************************");
-			println("TITLE: " + f.getMetaData("TITLE"));
-			println("ARTIST: " + f.getMetaData("ARTIST"));
-			println("FILENAME: " + f.getName());
-			println("TRACK: " + f.getMetaData("TRACK"));
-			println("YEAR: " + f.getMetaData("YEAR"));
-			println("ALBUM: " + f.getMetaData("ALBUM"));
-			println("*****************************");
-		}
+		String filename = selectedFile.getName();
+		String title = selectedFile.getMetaData("TITLE");
+		String artist = selectedFile.getMetaData("ARTIST");
+		String track = selectedFile.getMetaData("TRACK");
+		String album = selectedFile.getMetaData("ALBUM");
+		String year = selectedFile.getMetaData("YEAR");
 		
-		println();
+		println("*****************************");
+		println("TITLE: " + title);
+		println("ARTIST: " + artist);
+		println("FILENAME: " + filename);
+		println("TRACK: " + track);
+		println("YEAR: " + year);
+		println("ALBUM: " + album);
+		println("*****************************");
+		
+		
+	}
+	
+	private void selectAudioFile(int index){
+		this.controller.selectAudioFile(index);
 	}
 	
 	private void open(){
-		AudioFile file = this.workingDirectoryCache.get(Integer.parseInt(userParams[0]));
-		ArrayList<AudioFile> list = new ArrayList<AudioFile>();
-		list.add(file);
-		//this.controller.clearSelectedAudioFiles();
-		//this.controller.addToSelectedAudioFiles(list);
+		String songTitle = this.controller.getSelectedFile().getMetaData("TITLE");
 		
-		println("OPENING: " + file.getMetaData("TITLE") + " ...");    
-	    try {
-			Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ file);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		println("OPENING: " + songTitle + " ...");
+	    
+		this.controller.openSelectedAudioFile();    
 	}
 	
 
