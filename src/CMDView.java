@@ -1,8 +1,11 @@
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.awt.Desktop;
+
 
 import org.jaudiotagger.tag.FieldKey;
 
@@ -13,6 +16,12 @@ public class CMDView {
 	public CMDView(MetaManController metaManController) {
 		this.controller = metaManController;
 		populateOperationMap();
+		try {
+			this.lsaoAsOfLastCall = controller.lsao();
+		} catch (CorruptedFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void startup() {
@@ -127,14 +136,6 @@ public class CMDView {
 	}
 
 	private void lsao() {
-
-		// try {
-		// printTable("SUPORTED FILES/DIRS", new String[]{"NAME", "TYPE"},
-		// controller.lsao());
-		// } catch (CorruptedFileException e1) {
-		// // TODO Auto-generated catch block
-		// e1.printStackTrace();
-		// }
 
 		println();
 		println("     SUPORTED FILES/DIRS");
@@ -268,6 +269,8 @@ public class CMDView {
 		this.operation_map.put("lsao", "lsao");
 		this.operation_map.put("lsdo", "lsdo");
 		this.operation_map.put("modao", "modao");
+		this.operation_map.put("view", "view");
+		this.operation_map.put("open", "open");
 	}
 
 	private void executeUserCommand() {
@@ -291,12 +294,46 @@ public class CMDView {
 				modao();
 			if (operation_map.get(userCmd).equals("lsdo"))
 				lsdo();
+			if (operation_map.get(userCmd).equals("view"))
+				view();
+			if (operation_map.get(userCmd).equals("open"))
+				open();
 		}
 
 		catch (Exception e) {
-			unknownCmd();
-			// e.printStackTrace();
+			//unknownCmd();
+			 e.printStackTrace();
 		}
+	}
+
+	private void view() {
+		controller.clearSelectedAudioFiles();
+		String element = "";
+		for (int i = 3; i < userParams.length; i++) {
+			element += userParams[i] + " ";
+		}
+		element.trim();
+
+		ArrayList<AudioFile> toSelect = new ArrayList<AudioFile>();
+		
+		for(int i = Integer.parseInt(userParams[0]) ; i <= Integer.parseInt(userParams[1]) ; i++ ){
+			AudioFile f = this.lsaoAsOfLastCall.get(i);
+			println("*****************************");
+			println("TITLE: " + f.getMetaData("TITLE"));
+			println("ARTIST: " + f.getMetaData("ARTIST"));
+			println("FILENAME" + f.getName());
+			println("*****************************");
+		}
+		
+		println();
+	}
+	
+	private void open() throws IOException{
+		AudioFile file = this.lsaoAsOfLastCall.get(Integer.parseInt(userParams[0]));
+		println("OPENING: " + file.getMetaData("TITLE") + " ...");
+		  Desktop d = Desktop.getDesktop();
+	         File f = new File("D:\\Music\\_NSYNC\\No Strings Attached\\01 Bye Bye Bye 1.mp3");
+	         Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ file); 
 	}
 
 	private void printSpace(int count) {
