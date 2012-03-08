@@ -64,8 +64,16 @@ public class MetaManController {
 		return metaMan.lsdo();
 	}
 	
-	public List<AudioFile> modao(List<AudioFile> toMod, String key, int start, int end, String newValue) throws CorruptedFileException{
-		return metaMan.modao(toMod, key, start, end, newValue);
+	public List<AudioFile> modao(String key, String newValue) throws CorruptedFileException{
+		return metaMan.modao(key, newValue);
+	}
+	
+	public boolean addToSelectedAudioFiles(List<AudioFile> toSelect){
+		return this.metaMan.addToSelectedAudioFiles(toSelect);
+	}
+	
+	public void clearSelectedAudioFiles(){
+		this.metaMan.clearSelectedAudioFiles();
 	}
 	
 	private final MetaMan metaMan;

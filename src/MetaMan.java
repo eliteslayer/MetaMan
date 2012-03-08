@@ -4,8 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MetaMan {
+	
+	public MetaMan(){
+		this.selectedAudioFiles = new ArrayList<AudioFile>();
+	}
 
 	public boolean cd(String dir) {
+		this.selectedAudioFiles.clear();
+		
 		File f = new File(dir);
 		if (f.exists()) {
 			workingDirectory = f;
@@ -23,6 +29,8 @@ public class MetaMan {
 	}
 
 	public boolean up() {
+		this.selectedAudioFiles.clear();
+		
 		if (workingDirectory.getParentFile() == null)
 			return false;
 		workingDirectory = workingDirectory.getParentFile();
@@ -43,7 +51,6 @@ public class MetaMan {
 
 	public List<AudioFile> lsao() throws CorruptedFileException {
 		ArrayList<AudioFile> list = new ArrayList<AudioFile>();
-		//TODO: 
 		for (File f : workingDirectory.listFiles(new AudioFileFilter())) {
 			list.add(new AudioFile(f.getAbsolutePath()));
 		}
@@ -61,33 +68,27 @@ public class MetaMan {
 		return list;
 
 	}
+	
+	public boolean addToSelectedAudioFiles(List<AudioFile> toSelect){
+		return this.selectedAudioFiles.addAll(toSelect);
+	}
+	
+	public void clearSelectedAudioFiles(){
+		this.selectedAudioFiles.clear();
+	}
 
-	public List<AudioFile> modao(List<AudioFile> toMod, String key, int start, int end, String newValue)
-			throws CorruptedFileException {
+	public List<AudioFile> modao(String key, String newValue) throws CorruptedFileException {
 		ArrayList<AudioFile> toReturn = new ArrayList<AudioFile>();
-		for (int i = 0; i < toMod.size(); i++) {
-			if (i >= start && i <= end) {
-				toMod.get(i).setMetaData(key, newValue);
-				toMod.get(i).saveMetaData();
-				toReturn.add(toMod.get(i));
-			}
+		for (int i = 0; i < this.selectedAudioFiles.size(); i++) {
+				this.selectedAudioFiles.get(i).setMetaData(key, newValue);
+				this.selectedAudioFiles.get(i).saveMetaData();
+				toReturn.add(this.selectedAudioFiles.get(i));
 		}
 		return toReturn;
 	}
 
-	private class OnlyExt implements FilenameFilter {
-		String ext;
-
-		public OnlyExt(String ext) {
-			this.ext = "." + ext;
-		}
-
-		public boolean accept(File dir, String name) {
-			return name.endsWith(ext);
-		}
-	}
-
 	private final File HOME_DIR = new File(System.getProperty("user.home"));
 	private File workingDirectory = HOME_DIR;
+	private List<AudioFile> selectedAudioFiles;
 
 }

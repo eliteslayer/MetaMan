@@ -218,10 +218,16 @@ public class CMDView {
 		}
 		element.trim();
 
+		ArrayList<AudioFile> toSelect = new ArrayList<AudioFile>();
+		
+		for(int i = Integer.parseInt(userParams[1]) ; i <= Integer.parseInt(userParams[2]) ; i++ ){
+			toSelect.add(this.lsaoAsOfLastCall.get(i));
+		}
+		
+		controller.addToSelectedAudioFiles(toSelect);
 		ArrayList<AudioFile> changedFiles = (ArrayList<AudioFile>) controller
-				.modao(lsaoAsOfLastCall, userParams[0],
-						Integer.parseInt(userParams[1]),
-						Integer.parseInt(userParams[2]), element);
+				.modao(userParams[0], element);
+		
 		println(changedFiles.size() + " files where modified successfully");
 		println();
 	}
