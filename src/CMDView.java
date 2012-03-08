@@ -213,7 +213,7 @@ public class CMDView {
 		
 		
 		ArrayList<AudioFile> changedFiles = (ArrayList<AudioFile>) controller
-				.modao(this.workingDirectoryCache, userParams[0], element);
+				.modao(toSelect, userParams[0], element);
 		
 		println(changedFiles.size() + " files where modified successfully");
 		println();
@@ -260,6 +260,8 @@ public class CMDView {
 	}
 
 	private void executeUserCommand() {
+		
+		try{
 			if (operation_map.get(userCmd).equals("pwd"))
 				pwd();
 			else if (operation_map.get(userCmd).equals("exit"))
@@ -285,6 +287,9 @@ public class CMDView {
 			else{
 				this.unknownCmd();
 			}
+		}catch (Exception e){
+			this.unknownCmd();
+		}
 	}
 
 	private void view() {
