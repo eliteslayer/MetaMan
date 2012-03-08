@@ -10,11 +10,12 @@ public class CMDView {
 	
 	public CMDView(MetaManController metaManController) {
 		this.controller = metaManController;
-		this.workingDirectoryCache = controller.lsao();	
+		//this.workingDirectoryCache = controller.lsao();
+		this.controller.lsao();
 		this.populateOperationMap();
 	}
 
-	public void startup() {
+	public void startup() throws IOException {
 
 		// Print a welcome message to the user.
 		println(welcomeMessage());
@@ -133,8 +134,9 @@ public class CMDView {
 
 		try {
 			int count = 0;
-			this.workingDirectoryCache = controller.lsao();
-			for (AudioFile f : this.workingDirectoryCache) {
+			ArrayList<AudioFile> list = new ArrayList<AudioFile>();
+			list = (ArrayList<AudioFile>) controller.lsao();
+			for (AudioFile f : list) {
 				print(count + "");
 				String count_s = count + "";
 				printSpace(10 - count_s.length());
@@ -198,41 +200,41 @@ public class CMDView {
 
 	}
 
-	private void modao() {
-		String element = "";
-		for (int i = 3; i < userParams.length; i++) {
-			element += userParams[i] + " ";
-		}
-		element.trim();
-
-		ArrayList<AudioFile> toSelect = new ArrayList<AudioFile>();
-		
-		for(int i = Integer.parseInt(userParams[1]) ; i <= Integer.parseInt(userParams[2]) ; i++ ){
-			toSelect.add(this.workingDirectoryCache.get(i));
-		}
-		
-		
-		ArrayList<AudioFile> changedFiles = (ArrayList<AudioFile>) controller
-				.modao(this.workingDirectoryCache, userParams[0], element);
-		
-		println(changedFiles.size() + " files where modified successfully");
-		println();
-		
-		
-
-	}
+//	private void modao() {
+//		String element = "";
+//		for (int i = 3; i < userParams.length; i++) {
+//			element += userParams[i] + " ";
+//		}
+//		element.trim();
+//
+//		ArrayList<AudioFile> toSelect = new ArrayList<AudioFile>();
+//		
+//		for(int i = Integer.parseInt(userParams[1]) ; i <= Integer.parseInt(userParams[2]) ; i++ ){
+//			toSelect.add(this.workingDirectoryCache.get(i));
+//		}
+//		
+//		
+//		ArrayList<AudioFile> changedFiles = (ArrayList<AudioFile>) controller
+//				.modao(this.workingDirectoryCache, userParams[0], element);
+//		
+//		println(changedFiles.size() + " files where modified successfully");
+//		println();
+//		
+//		
+//
+//	}
 	
-	private void modAudioFileRange(List<Integer> range, String key, String newValue){
-		int nSuccessfulChanges = 0;
-		for(int i : range){
-			this.controller.selectAudioFile(i);
-			this.controller.modSelectedAudio(key, newValue);
-			nSuccessfulChanges++;
-		}
-		println(nSuccessfulChanges + " file(s) where modified successfully");
-		println();
-		
-	}
+//	private void modAudioFileRange(List<Integer> range, String key, String newValue){
+//		int nSuccessfulChanges = 0;
+//		for(int i : range){
+//			this.controller.selectAudioFile(i);
+//			this.controller.modSelectedAudio(key, newValue);
+//			nSuccessfulChanges++;
+//		}
+//		println(nSuccessfulChanges + " file(s) where modified successfully");
+//		println();
+//		
+//	}
 
 	private String welcomeMessage() {
 		return "MetaMan -v 1.0\n--------------\nWelcome To MetaMan!\nEnter 'help' if needed\n";
@@ -269,12 +271,12 @@ public class CMDView {
 		this.operation_map.put("help", "help");
 		this.operation_map.put("lsao", "lsao");
 		this.operation_map.put("lsdo", "lsdo");
-		this.operation_map.put("modao", "modao");
+		this.operation_map.put("mod", "mod");
 		this.operation_map.put("view", "view");
 		this.operation_map.put("open", "open");
 	}
 
-	private void executeUserCommand() {
+	private void executeUserCommand() throws IOException {
 			if (operation_map.get(userCmd).equals("pwd"))
 				pwd();
 			else if (operation_map.get(userCmd).equals("exit"))
@@ -289,15 +291,15 @@ public class CMDView {
 				help();
 			else if (operation_map.get(userCmd).equals("lsao"))
 				lsao();
-			else if (operation_map.get(userCmd).equals("modao")){
-				int start = Integer.parseInt(userParams[0]);
-			    int end = Integer.parseInt(userParams[1]);
-				ArrayList<Integer> range = new ArrayList<Integer>();
-				for(int i = start ; i <= end ; i++){
-					range.add(i);
-				}
-				this.modAudioFileRange(range, userParams[2], userParams[3]);
-			}
+//			else if (operation_map.get(userCmd).equals("mod")){
+//				int start = Integer.parseInt(userParams[0]);
+//			    int end = Integer.parseInt(userParams[1]);
+//				ArrayList<Integer> range = new ArrayList<Integer>();
+//				for(int i = start ; i <= end ; i++){
+//					range.add(i);
+//				}
+//				this.modAudioFileRange(range, userParams[2], userParams[3]);
+//			}
 			else if (operation_map.get(userCmd).equals("lsdo"))
 				lsdo();
 			else if (operation_map.get(userCmd).equals("view")){
@@ -308,10 +310,18 @@ public class CMDView {
 				this.selectAudioFile(Integer.parseInt(userParams[0]));
 				this.open();
 			}
+			else if (operation_map.get(userCmd).equals("mod")){
+				this.selectAudioFile(Integer.parseInt(userParams[0]));
+				this.modSelected(userParams[1],userParams[2]);
+			}
 				
 			else{
 				this.unknownCmd();
 			}
+	}
+
+	private void modSelected(String key, String newValue) {
+		this.controller.modSelectedAudio(key, newValue);	
 	}
 
 	private void view() {
@@ -341,12 +351,13 @@ public class CMDView {
 		this.controller.selectAudioFile(index);
 	}
 	
-	private void open(){
+	private void open() throws IOException{
 		String songTitle = this.controller.getSelectedFile().getMetaData("TITLE");
 		
 		println("OPENING: " + songTitle + " ...");
 	    
-		this.controller.openSelectedAudioFile();    
+		this.controller.openSelectedAudioFile();
+		
 	}
 	
 
@@ -375,6 +386,6 @@ public class CMDView {
 		}
 	}
 	
-	private List<AudioFile> workingDirectoryCache;
+	//private List<MetaManFile> workingDirectoryCache;
 
 }

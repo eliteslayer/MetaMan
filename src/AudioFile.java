@@ -38,14 +38,6 @@ public class AudioFile extends MetaManFile{
 		}
 	}
 	
-	public boolean saveMetaData() {
-		try {
-			metaData.commit();
-		} catch (CannotWriteException e) {
-			return true;
-		}
-		return true;
-	}
 	
 	public String getMetaData(String key){
 		try {
@@ -67,6 +59,12 @@ public class AudioFile extends MetaManFile{
 		} catch (FieldDataInvalidException e) {
 			return false;
 		}
+		try {
+			metaData.commit();
+		} catch (CannotWriteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return true;
 	}
 	
@@ -86,6 +84,12 @@ public class AudioFile extends MetaManFile{
 			return FieldKey.YEAR;
 		}
 		throw new KeyNotFoundException();
+	}
+
+	@Override
+	public String view() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

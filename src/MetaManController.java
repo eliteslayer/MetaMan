@@ -1,4 +1,6 @@
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +32,7 @@ public class MetaManController {
 	 * @return - A list of files/directories in the current directory
 	 * @throws CorruptedFileException
 	 */
-	public List<File> ls(){
+	public List<MetaManFile> ls(){
 		return metaMan.ls();
 	}
 	
@@ -57,16 +59,20 @@ public class MetaManController {
 	 * @throws CorruptedFileException
 	 */
 	public List<AudioFile> lsao(){
-		return metaMan.lsao();
+		ArrayList<AudioFile> list = new ArrayList<AudioFile>();
+		for(MetaManFile f : metaMan.lsao()){
+			list.add((AudioFile) f);
+		}
+		return list;
 	}
 	
-	public List<File> lsdo(){
+	public List<MetaManFile> lsdo(){
 		return metaMan.lsdo();
 	}
 	
-	public List<AudioFile> modao(List<AudioFile> toMod, String key, String newValue){
-		return metaMan.modao(toMod, key, newValue);
-	}
+//	public List<AudioFile> modao(List<AudioFile> toMod, String key, String newValue){
+//		return metaMan.modao(toMod, key, newValue);
+//	}
 	
 //	public boolean addToSelectedAudioFiles(List<AudioFile> toSelect){
 //		return this.metaMan.addToSelectedAudioFiles(toSelect);
@@ -79,15 +85,15 @@ public class MetaManController {
 	private final MetaMan metaMan;
 
 	public void selectAudioFile(int i) {
-		AudioFile selectedAudioFile = this.metaMan.lsao().get(i);
-		this.metaMan.setSelectedAudioFile(selectedAudioFile);
+		//AudioFile selectedAudioFile = this.metaMan.lsao().get(i);
+		this.metaMan.setSelectedAudioFile(i);
 	}
 
 	public AudioFile getSelectedFile() {
 		return this.metaMan.getSelectedAudioFile();
 	}
 
-	public void openSelectedAudioFile() {
+	public void openSelectedAudioFile() throws IOException {
 		this.metaMan.openSelectedAudioFile();
 	}
 

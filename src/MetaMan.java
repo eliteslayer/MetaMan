@@ -42,28 +42,30 @@ public class MetaMan {
 		return workingDirectory.getAbsolutePath();
 	}
 
-	public List<File> ls() {
-		ArrayList<File> list = new ArrayList<File>();
+	public List<MetaManFile> ls() {
+		ArrayList<MetaManFile> list = new ArrayList<MetaManFile>();
 		list.addAll(lsao());
 		list.addAll(lsdo());
+		this.cache = list;
 		return list;
 	}
 
-	public List<AudioFile> lsao() {
-		ArrayList<AudioFile> list = new ArrayList<AudioFile>();
+	public List<MetaManFile> lsao() {
+		List<MetaManFile> list = new ArrayList<MetaManFile>();
 		for (File f : workingDirectory.listFiles(new AudioFileFilter())) {
 			list.add(new AudioFile(f.getAbsolutePath()));
 		}
+		this.cache = list;
 		return list;
 
 	}
 
-	public List<File> lsdo() {
-		ArrayList<File> list = new ArrayList<File>();
+	public List<MetaManFile> lsdo() {
+		ArrayList<MetaManFile> list = new ArrayList<MetaManFile>();
 
 		for (File f : workingDirectory.listFiles()) {
 			if (workingDirectory.isDirectory())
-				list.add(new File(f.getAbsolutePath()));
+				list.add(new MetaManDirectory(f.getAbsolutePath()));
 		}
 		return list;
 
@@ -77,35 +79,31 @@ public class MetaMan {
 //		this.selectedAudioFiles.clear();
 //	}
 
-	public List<AudioFile> modao(List<AudioFile> toMod, String key, String newValue) {
-		ArrayList<AudioFile> toReturn = new ArrayList<AudioFile>();
-		for (int i = 0; i < toMod.size(); i++) {
-				toMod.get(i).setMetaData(key, newValue);
-				toMod.get(i).saveMetaData();
-				toReturn.add(toMod.get(i));
-		}
-		return toReturn;
-	}
+//	public List<AudioFile> modao(List<AudioFile> toMod, String key, String newValue) {
+//		ArrayList<AudioFile> toReturn = new ArrayList<AudioFile>();
+//		for (int i = 0; i < toMod.size(); i++) {
+//				toMod.get(i).setMetaData(key, newValue);
+//				toReturn.add(toMod.get(i));
+//		}
+//		return toReturn;
+//	}
 
 	private final File HOME_DIR = new File(System.getProperty("user.home"));
 	private File workingDirectory = HOME_DIR;
 	private AudioFile selectedAudioFile;
+	private List<MetaManFile> cache; 
+	
 	//private List<AudioFile> selectedAudioFiles;
-	public void setSelectedAudioFile(AudioFile selectedAudioFile) {
-		this.selectedAudioFile = selectedAudioFile;
+	public void setSelectedAudioFile(int i) {
+		this.selectedAudioFile = (AudioFile) this.cache.get(i);
 	}
 
 	public AudioFile getSelectedAudioFile() {
 		return this.selectedAudioFile;
 	}
 
-	public void openSelectedAudioFile() {   
-	    try {
-			Runtime.getRuntime().exec("rundll32 SHELL32.DLL,ShellExec_RunDLL "+ this.selectedAudioFile);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	public void openSelectedAudioFile() throws IOException {   
+	    this.selectedAudioFile.open();
 		
 	}
 

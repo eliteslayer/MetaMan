@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 /**
  * The class starts the program using a command line view.
  * @author COM S 362 Group 7
@@ -8,8 +10,9 @@ public class ProgramStarter {
 	/**
 	 * Starting point of the program.  
 	 * @param args - No arguments to the main program are excepted at this time.
+	 * @throws IOException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		//Create a MetaMan Object
 		MetaMan metaMan = new MetaMan();
 		
