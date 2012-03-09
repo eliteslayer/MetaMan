@@ -1,7 +1,10 @@
-import java.io.File;
+package org.coms362.group7.MetaMan;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jaudiotagger.tag.FieldKey;
 
 /**
  * A controller for the MetaMan Object.  All method calls to MetaMan from any view must go through this.
@@ -97,7 +100,7 @@ public class MetaManController {
 		this.metaMan.openSelectedAudioFile();
 	}
 
-	public boolean modSelectedAudio(String key, String newValue) {
+	public boolean modSelectedAudio(FieldKey key, String newValue) {
 		return this.metaMan.modSelectedFile(key, newValue);
 	}
 }

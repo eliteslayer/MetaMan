@@ -1,8 +1,11 @@
+package org.coms362.group7.MetaMan;
+
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.jaudiotagger.tag.FieldKey;
 
 public class MetaMan {
 	
@@ -107,7 +110,7 @@ public class MetaMan {
 		
 	}
 
-	public boolean modSelectedFile(String key, String newValue) {
+	public boolean modSelectedFile(FieldKey key, String newValue) {
 		this.selectedAudioFile.setMetaData(key, newValue);
 		return true;
 	}

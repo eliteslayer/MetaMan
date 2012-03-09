@@ -1,4 +1,8 @@
+package org.coms362.group7.MetaMan;
+
 import java.io.IOException;
+
+import org.jaudiotagger.tag.FieldKey;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -32,14 +36,14 @@ abstract class MetaManFile extends java.io.File {
 	 * @param value value to set to
 	 * @return true if successful
 	 */
-	public abstract boolean setMetaData(String key, String value);
+	public abstract boolean setMetaData(FieldKey key, String value);
 	
 	/**
 	 * Gets the specified meta data
 	 * @param key key to retrieve
 	 * @return String of retrieved data or null if it does not exist
 	 */
-	public abstract String getMetaData(String key);
+	public abstract String getMetaData(FieldKey key);
 	
 	/**
 	 * Opens the file with the operating systems default program

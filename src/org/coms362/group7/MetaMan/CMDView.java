@@ -1,9 +1,13 @@
+package org.coms362.group7.MetaMan;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Scanner;
+
+import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.KeyNotFoundException;
 
 public class CMDView {
 
@@ -140,13 +144,13 @@ public class CMDView {
 				print(count + "");
 				String count_s = count + "";
 				printSpace(10 - count_s.length());
-				String name = f.getMetaData("TITLE");
+				String name = f.getMetaData(decodeFieldKey("TITLE"));
 				if (name.length() > 10) {
 					name = name.substring(0, 10) + "...";
 				}
 				print(name);
 				printSpace(15 - name.length());
-				print(f.getMetaData("ARTIST"));
+				print(f.getMetaData(decodeFieldKey("ARTIST")));
 				print("\n");
 				count++;
 			}
@@ -321,7 +325,7 @@ public class CMDView {
 	}
 
 	private void modSelected(String key, String newValue) {
-		this.controller.modSelectedAudio(key, newValue);	
+		this.controller.modSelectedAudio(decodeFieldKey(key), newValue);	
 	}
 
 	private void view() {
@@ -329,11 +333,11 @@ public class CMDView {
 		AudioFile selectedFile = this.controller.getSelectedFile();
 		
 		String filename = selectedFile.getName();
-		String title = selectedFile.getMetaData("TITLE");
-		String artist = selectedFile.getMetaData("ARTIST");
-		String track = selectedFile.getMetaData("TRACK");
-		String album = selectedFile.getMetaData("ALBUM");
-		String year = selectedFile.getMetaData("YEAR");
+		String title = selectedFile.getMetaData(decodeFieldKey("TITLE"));
+		String artist = selectedFile.getMetaData(decodeFieldKey("ARTIST"));
+		String track = selectedFile.getMetaData(decodeFieldKey("TRACK"));
+		String album = selectedFile.getMetaData(decodeFieldKey("ALBUM"));
+		String year = selectedFile.getMetaData(decodeFieldKey("YEAR"));
 		
 		println("*****************************");
 		println("TITLE: " + title);
@@ -346,13 +350,29 @@ public class CMDView {
 		
 		
 	}
-	
+	private FieldKey decodeFieldKey(String key){
+		if (key.toUpperCase().equals("ARTIST")) {
+			return FieldKey.ARTIST;
+		} else if (key.toUpperCase().equals("TITLE")) {
+			return FieldKey.TITLE;
+		}
+		else if (key.toUpperCase().equals("ALBUM")) {
+			return FieldKey.ALBUM;
+		}
+		else if (key.toUpperCase().equals("TRACK")) {
+			return FieldKey.TRACK;
+		}
+		else if (key.toUpperCase().equals("YEAR")) {
+			return FieldKey.YEAR;
+		}
+		throw new KeyNotFoundException();
+	}
 	private void selectAudioFile(int index){
 		this.controller.selectAudioFile(index);
 	}
 	
 	private void open() throws IOException{
-		String songTitle = this.controller.getSelectedFile().getMetaData("TITLE");
+		String songTitle = this.controller.getSelectedFile().getMetaData(decodeFieldKey("TITLE"));
 		
 		println("OPENING: " + songTitle + " ...");
 	    

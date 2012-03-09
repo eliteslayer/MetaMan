@@ -1,3 +1,7 @@
+package org.coms362.group7.MetaMan;
+
+import org.jaudiotagger.tag.FieldKey;
+
 
 public class MetaManDirectory extends MetaManFile {
 
@@ -18,13 +22,13 @@ public class MetaManDirectory extends MetaManFile {
 	}
 
 	@Override
-	public boolean setMetaData(String key, String value) {
+	public boolean setMetaData(FieldKey key, String value) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public String getMetaData(String key) {
+	public String getMetaData(FieldKey key) {
 		// TODO Auto-generated method stub
 		return null;
 	}
