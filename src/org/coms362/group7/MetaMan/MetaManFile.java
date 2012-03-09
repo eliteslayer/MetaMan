@@ -26,7 +26,6 @@ abstract class MetaManFile extends java.io.File {
 	 */
 	public MetaManFile(String pathname) {
 		super(pathname);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -55,8 +54,7 @@ abstract class MetaManFile extends java.io.File {
 	 * @return
 	 */
 	public boolean lock() {
-		GlobalData.LOCKED_FILES.add(this);
-		return this.setReadOnly();
+		return this.setWritable(false);
 	}
 
 	/**
@@ -65,7 +63,7 @@ abstract class MetaManFile extends java.io.File {
 	 * @throws IOException
 	 */
 	public boolean open() {
-		if (GlobalData.LOCKED_FILES.contains(this)) {
+		if (!this.canWrite()) {
 			return false;
 		}
 		try {
@@ -78,7 +76,7 @@ abstract class MetaManFile extends java.io.File {
 	}
 
 	public boolean setMetaData(FieldKey key, String value) {
-		if (GlobalData.LOCKED_FILES.contains(this)) {
+		if (!this.canWrite()) {
 			return false;
 		}
 		return this.setMetaDataHelper(key, value);
@@ -100,8 +98,7 @@ abstract class MetaManFile extends java.io.File {
 	 * 
 	 */
 	public boolean unlock() {
-		GlobalData.LOCKED_FILES.remove(GlobalData.LOCKED_FILES.indexOf(this));
-		return true;
+		return this.setWritable(true);
 	}
 
 	/**

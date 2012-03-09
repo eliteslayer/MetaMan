@@ -111,6 +111,7 @@ public class AudioFile extends MetaManFile {
 		retVal += "TRACK: " + track + "\n";
 		retVal += "YEAR: " + year + "\n";
 		retVal += "ALBUM: " + album + "\n";
+		retVal += "LOCKED?: " + !this.canWrite() + "\n";
 		retVal += "*****************************\n";
 
 		return retVal;

@@ -114,7 +114,11 @@ public class MetaManCommandLineView {
 				this.open();
 			} else if (this.operation_map.get(this.userCmd).equals("mod")) {
 				this.setSelectedAudioFile(Integer.parseInt(this.userParams[0]));
-				this.modSelected(this.userParams[1], this.userParams[2]);
+				String newValue = "";
+				for(int i = 2 ; i < this.userParams.length ; i++){
+					newValue += this.userParams[i] + " ";
+				}
+				this.modSelected(this.userParams[1], newValue.trim());
 			} else if (this.operation_map.get(this.userCmd).equals("lock")) {
 				this.setSelectedAudioFile(Integer.parseInt(this.userParams[0]));
 				this.lockSelected();
@@ -154,27 +158,45 @@ public class MetaManCommandLineView {
 	}
 
 	/**
-	 * 
+	 * Prints out a help menu to the user
 	 */
 	private void help() {
 		this.println();
 		this.println("Support MetaMan Commands:");
 		this.println();
-		this.println("MODAO {tag} {startIndex} {endIndex} {newName}:");
+		this.println("MOD {index} {tag} {newName}:");
 		this.println("     Modifies meta data info for audio files in the current directory");
 		this.println();
 		this.println("PWD:");
 		this.println("     Prints out the current working directory");
+		this.println();
 		this.println("LS:");
 		this.println("     Lists all the files MetaMan supports within the current directory");
+		this.println();
 		this.println("LSAO:");
 		this.println("     Lists all the audio files MetaMan supports within the current directory");
+		this.println();
 		this.println("LSDO:");
 		this.println("     Lists all the directorys within the current directory");
+		this.println();
+		this.println("LOCK {index}:");
+		this.println("     Lists all the directorys within the current directory");
+		this.println();
+		this.println("UNLOCK {index}:");
+		this.println("     Lists all the directorys within the current directory");
+		this.println();
+		this.println("VIEW {index}:");
+		this.println("     Lists all the directorys within the current directory");
+		this.println();
+		this.println("OPEN {index}:");
+		this.println("     opens the file at index");
 		this.println();
 
 	}
 
+	/**
+	 * Informs the controller that the user wishes to lock the selected file
+	 */
 	private void lockSelected() {
 		if (this.controller.lockSelectedFile()) {
 			System.out.println("FILE WAS LOCKED");
@@ -185,7 +207,7 @@ public class MetaManCommandLineView {
 	}
 
 	/**
-	 * 
+	 * Asks the controller for a listing of files of the current directory and prints them out in a table.
 	 */
 	private void ls() {
 		this.println();
@@ -309,8 +331,14 @@ public class MetaManCommandLineView {
 	 * @param newValue
 	 */
 	private void modSelected(String key, String newValue) {
-		this.controller.modMetaDataOfSelectedFile(this.decodeFieldKey(key),
-				newValue);
+		if(this.controller.modMetaDataOfSelectedFile(this.decodeFieldKey(key),
+				newValue)){
+			print("File was modified successfylly");
+			println();
+		}
+		else{
+			this.printError("File could not be opened because it is locked form MetaMan");
+		}
 	}
 
 	/**
