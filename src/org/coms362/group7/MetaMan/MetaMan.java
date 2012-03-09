@@ -75,12 +75,6 @@ public class MetaMan {
 	 * Lists the metaman files in the current directory
 	 * @return list of all of the compatible files
 	 * @throws MetaManException
-	 * @throws InvalidAudioFrameException
-	 * @throws ReadOnlyFileException
-	 * @throws TagException
-	 * @throws IOException
-	 * @throws CannotReadException
-	 * @throws CorruptedFileException
 	 */
 	public List<MetaManFile> listing() throws MetaManException {
 		final ArrayList<MetaManFile> list = new ArrayList<MetaManFile>();

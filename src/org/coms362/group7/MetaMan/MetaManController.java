@@ -65,8 +65,8 @@ public class MetaManController {
 	}
 
 	/**
-	 * Returns a list of audio 
-	 * @return
+	 * List only the audio files
+	 * @return list of all supported audio files in the directory
 	 * @throws MetaManException
 	 */
 	public List<AudioFile> listingAudioOnly() throws MetaManException {
@@ -78,28 +78,26 @@ public class MetaManController {
 	}
 
 	/**
-	 * 
-	 * @return
-	 * @throws InvalidAudioFrameException
-	 * @throws ReadOnlyFileException
-	 * @throws TagException
-	 * @throws IOException
-	 * @throws CannotReadException
-	 * @throws CorruptedFileException
+	 * List the directories in the current working directory
+	 * @return list of all the directories
 	 */
 	public List<MetaManFile> listingDirectoiesOnly() {
 		return this.metaMan.listingDirectoriesOnly();
 	}
 
+	/**
+	 * Locks the selected file
+	 * @return true if locked
+	 */
 	public boolean lockSelectedFile() {
 		return this.metaMan.lockSelectedFile();
 
 	}
 
 	/**
-	 * 
-	 * @param key
-	 * @param newValue
+	 * Modifies the metadata tag with the newValue
+	 * @param key The meta data key to be changed 
+	 * @param newValue The value the key will be changed to
 	 * @return
 	 */
 	public boolean modMetaDataOfSelectedFile(FieldKey key, String newValue) {
@@ -107,38 +105,40 @@ public class MetaManController {
 	}
 
 	/**
-	 * 
-	 * @return
+	 *Opens the selected file
+	 * @return true if the file is opened
 	 */
 	public boolean openSelectedFile() {
 		return this.metaMan.openSelectedAudioFile();
 	}
 
 	/**
-	 * Fetches the current working directory.
-	 * 
-	 * @return The current working directory of MetaMan.
+	 * Prints the current working directory's absolute path
+	 * @return the absolute path of the file
 	 */
 	public String printWorkingDirectory() {
 		return this.metaMan.printWorkingDirectory();
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @return
+	 * Sets the selected audio file
+	 * @param index position of the file in the cache(this is the index that is printed in the veiw)
+	 * @return true if the file could be selected
 	 */
 	public boolean setSelectedAudioFile(int index) {
 		return this.metaMan.setSelectedAudioFile(index);
 	}
-
+	/**
+	 * Unlocks the selected file
+	 * @return true if unlocked
+	 */
 	public boolean unlockSelectedFile() {
 		return this.metaMan.unlockSelectedFile();
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Gets a string representation of the meta data
+	 * @return the meta data of the file
 	 */
 	public String viewMetaDataOfSelectedFile() {
 		return this.metaMan.viewMetaDataOfSelectedFile();
