@@ -1,12 +1,8 @@
 package org.coms362.group7.MetaMan;
 
-import java.io.IOException;
 
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.TagException;
+
 
 /**
  * 
@@ -20,15 +16,10 @@ public class MetaManDirectory extends MetaManFile {
 	 */
 	private static final long serialVersionUID = 6040146303193263835L;
 
+
 	/**
 	 * 
 	 * @param pathname
-	 * @throws InvalidAudioFrameException
-	 * @throws ReadOnlyFileException
-	 * @throws TagException
-	 * @throws IOException
-	 * @throws CannotReadException
-	 * @throws CorruptedFileException
 	 */
 	public MetaManDirectory(String pathname) {
 		super(pathname);

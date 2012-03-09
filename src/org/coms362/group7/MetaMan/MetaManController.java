@@ -1,15 +1,11 @@
 package org.coms362.group7.MetaMan;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.TagException;
+
 
 /**
  * A controller for the MetaMan Object. All method calls to MetaMan from any
@@ -27,7 +23,6 @@ public class MetaManController {
 	 * 
 	 * @param metaMan
 	 *            - The MetaMan Object that this controller will Manipulate.
-	 * @throws IOException
 	 * @throws MetaManException
 	 */
 	public MetaManController(File startingDirectory) throws MetaManException {
@@ -55,17 +50,11 @@ public class MetaManController {
 		return this.metaMan.goUpOneDirectory();
 	}
 
+
 	/**
-	 * Lists all the files in the current directory.
 	 * 
-	 * @return - A list of files/directories in the current directory
+	 * @return
 	 * @throws MetaManException
-	 * @throws InvalidAudioFrameException
-	 * @throws ReadOnlyFileException
-	 * @throws TagException
-	 * @throws IOException
-	 * @throws CannotReadException
-	 * @throws CorruptedFileException
 	 */
 	public List<MetaManFile> listing() throws MetaManException {
 		return this.metaMan.listing();
@@ -75,12 +64,6 @@ public class MetaManController {
 	 * 
 	 * @return
 	 * @throws MetaManException
-	 * @throws InvalidAudioFrameException
-	 * @throws ReadOnlyFileException
-	 * @throws TagException
-	 * @throws IOException
-	 * @throws CannotReadException
-	 * @throws CorruptedFileException
 	 */
 	public List<AudioFile> listingAudioOnly() throws MetaManException {
 		final ArrayList<AudioFile> list = new ArrayList<AudioFile>();
@@ -93,12 +76,6 @@ public class MetaManController {
 	/**
 	 * 
 	 * @return
-	 * @throws InvalidAudioFrameException
-	 * @throws ReadOnlyFileException
-	 * @throws TagException
-	 * @throws IOException
-	 * @throws CannotReadException
-	 * @throws CorruptedFileException
 	 */
 	public List<MetaManFile> listingDirectoiesOnly() {
 		return this.metaMan.listingDirectoriesOnly();
@@ -128,9 +105,8 @@ public class MetaManController {
 	}
 
 	/**
-	 * Fetches the current working directory.
 	 * 
-	 * @return The current working directory of MetaMan.
+	 * @return
 	 */
 	public String printWorkingDirectory() {
 		return this.metaMan.printWorkingDirectory();
@@ -145,6 +121,10 @@ public class MetaManController {
 		return this.metaMan.setSelectedAudioFile(index);
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean unlockSelectedFile() {
 		return this.metaMan.unlockSelectedFile();
 	}
