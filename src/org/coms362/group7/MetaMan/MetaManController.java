@@ -61,6 +61,7 @@ public class MetaManController {
 
 	/**
 	 * List only the audio files
+	 * 
 	 * @return list of all supported audio files in the directory
 	 * @throws MetaManException
 	 */
@@ -74,6 +75,7 @@ public class MetaManController {
 
 	/**
 	 * List the directories in the current working directory
+	 * 
 	 * @return list of all the directories
 	 */
 	public List<MetaManFile> listingDirectoiesOnly() {
@@ -82,6 +84,7 @@ public class MetaManController {
 
 	/**
 	 * Locks the selected file
+	 * 
 	 * @return true if locked
 	 */
 	public boolean lockSelectedFile() {
@@ -91,8 +94,11 @@ public class MetaManController {
 
 	/**
 	 * Modifies the metadata tag with the newValue
-	 * @param key The meta data key to be changed 
-	 * @param newValue The value the key will be changed to
+	 * 
+	 * @param key
+	 *            The meta data key to be changed
+	 * @param newValue
+	 *            The value the key will be changed to
 	 * @return
 	 */
 	public boolean modMetaDataOfSelectedFile(FieldKey key, String newValue) {
@@ -100,7 +106,8 @@ public class MetaManController {
 	}
 
 	/**
-	 *Opens the selected file
+	 * Opens the selected file
+	 * 
 	 * @return true if the file is opened
 	 */
 	public boolean openSelectedFile() {
@@ -109,6 +116,7 @@ public class MetaManController {
 
 	/**
 	 * Prints the current working directory's absolute path
+	 * 
 	 * @return the absolute path of the file
 	 */
 	public String printWorkingDirectory() {
@@ -117,14 +125,19 @@ public class MetaManController {
 
 	/**
 	 * Sets the selected audio file
-	 * @param index position of the file in the cache(this is the index that is printed in the veiw)
+	 * 
+	 * @param index
+	 *            position of the file in the cache(this is the index that is
+	 *            printed in the veiw)
 	 * @return true if the file could be selected
 	 */
 	public boolean setSelectedAudioFile(int index) {
 		return this.metaMan.setSelectedAudioFile(index);
 	}
+
 	/**
 	 * Unlocks the selected file
+	 * 
 	 * @return true if unlocked
 	 */
 	public boolean unlockSelectedFile() {
@@ -133,6 +146,7 @@ public class MetaManController {
 
 	/**
 	 * Gets a string representation of the meta data
+	 * 
 	 * @return the meta data of the file
 	 */
 	public String viewMetaDataOfSelectedFile() {
