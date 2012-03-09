@@ -25,7 +25,8 @@ public class ProgramStarter {
 	public static void main(String[] args) {
 
 		try {
-			final MetaManCommandLineView cmd = new MetaManCommandLineView(new File(ProgramStarter.HOME_DIR));
+			final MetaManCommandLineView cmd = new MetaManCommandLineView(
+					new File(ProgramStarter.HOME_DIR));
 			cmd.startup();
 
 		} catch (final MetaManException e) {

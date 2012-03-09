@@ -5,6 +5,7 @@ import java.io.FileFilter;
 
 /**
  * A FileFilter that only lets Audio Files through its only method, accept().
+ * 
  * @see FileFilter
  * @author COM S 362 Group 7
  * 

@@ -10,19 +10,24 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
 
 /**
- * MetaManCommandLineView is a command prompt view of the MetaMan Application. MetaManCommandLineView is one of possibly more views of the MetaMan application.
+ * MetaManCommandLineView is a command prompt view of the MetaMan Application.
+ * MetaManCommandLineView is one of possibly more views of the MetaMan
+ * application.
+ * 
  * @author COM S 362 Group 7
  * 
  */
 public class MetaManCommandLineView {
 
 	/**
-	 * The controller is what this view will be the interface between this view and the MetaMan object.
+	 * The controller is what this view will be the interface between this view
+	 * and the MetaMan object.
 	 */
 	private final MetaManController controller;
 
 	/**
-	 * A mapping of user commands to real functions.  For instance when a user types in 'ls' this map points 'ls' to listing()
+	 * A mapping of user commands to real functions. For instance when a user
+	 * types in 'ls' this map points 'ls' to listing()
 	 */
 	private HashMap<String, String> operation_map;
 
@@ -43,18 +48,25 @@ public class MetaManCommandLineView {
 
 	/**
 	 * Constructs the command line view of MetaMan.
-	 * @param startingDirectory The directory MetaMan should start in.
-	 * @throws MetaManException When a error occurs starting up MetaMan
+	 * 
+	 * @param startingDirectory
+	 *            The directory MetaMan should start in.
+	 * @throws MetaManException
+	 *             When a error occurs starting up MetaMan
 	 */
-	public MetaManCommandLineView(File startingDirectory) throws MetaManException {
+	public MetaManCommandLineView(File startingDirectory)
+			throws MetaManException {
 		this.controller = new MetaManController(startingDirectory);
 		this.controller.listingAudioOnly();
 		this.populateOperationMap();
 	}
 
 	/**
-	 * Informs the controller that the user wishes to change the directory they are working in.
-	 * @param newPath The path the user wishes to change to.
+	 * Informs the controller that the user wishes to change the directory they
+	 * are working in.
+	 * 
+	 * @param newPath
+	 *            The path the user wishes to change to.
 	 */
 	private void cd(String newPath) {
 		if (!this.controller.changeDirectory(newPath)) {
@@ -65,7 +77,10 @@ public class MetaManCommandLineView {
 
 	/**
 	 * Decodes raw user input as FieldKeys for MetaData tags
-	 * @param key The user input to decode.  Examples include "TITLE", "ARTIST", ext.
+	 * 
+	 * @param key
+	 *            The user input to decode. Examples include "TITLE", "ARTIST",
+	 *            ext.
 	 * @return The true Field key
 	 */
 	private FieldKey decodeFieldKey(String key) {
@@ -85,6 +100,7 @@ public class MetaManCommandLineView {
 
 	/**
 	 * Executes the users command
+	 * 
 	 * @throws IOException
 	 */
 	private void executeUserCommand() {
@@ -115,7 +131,7 @@ public class MetaManCommandLineView {
 			} else if (this.operation_map.get(this.userCmd).equals("mod")) {
 				this.setSelectedAudioFile(Integer.parseInt(this.userParams[0]));
 				String newValue = "";
-				for(int i = 2 ; i < this.userParams.length ; i++){
+				for (int i = 2; i < this.userParams.length; i++) {
 					newValue += this.userParams[i] + " ";
 				}
 				this.modSelected(this.userParams[1], newValue.trim());
@@ -213,7 +229,8 @@ public class MetaManCommandLineView {
 	}
 
 	/**
-	 * Asks the controller for a listing of files of the current directory and prints them out in a table.
+	 * Asks the controller for a listing of files of the current directory and
+	 * prints them out in a table.
 	 */
 	private void ls() {
 		this.println();
@@ -265,7 +282,8 @@ public class MetaManCommandLineView {
 	}
 
 	/**
-	 * Prints the list of all the supported audio files in the current working directory
+	 * Prints the list of all the supported audio files in the current working
+	 * directory
 	 */
 	private void lsao() {
 
@@ -333,22 +351,25 @@ public class MetaManCommandLineView {
 
 	/**
 	 * Modifies the selected files meta data
-	 * @param key key to be set
-	 * @param newValue the value to set the key to
+	 * 
+	 * @param key
+	 *            key to be set
+	 * @param newValue
+	 *            the value to set the key to
 	 */
 	private void modSelected(String key, String newValue) {
-		if(this.controller.modMetaDataOfSelectedFile(this.decodeFieldKey(key),
-				newValue)){
-			print("File was modified successfylly");
-			println();
-		}
-		else{
+		if (this.controller.modMetaDataOfSelectedFile(this.decodeFieldKey(key),
+				newValue)) {
+			this.print("File was modified successfylly");
+			this.println();
+		} else {
 			this.printError("File could not be opened because it is locked form MetaMan");
 		}
 	}
 
 	/**
 	 * Opens the selected file
+	 * 
 	 * @throws IOException
 	 */
 	private void open() {
@@ -386,7 +407,9 @@ public class MetaManCommandLineView {
 
 	/**
 	 * Print a message with no new line
-	 * @param message message to be printed
+	 * 
+	 * @param message
+	 *            message to be printed
 	 */
 	private void print(String message) {
 		System.out.print(message);
@@ -394,8 +417,11 @@ public class MetaManCommandLineView {
 
 	/**
 	 * Print character to the screen
-	 * @param count number of times to print the character
-	 * @param x character to print
+	 * 
+	 * @param count
+	 *            number of times to print the character
+	 * @param x
+	 *            character to print
 	 */
 	private void printChar(int count, char x) {
 		for (int i = 0; i < count; i++) {
@@ -405,7 +431,9 @@ public class MetaManCommandLineView {
 
 	/**
 	 * Prints error messages
-	 * @param message message to be printed
+	 * 
+	 * @param message
+	 *            message to be printed
 	 */
 	private void printError(String message) {
 		this.println();
@@ -422,7 +450,9 @@ public class MetaManCommandLineView {
 
 	/**
 	 * Print message with new line
-	 * @param message message to be printed
+	 * 
+	 * @param message
+	 *            message to be printed
 	 */
 	private void println(String message) {
 		System.out.println(message);
@@ -430,7 +460,9 @@ public class MetaManCommandLineView {
 
 	/**
 	 * Print spaces on same line
-	 * @param count number of spaces to print
+	 * 
+	 * @param count
+	 *            number of spaces to print
 	 */
 	private void printSpace(int count) {
 		this.printChar(count, ' ');
@@ -444,16 +476,18 @@ public class MetaManCommandLineView {
 	}
 
 	/**
-	 *Sets the selected file
-	 * @param index index corresponding to the list that was last printed
+	 * Sets the selected file
+	 * 
+	 * @param index
+	 *            index corresponding to the list that was last printed
 	 */
 	private void setSelectedAudioFile(int index) {
 		this.controller.setSelectedAudioFile(index);
 	}
 
 	/**
-	 * Main Entry point of the program
-	 * Loops until exit command 
+	 * Main Entry point of the program Loops until exit command
+	 * 
 	 * @throws IOException
 	 */
 	public void startup() {
@@ -505,6 +539,7 @@ public class MetaManCommandLineView {
 
 	/**
 	 * Move to the parent directory
+	 * 
 	 * @return true if move was successful
 	 */
 	private boolean up() {
@@ -520,6 +555,7 @@ public class MetaManCommandLineView {
 
 	/**
 	 * Welcomes the user
+	 * 
 	 * @return welcome message
 	 */
 	private String welcomeMessage() {

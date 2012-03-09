@@ -43,7 +43,9 @@ public class MetaMan {
 
 	/**
 	 * Change the directory to the one specified
-	 * @param dir the target directory to change to
+	 * 
+	 * @param dir
+	 *            the target directory to change to
 	 * @return true if changing was successful
 	 */
 	public boolean changeDirectory(String dir) {
@@ -61,6 +63,7 @@ public class MetaMan {
 
 	/**
 	 * Move to the parent directory
+	 * 
 	 * @return true if the move was successful
 	 */
 	public boolean goUpOneDirectory() {
@@ -73,6 +76,7 @@ public class MetaMan {
 
 	/**
 	 * Lists the metaman files in the current directory
+	 * 
 	 * @return list of all of the compatible files
 	 * @throws MetaManException
 	 * @throws InvalidAudioFrameException
@@ -92,6 +96,7 @@ public class MetaMan {
 
 	/**
 	 * List only the audio files
+	 * 
 	 * @return list of all supported audio files in the directory
 	 * @throws MetaManException
 	 */
@@ -107,6 +112,7 @@ public class MetaMan {
 
 	/**
 	 * List the directories in the current working directory
+	 * 
 	 * @return list of all the directories
 	 */
 	public List<MetaManFile> listingDirectoriesOnly() {
@@ -121,6 +127,7 @@ public class MetaMan {
 
 	/**
 	 * Locks the selected file
+	 * 
 	 * @return true if locked
 	 */
 	public boolean lockSelectedFile() {
@@ -132,8 +139,11 @@ public class MetaMan {
 
 	/**
 	 * Modifies the metadata tag with the newValue
-	 * @param key The meta data key to be changed 
-	 * @param newValue The value the key will be changed to
+	 * 
+	 * @param key
+	 *            The meta data key to be changed
+	 * @param newValue
+	 *            The value the key will be changed to
 	 * @return
 	 */
 	public boolean modMetaDataOfSelectedFile(FieldKey key, String newValue) {
@@ -144,7 +154,8 @@ public class MetaMan {
 	}
 
 	/**
-	 *Opens the selected file
+	 * Opens the selected file
+	 * 
 	 * @return true if the file is opened
 	 */
 	public boolean openSelectedAudioFile() {
@@ -156,6 +167,7 @@ public class MetaMan {
 
 	/**
 	 * Prints the current working directory's absolute path
+	 * 
 	 * @return the absolute path of the file
 	 */
 	public String printWorkingDirectory() {
@@ -164,7 +176,10 @@ public class MetaMan {
 
 	/**
 	 * Sets the selected audio file
-	 * @param index position of the file in the cache(this is the index that is printed in the veiw)
+	 * 
+	 * @param index
+	 *            position of the file in the cache(this is the index that is
+	 *            printed in the veiw)
 	 * @return true if the file could be selected
 	 */
 	public boolean setSelectedAudioFile(int index) {
@@ -174,6 +189,7 @@ public class MetaMan {
 
 	/**
 	 * Unlocks the selected file
+	 * 
 	 * @return true if unlocked
 	 */
 	public boolean unlockSelectedFile() {
@@ -185,6 +201,7 @@ public class MetaMan {
 
 	/**
 	 * Gets a string representation of the meta data
+	 * 
 	 * @return the meta data of the file
 	 */
 	public String viewMetaDataOfSelectedFile() {

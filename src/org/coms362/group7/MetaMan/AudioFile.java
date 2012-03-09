@@ -13,7 +13,9 @@ import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.TagException;
 
 /**
- * An AudioFile, extended from MetaManFile, file is any File that can fit through AudioFileFilter
+ * An AudioFile, extended from MetaManFile, file is any File that can fit
+ * through AudioFileFilter
+ * 
  * @see AudioFileFilter
  * @see MetaManFile
  * @author COM S 363 Group 7
@@ -36,8 +38,11 @@ public class AudioFile extends MetaManFile {
 
 	/**
 	 * Constructs a new AudioFile
-	 * @param pathname The file path of the audio file to be constructed
-	 * @throws MetaManException If the file could not be constructed properly.
+	 * 
+	 * @param pathname
+	 *            The file path of the audio file to be constructed
+	 * @throws MetaManException
+	 *             If the file could not be constructed properly.
 	 */
 	public AudioFile(String pathname) throws MetaManException {
 		super(pathname);
