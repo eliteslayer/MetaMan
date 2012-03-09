@@ -59,27 +59,15 @@ public class MetaManController {
 	 * 
 	 * @return - A list of files/directories in the current directory
 	 * @throws MetaManException
-	 * @throws InvalidAudioFrameException
-	 * @throws ReadOnlyFileException
-	 * @throws TagException
-	 * @throws IOException
-	 * @throws CannotReadException
-	 * @throws CorruptedFileException
 	 */
 	public List<MetaManFile> listing() throws MetaManException {
 		return this.metaMan.listing();
 	}
 
 	/**
-	 * 
+	 * Returns a list of audio 
 	 * @return
 	 * @throws MetaManException
-	 * @throws InvalidAudioFrameException
-	 * @throws ReadOnlyFileException
-	 * @throws TagException
-	 * @throws IOException
-	 * @throws CannotReadException
-	 * @throws CorruptedFileException
 	 */
 	public List<AudioFile> listingAudioOnly() throws MetaManException {
 		final ArrayList<AudioFile> list = new ArrayList<AudioFile>();
