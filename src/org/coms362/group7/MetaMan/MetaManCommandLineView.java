@@ -84,7 +84,7 @@ public class MetaManCommandLineView {
 	}
 
 	/**
-	 * 
+	 * Executes the users command
 	 * @throws IOException
 	 */
 	private void executeUserCommand() {
@@ -134,13 +134,16 @@ public class MetaManCommandLineView {
 	}
 
 	/**
-	 * 
+	 * Ends the program
 	 */
 	private void exit() {
 		this.println("Goodbye");
 		System.exit(0);
 	}
 
+	/**
+	 * Parses the command entered by the user
+	 */
 	private void extractCommandAndParamsFromInput() {
 
 		try {
@@ -190,6 +193,9 @@ public class MetaManCommandLineView {
 		this.println();
 		this.println("OPEN {index}:");
 		this.println("     opens the file at index");
+		this.println();
+		this.println("EXIT :");
+		this.println("     exits the program");
 		this.println();
 
 	}
@@ -259,7 +265,7 @@ public class MetaManCommandLineView {
 	}
 
 	/**
-	 * 
+	 * Prints the list of all the supported audio files in the current working directory
 	 */
 	private void lsao() {
 
@@ -295,7 +301,7 @@ public class MetaManCommandLineView {
 	}
 
 	/**
-	 * 
+	 * Prints the list of all the directories in the current working directory
 	 */
 	private void lsdo() {
 
@@ -326,9 +332,9 @@ public class MetaManCommandLineView {
 	}
 
 	/**
-	 * 
-	 * @param key
-	 * @param newValue
+	 * Modifies the selected files meta data
+	 * @param key key to be set
+	 * @param newValue the value to set the key to
 	 */
 	private void modSelected(String key, String newValue) {
 		if(this.controller.modMetaDataOfSelectedFile(this.decodeFieldKey(key),
@@ -342,7 +348,7 @@ public class MetaManCommandLineView {
 	}
 
 	/**
-	 * 
+	 * Opens the selected file
 	 * @throws IOException
 	 */
 	private void open() {
@@ -355,7 +361,7 @@ public class MetaManCommandLineView {
 	}
 
 	/**
-	 * 
+	 * Populates the operations and what they map to
 	 */
 	private void populateOperationMap() {
 		this.operation_map = new HashMap<String, String>();
@@ -375,20 +381,21 @@ public class MetaManCommandLineView {
 		this.operation_map.put("open", "open");
 		this.operation_map.put("lock", "lock");
 		this.operation_map.put("unlock", "unlock");
+		this.operation_map.put("quit", "exit");
 	}
 
 	/**
-	 * 
-	 * @param message
+	 * Print a message with no new line
+	 * @param message message to be printed
 	 */
 	private void print(String message) {
 		System.out.print(message);
 	}
 
 	/**
-	 * 
-	 * @param count
-	 * @param x
+	 * Print character to the screen
+	 * @param count number of times to print the character
+	 * @param x character to print
 	 */
 	private void printChar(int count, char x) {
 		for (int i = 0; i < count; i++) {
@@ -396,6 +403,10 @@ public class MetaManCommandLineView {
 		}
 	}
 
+	/**
+	 * Prints error messages
+	 * @param message message to be printed
+	 */
 	private void printError(String message) {
 		this.println();
 		this.println("ERROR: " + message);
@@ -403,45 +414,46 @@ public class MetaManCommandLineView {
 	}
 
 	/**
-	 * 
+	 * Prints a blank line
 	 */
 	private void println() {
 		System.out.println();
 	}
 
 	/**
-	 * 
-	 * @param message
+	 * Print message with new line
+	 * @param message message to be printed
 	 */
 	private void println(String message) {
 		System.out.println(message);
 	}
 
 	/**
-	 * 
-	 * @param count
+	 * Print spaces on same line
+	 * @param count number of spaces to print
 	 */
 	private void printSpace(int count) {
 		this.printChar(count, ' ');
 	}
 
 	/**
-	 * 
+	 * Prints the working directory and new line
 	 */
 	private void pwd() {
 		this.println(this.controller.printWorkingDirectory());
 	}
 
 	/**
-	 * 
-	 * @param index
+	 *Sets the selected file
+	 * @param index index corresponding to the list that was last printed
 	 */
 	private void setSelectedAudioFile(int index) {
 		this.controller.setSelectedAudioFile(index);
 	}
 
 	/**
-	 * 
+	 * Main Entry point of the program
+	 * Loops until exit command 
 	 * @throws IOException
 	 */
 	public void startup() {
@@ -471,7 +483,7 @@ public class MetaManCommandLineView {
 	}
 
 	/**
-	 * 
+	 * @see code
 	 */
 	private void unknownCmd() {
 		this.println("'"
@@ -480,6 +492,9 @@ public class MetaManCommandLineView {
 		this.println();
 	}
 
+	/**
+	 * Unlocks a selected file
+	 */
 	private void unlockSelected() {
 		if (this.controller.unlockSelectedFile()) {
 			System.out.println("FILE WAS UNLOCKED");
@@ -489,23 +504,23 @@ public class MetaManCommandLineView {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Move to the parent directory
+	 * @return true if move was successful
 	 */
 	private boolean up() {
 		return this.controller.goUpOneDirectory();
 	}
 
 	/**
-	 * 
+	 * Views the selected files meta data
 	 */
 	private void view() {
 		this.println(this.controller.viewMetaDataOfSelectedFile());
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Welcomes the user
+	 * @return welcome message
 	 */
 	private String welcomeMessage() {
 		return "MetaMan -v 1.0\n--------------\nWelcome To MetaMan!\nEnter 'help' if needed\n";

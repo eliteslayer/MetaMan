@@ -20,17 +20,17 @@ import org.jaudiotagger.tag.TagException;
 public class MetaMan {
 
 	/**
-	 * 
+	 * List of files resulting from the last ls command
 	 */
 	private List<MetaManFile> cache;
 
 	/**
-	 * 
+	 * the currently selected audio file
 	 */
 	private AudioFile selectedAudioFile;
 
 	/**
-	 * 
+	 * The current working directory
 	 */
 	private File workingDirectory;
 
@@ -42,9 +42,9 @@ public class MetaMan {
 	}
 
 	/**
-	 * 
-	 * @param dir
-	 * @return
+	 * Change the directory to the one specified
+	 * @param dir the target directory to change to
+	 * @return true if changing was successful
 	 */
 	public boolean changeDirectory(String dir) {
 		File file;
@@ -60,8 +60,8 @@ public class MetaMan {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Move to the parent directory
+	 * @return true if the move was successful
 	 */
 	public boolean goUpOneDirectory() {
 		if (this.workingDirectory.getParentFile().exists()) {
@@ -72,8 +72,8 @@ public class MetaMan {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Lists the metaman files in the current directory
+	 * @return list of all of the compatible files
 	 * @throws MetaManException
 	 * @throws InvalidAudioFrameException
 	 * @throws ReadOnlyFileException
@@ -84,22 +84,16 @@ public class MetaMan {
 	 */
 	public List<MetaManFile> listing() throws MetaManException {
 		final ArrayList<MetaManFile> list = new ArrayList<MetaManFile>();
-		list.addAll(this.listingAudioOnly());
 		list.addAll(this.listingDirectoriesOnly());
+		list.addAll(this.listingAudioOnly());
 		this.cache = list;
 		return list;
 	}
 
 	/**
-	 * 
-	 * @return
+	 * List only the audio files
+	 * @return list of all supported audio files in the directory
 	 * @throws MetaManException
-	 * @throws CorruptedFileException
-	 * @throws InvalidAudioFrameException
-	 * @throws ReadOnlyFileException
-	 * @throws TagException
-	 * @throws IOException
-	 * @throws CannotReadException
 	 */
 	public List<MetaManFile> listingAudioOnly() throws MetaManException {
 		final List<MetaManFile> list = new ArrayList<MetaManFile>();
@@ -112,14 +106,8 @@ public class MetaMan {
 	}
 
 	/**
-	 * 
-	 * @return
-	 * @throws InvalidAudioFrameException
-	 * @throws ReadOnlyFileException
-	 * @throws TagException
-	 * @throws IOException
-	 * @throws CannotReadException
-	 * @throws CorruptedFileException
+	 * List the directories in the current working directory
+	 * @return list of all the directories
 	 */
 	public List<MetaManFile> listingDirectoriesOnly() {
 		final ArrayList<MetaManFile> list = new ArrayList<MetaManFile>();
@@ -131,6 +119,10 @@ public class MetaMan {
 		return list;
 	}
 
+	/**
+	 * Locks the selected file
+	 * @return true if locked
+	 */
 	public boolean lockSelectedFile() {
 		if (this.selectedAudioFile == null) {
 			throw new NullPointerException();
@@ -139,9 +131,9 @@ public class MetaMan {
 	}
 
 	/**
-	 * 
-	 * @param key
-	 * @param newValue
+	 * Modifies the metadata tag with the newValue
+	 * @param key The meta data key to be changed 
+	 * @param newValue The value the key will be changed to
 	 * @return
 	 */
 	public boolean modMetaDataOfSelectedFile(FieldKey key, String newValue) {
@@ -152,8 +144,8 @@ public class MetaMan {
 	}
 
 	/**
-	 * 
-	 * @return
+	 *Opens the selected file
+	 * @return true if the file is opened
 	 */
 	public boolean openSelectedAudioFile() {
 		if (this.selectedAudioFile == null) {
@@ -163,23 +155,27 @@ public class MetaMan {
 	}
 
 	/**
-	 * 
-	 * @return
+	 * Prints the current working directory's absolute path
+	 * @return the absolute path of the file
 	 */
 	public String printWorkingDirectory() {
 		return this.workingDirectory.getAbsolutePath();
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @return
+	 * Sets the selected audio file
+	 * @param index position of the file in the cache(this is the index that is printed in the veiw)
+	 * @return true if the file could be selected
 	 */
 	public boolean setSelectedAudioFile(int index) {
 		this.selectedAudioFile = (AudioFile) this.cache.get(index);
 		return true;
 	}
 
+	/**
+	 * Unlocks the selected file
+	 * @return true if unlocked
+	 */
 	public boolean unlockSelectedFile() {
 		if (this.selectedAudioFile == null) {
 			throw new NullPointerException();
@@ -187,6 +183,10 @@ public class MetaMan {
 		return this.selectedAudioFile.unlock();
 	}
 
+	/**
+	 * Gets a string representation of the meta data
+	 * @return the meta data of the file
+	 */
 	public String viewMetaDataOfSelectedFile() {
 		if (this.selectedAudioFile == null) {
 			throw new NullPointerException();

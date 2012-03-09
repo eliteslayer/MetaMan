@@ -27,7 +27,6 @@ public class MetaManController {
 	 * 
 	 * @param metaMan
 	 *            - The MetaMan Object that this controller will Manipulate.
-	 * @throws IOException
 	 * @throws MetaManException
 	 */
 	public MetaManController(File startingDirectory) throws MetaManException {
