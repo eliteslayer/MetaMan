@@ -1,106 +1,159 @@
 package org.coms362.group7.MetaMan;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jaudiotagger.audio.exceptions.CannotReadException;
+import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
+import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
 import org.jaudiotagger.tag.FieldKey;
+import org.jaudiotagger.tag.TagException;
 
 /**
- * A controller for the MetaMan Object.  All method calls to MetaMan from any view must go through this.
+ * A controller for the MetaMan Object. All method calls to MetaMan from any
+ * view must go through this.
+ * 
  * @author COM S 362 GROUP 7
- *
+ * 
  */
 public class MetaManController {
 
+	private final MetaMan metaMan;
+
 	/**
 	 * Creates a MetaMan Controller Object.
-	 * @param metaMan - The MetaMan Object that this controller will Manipulate.
+	 * 
+	 * @param metaMan
+	 *            - The MetaMan Object that this controller will Manipulate.
+	 * @throws IOException
+	 * @throws MetaManException
 	 */
-	public MetaManController(MetaMan metaMan)
-	{
-		this.metaMan = metaMan;
+	public MetaManController(File startingDirectory) throws MetaManException {
+		this.metaMan = new MetaMan(startingDirectory);
 	}
-	
-	/**
-	 * Fetches the current working directory.
-	 * @return The current working directory of MetaMan.
-	 */
-	public String pwd(){
-		return metaMan.pwd();
-	}
-	
-	/**
-	 * Lists all the files in the current directory.
-	 * @return - A list of files/directories in the current directory
-	 * @throws CorruptedFileException
-	 */
-	public List<MetaManFile> ls(){
-		return metaMan.ls();
-	}
-	
-	/**
-	 * Bumps the current working directory up one level
-	 * @return True is the move up was successful.
-	 */
-	public boolean up(){
-		return metaMan.up();
-	}
-	
+
 	/**
 	 * Changes the directory that MetaData is currently in to 'newPath'
-	 * @param newPath The path that MetaData's current working directory will be changed to.
+	 * 
+	 * @param newPath
+	 *            The path that MetaData's current working directory will be
+	 *            changed to.
 	 * @return True if the change was made successfully.
 	 */
-	public boolean cd(String newPath){
-		return metaMan.cd(newPath);
+	public boolean changeDirectory(String newPath) {
+		return this.metaMan.changeDirectory(newPath);
 	}
-	
+
+	/**
+	 * Bumps the current working directory up one level
+	 * 
+	 * @return True is the move up was successful.
+	 */
+	public boolean goUpOneDirectory() {
+		return this.metaMan.goUpOneDirectory();
+	}
+
+	/**
+	 * Lists all the files in the current directory.
+	 * 
+	 * @return - A list of files/directories in the current directory
+	 * @throws MetaManException
+	 * @throws InvalidAudioFrameException
+	 * @throws ReadOnlyFileException
+	 * @throws TagException
+	 * @throws IOException
+	 * @throws CannotReadException
+	 * @throws CorruptedFileException
+	 */
+	public List<MetaManFile> listing() throws MetaManException {
+		return this.metaMan.listing();
+	}
+
 	/**
 	 * 
 	 * @return
+	 * @throws MetaManException
+	 * @throws InvalidAudioFrameException
+	 * @throws ReadOnlyFileException
+	 * @throws TagException
+	 * @throws IOException
+	 * @throws CannotReadException
 	 * @throws CorruptedFileException
 	 */
-	public List<AudioFile> lsao(){
-		ArrayList<AudioFile> list = new ArrayList<AudioFile>();
-		for(MetaManFile f : metaMan.lsao()){
+	public List<AudioFile> listingAudioOnly() throws MetaManException {
+		final ArrayList<AudioFile> list = new ArrayList<AudioFile>();
+		for (final MetaManFile f : this.metaMan.listingAudioOnly()) {
 			list.add((AudioFile) f);
 		}
 		return list;
 	}
-	
-	public List<MetaManFile> lsdo(){
-		return metaMan.lsdo();
-	}
-	
-//	public List<AudioFile> modao(List<AudioFile> toMod, String key, String newValue){
-//		return metaMan.modao(toMod, key, newValue);
-//	}
-	
-//	public boolean addToSelectedAudioFiles(List<AudioFile> toSelect){
-//		return this.metaMan.addToSelectedAudioFiles(toSelect);
-//	}
-//	
-//	public void clearSelectedAudioFiles(){
-//		this.metaMan.clearSelectedAudioFiles();
-//	}
-	
-	private final MetaMan metaMan;
 
-	public void selectAudioFile(int i) {
-		//AudioFile selectedAudioFile = this.metaMan.lsao().get(i);
-		this.metaMan.setSelectedAudioFile(i);
+	/**
+	 * 
+	 * @return
+	 * @throws InvalidAudioFrameException
+	 * @throws ReadOnlyFileException
+	 * @throws TagException
+	 * @throws IOException
+	 * @throws CannotReadException
+	 * @throws CorruptedFileException
+	 */
+	public List<MetaManFile> listingDirectoiesOnly() {
+		return this.metaMan.listingDirectoriesOnly();
 	}
 
-	public AudioFile getSelectedFile() {
-		return this.metaMan.getSelectedAudioFile();
+	public boolean lockSelectedFile() {
+		return this.metaMan.lockSelectedFile();
+
 	}
 
-	public void openSelectedAudioFile() throws IOException {
-		this.metaMan.openSelectedAudioFile();
+	/**
+	 * 
+	 * @param key
+	 * @param newValue
+	 * @return
+	 */
+	public boolean modMetaDataOfSelectedFile(FieldKey key, String newValue) {
+		return this.metaMan.modMetaDataOfSelectedFile(key, newValue);
 	}
 
-	public boolean modSelectedAudio(FieldKey key, String newValue) {
-		return this.metaMan.modSelectedFile(key, newValue);
+	/**
+	 * 
+	 * @return
+	 */
+	public boolean openSelectedFile() {
+		return this.metaMan.openSelectedAudioFile();
+	}
+
+	/**
+	 * Fetches the current working directory.
+	 * 
+	 * @return The current working directory of MetaMan.
+	 */
+	public String printWorkingDirectory() {
+		return this.metaMan.printWorkingDirectory();
+	}
+
+	/**
+	 * 
+	 * @param index
+	 * @return
+	 */
+	public boolean setSelectedAudioFile(int index) {
+		return this.metaMan.setSelectedAudioFile(index);
+	}
+
+	public boolean unlockSelectedFile() {
+		return this.metaMan.unlockSelectedFile();
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public String viewMetaDataOfSelectedFile() {
+		return this.metaMan.viewMetaDataOfSelectedFile();
 	}
 }

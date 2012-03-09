@@ -1,31 +1,44 @@
 package org.coms362.group7.MetaMan;
 
-import java.io.IOException;
+import java.io.File;
 
 /**
- * The class starts the program using a command line view.
+ * The class starts the program MetaMan using a using a view.
+ * 
  * @author COM S 362 Group 7
- *
+ * 
  */
 public class ProgramStarter {
 
 	/**
-	 * Starting point of the program.  
-	 * @param args - No arguments to the main program are excepted at this time.
-	 * @throws IOException 
+	 * The current user's home directory
 	 */
-	public static void main(String[] args) throws IOException {
-		//Create a MetaMan Object
-		MetaMan metaMan = new MetaMan();
-		
-		//Create a MetaMan Controller placing metaMan inside of it to be controlled.
-		MetaManController controller = new MetaManController(metaMan);
-		
-		//Create the command line view of the program.  Place the controller inside of the view.
-		CMDView cmd = new CMDView(controller);
-		
-		//Start the command line view of the program.
-		cmd.startup();
-	}
 
+	private static final String HOME_DIR = System.getProperty("user.home");
+
+	/**
+	 * Starts the program.
+	 * 
+	 * @param args
+	 *            - Unused
+	 */
+	public static void main(String[] args) {
+
+		try {
+			final MetaManCommandLineView cmd = new MetaManCommandLineView(new File(ProgramStarter.HOME_DIR));
+			cmd.startup();
+
+		} catch (final MetaManException e) {
+			System.out.println(e.getMessage());
+			System.out.println();
+			System.out.println("MetaMan must now exit...");
+			System.exit(0);
+		} catch (final Exception e) {
+			System.out.println();
+			System.out
+					.println("An unknown error has occured, MetaMan must now exit...");
+			e.printStackTrace();
+			System.exit(0);
+		}
+	}
 }

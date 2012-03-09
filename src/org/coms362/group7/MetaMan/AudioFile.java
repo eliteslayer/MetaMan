@@ -12,88 +12,98 @@ import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.KeyNotFoundException;
 import org.jaudiotagger.tag.TagException;
 
+/**
+ * An AudioFile, extended from MetaManFile, file is any File that can fit through AudioFileFilter
+ * @see AudioFileFilter
+ * @see MetaManFile
+ * @author COM S 363 Group 7
+ * 
+ */
+public class AudioFile extends MetaManFile {
 
-@SuppressWarnings("serial")
-public class AudioFile extends MetaManFile{
+	/**
+	 * Needed for proper inheritance from parent class MetaManFile
+	 */
+	private static final long serialVersionUID = -5447397507042213309L;
 
+	/**
+	 * The meta data of 'this' audio file. NOTE: This is taken from an external
+	 * library called jAudioTagger
+	 * 
+	 * @see http://www.jthink.net/jaudiotagger/
+	 */
 	private org.jaudiotagger.audio.AudioFile metaData;
-	
-	public AudioFile(String pathname) {
+
+	/**
+	 * Constructs a new AudioFile
+	 * @param pathname The file path of the audio file to be constructed
+	 * @throws MetaManException If the file could not be constructed properly.
+	 */
+	public AudioFile(String pathname) throws MetaManException {
 		super(pathname);
 		try {
 			this.metaData = AudioFileIO.read(this);
-		} catch (CannotReadException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TagException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ReadOnlyFileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InvalidAudioFrameException e) {
-			e.printStackTrace();
+		} catch (final CannotReadException e) {
+			throw new MetaManException("Could not read audio file: "
+					+ this.getAbsolutePath());
+		} catch (final IOException e) {
+			throw new MetaManException("Could not open audio file: "
+					+ this.getAbsolutePath());
+		} catch (final TagException e) {
+			throw new MetaManException(
+					"Could not read metadata for audio file: "
+							+ this.getAbsolutePath());
+		} catch (final ReadOnlyFileException e) {
+			throw new MetaManException("Could not open read-only file: "
+					+ this.getAbsolutePath());
+		} catch (final InvalidAudioFrameException e) {
+			throw new MetaManException("Could not read corrupted audio-file: "
+					+ this.getAbsolutePath()
+					+ " - Please remove this file from the directory.");
 		}
 	}
-	
-	
-	public String getMetaData(FieldKey key){
-		try {
-//			return metaData.getTag().getFirst(decodeFieldKey(key));
-			return metaData.getTag().getFirst(key);
-		} catch (KeyNotFoundException e) {
-			return "Not Found";
-		}
-	}
-	
-	public boolean setMetaData(FieldKey key, String newValue)
-	{
-		//FieldKey fieldKey = decodeFieldKey(key);
-		try {
-			metaData.getTag().setField(key, newValue);
-		} catch (KeyNotFoundException e) {
-			return false;
-		} catch (FieldDataInvalidException e) {
-			return false;
-		}
-		//change meta data in the actual file
-		try {
-			metaData.commit();
-		} catch (CannotWriteException e) {
-			return false;
-		}
-		return true;
-	}
-	
-//	private FieldKey decodeFieldKey(String key){
-//		if (key.toUpperCase().equals("ARTIST")) {
-//			return FieldKey.ARTIST;
-//		} else if (key.toUpperCase().equals("TITLE")) {
-//			return FieldKey.TITLE;
-//		}
-//		else if (key.toUpperCase().equals("ALBUM")) {
-//			return FieldKey.ALBUM;
-//		}
-//		else if (key.toUpperCase().equals("TRACK")) {
-//			return FieldKey.TRACK;
-//		}
-//		else if (key.toUpperCase().equals("YEAR")) {
-//			return FieldKey.YEAR;
-//		}
-//		throw new KeyNotFoundException();
-//	}
 
+	/**
+	 * @see MetaManFile Documentation
+	 */
+	@Override
+	public String getMetaData(FieldKey key) {
+		try {
+			return this.metaData.getTag().getFirst(key);
+		} catch (final KeyNotFoundException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * @see MetaManFile Documentation
+	 */
+	@Override
+	public boolean setMetaDataHelper(FieldKey key, String newValue) {
+		try {
+			this.metaData.getTag().setField(key, newValue);
+			this.metaData.commit();
+			return true;
+		} catch (final KeyNotFoundException e) {
+			return false;
+		} catch (final FieldDataInvalidException e) {
+			return false;
+		} catch (final CannotWriteException e) {
+			return false;
+		}
+	}
+
+	/**
+	 * @see MetaManFile Documentation
+	 */
 	@Override
 	public String view() {
 		String retVal = "";
-		String title = this.getMetaData(FieldKey.TITLE);
-		String artist = this.getMetaData(FieldKey.ARTIST);
-		String track = this.getMetaData(FieldKey.TRACK);
-		String album = this.getMetaData(FieldKey.ALBUM);
-		String year = this.getMetaData(FieldKey.YEAR);
+		final String title = this.getMetaData(FieldKey.TITLE);
+		final String artist = this.getMetaData(FieldKey.ARTIST);
+		final String track = this.getMetaData(FieldKey.TRACK);
+		final String album = this.getMetaData(FieldKey.ALBUM);
+		final String year = this.getMetaData(FieldKey.YEAR);
 		retVal += "*****************************\n";
 		retVal += "TITLE: " + title + "\n";
 		retVal += "ARTIST: " + artist + "\n";
@@ -102,11 +112,8 @@ public class AudioFile extends MetaManFile{
 		retVal += "YEAR: " + year + "\n";
 		retVal += "ALBUM: " + album + "\n";
 		retVal += "*****************************\n";
-		
+
 		return retVal;
 	}
 
-
-	
-	
 }
