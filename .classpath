@@ -5,5 +5,6 @@
 	<classpathentry kind="lib" path="jaudiotagger-2.0.4-20111207.115108-15-sources.jar"/>
 	<classpathentry kind="lib" path="jaudiotagger-2.0.4-20111207.115108-15.jar"/>
 	<classpathentry kind="lib" path="jaudiotagger-2.0.4-20111207.115108-15-javadoc.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Public/Documents/metadata-extractor-2.5.0-RC3/metadata-extractor-2.5.0-RC3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -1,10 +1,7 @@
 package org.coms362.group7.MetaMan;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.jaudiotagger.tag.FieldKey;
 
 /**
  * A controller for the MetaMan Object. All method calls to MetaMan from any
@@ -78,6 +75,10 @@ public class MetaManController {
 		return this.metaMan.listingDirectoriesOnly();
 	}
 
+	public List<MetaManFile> listingImagesOnly() throws MetaManException {
+		return this.metaMan.listingImagesOnly();
+	}
+
 	/**
 	 * Locks the selected file
 	 * 
@@ -96,8 +97,10 @@ public class MetaManController {
 	 * @param newValue
 	 *            The value the key will be changed to
 	 * @return
+	 * @throws MetaManException
 	 */
-	public boolean modMetaDataOfSelectedFile(FieldKey key, String newValue) {
+	public boolean modMetaDataOfSelectedFile(String key, String newValue)
+			throws MetaManException {
 		return this.metaMan.modMetaDataOfSelectedFile(key, newValue);
 	}
 
@@ -107,7 +110,7 @@ public class MetaManController {
 	 * @return true if the file is opened
 	 */
 	public boolean openSelectedFile() {
-		return this.metaMan.openSelectedAudioFile();
+		return this.metaMan.openSelectedFile();
 	}
 
 	/**
@@ -126,9 +129,10 @@ public class MetaManController {
 	 *            position of the file in the cache(this is the index that is
 	 *            printed in the veiw)
 	 * @return true if the file could be selected
+	 * @throws MetaManException
 	 */
-	public boolean setSelectedAudioFile(int index) {
-		return this.metaMan.setSelectedAudioFile(index);
+	public boolean setSelectedFile(int index) throws MetaManException {
+		return this.metaMan.setSelectedFile(index);
 	}
 
 	/**
@@ -144,8 +148,9 @@ public class MetaManController {
 	 * Gets a string representation of the meta data
 	 * 
 	 * @return the meta data of the file
+	 * @throws MetaManException
 	 */
-	public String viewMetaDataOfSelectedFile() {
+	public String viewMetaDataOfSelectedFile() throws MetaManException {
 		return this.metaMan.viewMetaDataOfSelectedFile();
 	}
 }
