@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.KeyNotFoundException;
-
 /**
  * MetaManCommandLineView is a command prompt view of the MetaMan Application.
  * MetaManCommandLineView is one of possibly more views of the MetaMan
@@ -57,7 +54,6 @@ public class MetaManCommandLineView {
 	public MetaManCommandLineView(File startingDirectory)
 			throws MetaManException {
 		this.controller = new MetaManController(startingDirectory);
-		this.controller.listingAudioOnly();
 		this.populateOperationMap();
 	}
 
@@ -73,29 +69,6 @@ public class MetaManCommandLineView {
 			this.println("MetaMan could not find the path given.");
 		}
 		this.println();
-	}
-
-	/**
-	 * Decodes raw user input as FieldKeys for MetaData tags
-	 * 
-	 * @param key
-	 *            The user input to decode. Examples include "TITLE", "ARTIST",
-	 *            ext.
-	 * @return The true Field key
-	 */
-	private FieldKey decodeFieldKey(String key) {
-		if (key.toUpperCase().equals("ARTIST")) {
-			return FieldKey.ARTIST;
-		} else if (key.toUpperCase().equals("TITLE")) {
-			return FieldKey.TITLE;
-		} else if (key.toUpperCase().equals("ALBUM")) {
-			return FieldKey.ALBUM;
-		} else if (key.toUpperCase().equals("TRACK")) {
-			return FieldKey.TRACK;
-		} else if (key.toUpperCase().equals("YEAR")) {
-			return FieldKey.YEAR;
-		}
-		throw new KeyNotFoundException();
 	}
 
 	/**
@@ -122,30 +95,39 @@ public class MetaManCommandLineView {
 				this.lsao();
 			} else if (this.operation_map.get(this.userCmd).equals("lsdo")) {
 				this.lsdo();
+			} else if (this.operation_map.get(this.userCmd).equals("lsio")) {
+				this.lsio();
 			} else if (this.operation_map.get(this.userCmd).equals("view")) {
-				this.setSelectedAudioFile(Integer.parseInt(this.userParams[0]));
+				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				this.view();
 			} else if (this.operation_map.get(this.userCmd).equals("open")) {
-				this.setSelectedAudioFile(Integer.parseInt(this.userParams[0]));
+				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				this.open();
 			} else if (this.operation_map.get(this.userCmd).equals("mod")) {
-				this.setSelectedAudioFile(Integer.parseInt(this.userParams[0]));
+				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				String newValue = "";
 				for (int i = 2; i < this.userParams.length; i++) {
 					newValue += this.userParams[i] + " ";
 				}
 				this.modSelected(this.userParams[1], newValue.trim());
 			} else if (this.operation_map.get(this.userCmd).equals("lock")) {
-				this.setSelectedAudioFile(Integer.parseInt(this.userParams[0]));
+				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				this.lockSelected();
 			} else if (this.operation_map.get(this.userCmd).equals("unlock")) {
-				this.setSelectedAudioFile(Integer.parseInt(this.userParams[0]));
+				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				this.unlockSelected();
 			} else {
 				this.unknownCmd();
 			}
 		} catch (final NullPointerException e) {
 			this.unknownCmd();
+			// e.printStackTrace();
+		} catch (final MetaManException e) {
+			this.printError(e.getMessage());
+			// e.printStackTrace();
+		} catch (final UnsupportedOperationException e) {
+			this.printError(e.getMessage());
+			// e.printStackTrace();
 		}
 	}
 
@@ -195,6 +177,9 @@ public class MetaManCommandLineView {
 		this.println("LSAO:");
 		this.println("     Lists all the audio files MetaMan supports within the current directory");
 		this.println();
+		this.println("LSIO:");
+		this.println("     Lists all the image files MetaMan supports within the current directory");
+		this.println();
 		this.println("LSDO:");
 		this.println("     Lists all the directorys within the current directory");
 		this.println();
@@ -231,8 +216,10 @@ public class MetaManCommandLineView {
 	/**
 	 * Asks the controller for a listing of files of the current directory and
 	 * prints them out in a table.
+	 * 
+	 * @throws MetaManException
 	 */
-	private void ls() {
+	private void ls() throws MetaManException {
 		this.println();
 		this.println("     SUPORTED FILES/DIRS");
 		this.println("------------------------------");
@@ -271,8 +258,6 @@ public class MetaManCommandLineView {
 				}
 				count++;
 			}
-		} catch (final MetaManException e) {
-			this.printError(e.getMessage());
 		} catch (final StringIndexOutOfBoundsException e) {
 			// Do nothing
 		}
@@ -284,33 +269,36 @@ public class MetaManCommandLineView {
 	/**
 	 * Prints the list of all the supported audio files in the current working
 	 * directory
+	 * 
+	 * @throws MetaManException
 	 */
-	private void lsao() {
+	private void lsao() throws MetaManException {
 
 		this.println();
-		this.println("     SUPORTED FILES/DIRS");
+		this.println("     SUPORTED AUDIO FILES/DIRS");
 		this.println("------------------------------");
 		this.println("#         TITLE          ARTIST");
 		this.println("------------------------------");
 
 		int count = 0;
-		ArrayList<AudioFile> list = new ArrayList<AudioFile>();
-		try {
-			list = (ArrayList<AudioFile>) this.controller.listingAudioOnly();
-		} catch (final MetaManException e) {
-			this.printError(e.getMessage());
+		ArrayList<MetaManFile> list;
+		final ArrayList<AudioFile> aolist = new ArrayList<AudioFile>();
+		list = (ArrayList<MetaManFile>) this.controller.listingAudioOnly();
+		for (int i = 0; i < list.size(); i++) {
+			aolist.add((AudioFile) list.get(i));
 		}
-		for (final AudioFile f : list) {
+
+		for (final AudioFile f : aolist) {
 			this.print(count + "");
 			final String count_s = count + "";
 			this.printSpace(10 - count_s.length());
-			String name = f.getMetaData(this.decodeFieldKey("TITLE"));
+			String name = f.getMetaData("TITLE");
 			if (name.length() > 10) {
 				name = name.substring(0, 10) + "...";
 			}
 			this.print(name);
 			this.printSpace(15 - name.length());
-			this.print(f.getMetaData(this.decodeFieldKey("ARTIST")));
+			this.print(f.getMetaData("ARTIST"));
 			this.print("\n");
 			count++;
 		}
@@ -349,6 +337,39 @@ public class MetaManCommandLineView {
 
 	}
 
+	private void lsio() throws MetaManException {
+		this.println();
+		this.println("     SUPORTED IMAGE FILES/DIRS");
+		this.println("------------------------------");
+		this.println("#         WIDTH         HEIGHT");
+		this.println("------------------------------");
+
+		int count = 0;
+		ArrayList<MetaManFile> list;
+		final ArrayList<ImageFile> iolist = new ArrayList<ImageFile>();
+		list = (ArrayList<MetaManFile>) this.controller.listingImagesOnly();
+		for (int i = 0; i < list.size(); i++) {
+			iolist.add((ImageFile) list.get(i));
+		}
+
+		for (final ImageFile f : iolist) {
+			this.print(count + "");
+			final String count_s = count + "";
+			this.printSpace(10 - count_s.length());
+			String name = f.getMetaData("WIDTH");
+			if (name.length() > 10) {
+				name = name.substring(0, 10) + "...";
+			}
+			this.print(name);
+			this.printSpace(15 - name.length());
+			this.print(f.getMetaData("HEIGHT"));
+			this.print("\n");
+			count++;
+		}
+		this.println();
+
+	}
+
 	/**
 	 * Modifies the selected files meta data
 	 * 
@@ -356,27 +377,32 @@ public class MetaManCommandLineView {
 	 *            key to be set
 	 * @param newValue
 	 *            the value to set the key to
+	 * @throws MetaManException
 	 */
-	private void modSelected(String key, String newValue) {
-		if (this.controller.modMetaDataOfSelectedFile(this.decodeFieldKey(key),
-				newValue)) {
+	private void modSelected(String key, String newValue)
+			throws MetaManException {
+		if (this.controller.modMetaDataOfSelectedFile(key, newValue)) {
 			this.print("File was modified successfylly");
 			this.println();
 		} else {
-			this.printError("File could not be opened because it is locked form MetaMan");
+			throw new MetaManException(
+					"File could not be opened because it is locked form MetaMan");
 		}
 	}
 
 	/**
 	 * Opens the selected file
 	 * 
+	 * @throws MetaManException
+	 * 
 	 * @throws IOException
 	 */
-	private void open() {
+	private void open() throws MetaManException {
 		this.println("OPENING FILE ...");
 
 		if (!this.controller.openSelectedFile()) {
-			this.printError("File could not be opened because it is locked form MetaMan");
+			throw new MetaManException(
+					"File could not be opened because it is locked form MetaMan");
 		}
 
 	}
@@ -403,6 +429,7 @@ public class MetaManCommandLineView {
 		this.operation_map.put("lock", "lock");
 		this.operation_map.put("unlock", "unlock");
 		this.operation_map.put("quit", "exit");
+		this.operation_map.put("lsio", "lsio");
 	}
 
 	/**
@@ -480,9 +507,10 @@ public class MetaManCommandLineView {
 	 * 
 	 * @param index
 	 *            index corresponding to the list that was last printed
+	 * @throws MetaManException
 	 */
-	private void setSelectedAudioFile(int index) {
-		this.controller.setSelectedAudioFile(index);
+	private void setSelectedFile(int index) throws MetaManException {
+		this.controller.setSelectedFile(index);
 	}
 
 	/**
@@ -548,8 +576,10 @@ public class MetaManCommandLineView {
 
 	/**
 	 * Views the selected files meta data
+	 * 
+	 * @throws MetaManException
 	 */
-	private void view() {
+	private void view() throws MetaManException {
 		this.println(this.controller.viewMetaDataOfSelectedFile());
 	}
 

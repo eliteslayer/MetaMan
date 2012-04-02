@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
 import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.tag.FieldKey;
 import org.jaudiotagger.tag.TagException;
 
 /**
@@ -39,7 +38,7 @@ public class MetaManDirectory extends MetaManFile {
 	 * @see MetaManFile Documentation
 	 */
 	@Override
-	public String getMetaData(FieldKey key) {
+	public String getMetaData(String key) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -47,7 +46,7 @@ public class MetaManDirectory extends MetaManFile {
 	 * @see MetaManFile Documentation
 	 */
 	@Override
-	public boolean setMetaDataHelper(FieldKey key, String value) {
+	public boolean setMetaDataHelper(String key, String value) {
 		throw new UnsupportedOperationException();
 	}
 

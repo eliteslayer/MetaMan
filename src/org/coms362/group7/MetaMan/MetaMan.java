@@ -1,15 +1,8 @@
 package org.coms362.group7.MetaMan;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.jaudiotagger.audio.exceptions.CannotReadException;
-import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
-import org.jaudiotagger.audio.exceptions.ReadOnlyFileException;
-import org.jaudiotagger.tag.FieldKey;
-import org.jaudiotagger.tag.TagException;
 
 /**
  * 
@@ -27,12 +20,18 @@ public class MetaMan {
 	/**
 	 * the currently selected audio file
 	 */
-	private AudioFile selectedAudioFile;
+	private MetaManFile selectedFile;
 
 	/**
 	 * The current working directory
 	 */
 	private File workingDirectory;
+
+	/**
+	 * A flag to determine if a listing method has been called. If not then no
+	 * other methods can be called.
+	 */
+	private boolean listingMethodHasBeenCalled = false;
 
 	public MetaMan(File startingDirectory) throws MetaManException {
 		this.workingDirectory = startingDirectory;
@@ -52,9 +51,11 @@ public class MetaMan {
 		File file;
 		if ((file = new File(dir)).exists()) {
 			this.workingDirectory = file;
+			this.listingMethodHasBeenCalled = false;
 			return true;
 		} else if ((file = new File(this.workingDirectory + "\\" + dir))
 				.exists()) {
+			this.listingMethodHasBeenCalled = false;
 			this.workingDirectory = file;
 			return true;
 		}
@@ -71,6 +72,7 @@ public class MetaMan {
 			return false;
 		}
 		this.workingDirectory = this.workingDirectory.getParentFile();
+		this.listingMethodHasBeenCalled = false;
 		return true;
 	}
 
@@ -84,7 +86,9 @@ public class MetaMan {
 		final ArrayList<MetaManFile> list = new ArrayList<MetaManFile>();
 		list.addAll(this.listingDirectoriesOnly());
 		list.addAll(this.listingAudioOnly());
+		list.addAll(this.listingImagesOnly());
 		this.cache = list;
+		this.listingMethodHasBeenCalled = true;
 		return list;
 	}
 
@@ -101,6 +105,7 @@ public class MetaMan {
 			list.add(new AudioFile(f.getAbsolutePath()));
 		}
 		this.cache = list;
+		this.listingMethodHasBeenCalled = true;
 		return list;
 	}
 
@@ -116,6 +121,19 @@ public class MetaMan {
 				list.add(new MetaManDirectory(f.getAbsolutePath()));
 			}
 		}
+		this.cache = list;
+		this.listingMethodHasBeenCalled = true;
+		return list;
+	}
+
+	public List<MetaManFile> listingImagesOnly() throws MetaManException {
+		final List<MetaManFile> list = new ArrayList<MetaManFile>();
+		for (final File f : this.workingDirectory
+				.listFiles(new ImageFileFilter())) {
+			list.add(new ImageFile(f.getAbsolutePath()));
+		}
+		this.cache = list;
+		this.listingMethodHasBeenCalled = true;
 		return list;
 	}
 
@@ -125,10 +143,10 @@ public class MetaMan {
 	 * @return true if locked
 	 */
 	public boolean lockSelectedFile() {
-		if (this.selectedAudioFile == null) {
+		if (this.selectedFile == null) {
 			throw new NullPointerException();
 		}
-		return this.selectedAudioFile.lock();
+		return this.selectedFile.lock();
 	}
 
 	/**
@@ -139,12 +157,14 @@ public class MetaMan {
 	 * @param newValue
 	 *            The value the key will be changed to
 	 * @return
+	 * @throws MetaManException
 	 */
-	public boolean modMetaDataOfSelectedFile(FieldKey key, String newValue) {
-		if (this.selectedAudioFile == null) {
+	public boolean modMetaDataOfSelectedFile(String key, String newValue)
+			throws MetaManException {
+		if (this.selectedFile == null) {
 			throw new NullPointerException();
 		}
-		return this.selectedAudioFile.setMetaData(key, newValue);
+		return this.selectedFile.setMetaData(key, newValue);
 	}
 
 	/**
@@ -152,11 +172,11 @@ public class MetaMan {
 	 * 
 	 * @return true if the file is opened
 	 */
-	public boolean openSelectedAudioFile() {
-		if (this.selectedAudioFile == null) {
+	public boolean openSelectedFile() {
+		if (this.selectedFile == null) {
 			throw new NullPointerException();
 		}
-		return this.selectedAudioFile.open();
+		return this.selectedFile.open();
 	}
 
 	/**
@@ -175,9 +195,14 @@ public class MetaMan {
 	 *            position of the file in the cache(this is the index that is
 	 *            printed in the veiw)
 	 * @return true if the file could be selected
+	 * @throws MetaManException
 	 */
-	public boolean setSelectedAudioFile(int index) {
-		this.selectedAudioFile = (AudioFile) this.cache.get(index);
+	public boolean setSelectedFile(int index) throws MetaManException {
+		if (!this.listingMethodHasBeenCalled) {
+			throw new MetaManException(
+					"Cannot preform action.  No listing method has been called.");
+		}
+		this.selectedFile = this.cache.get(index);
 		return true;
 	}
 
@@ -187,22 +212,23 @@ public class MetaMan {
 	 * @return true if unlocked
 	 */
 	public boolean unlockSelectedFile() {
-		if (this.selectedAudioFile == null) {
+		if (this.selectedFile == null) {
 			throw new NullPointerException();
 		}
-		return this.selectedAudioFile.unlock();
+		return this.selectedFile.unlock();
 	}
 
 	/**
 	 * Gets a string representation of the meta data
 	 * 
 	 * @return the meta data of the file
+	 * @throws MetaManException
 	 */
-	public String viewMetaDataOfSelectedFile() {
-		if (this.selectedAudioFile == null) {
+	public String viewMetaDataOfSelectedFile() throws MetaManException {
+		if (this.selectedFile == null) {
 			throw new NullPointerException();
 		}
-		return this.selectedAudioFile.view();
+		return this.selectedFile.view();
 	}
 
 }

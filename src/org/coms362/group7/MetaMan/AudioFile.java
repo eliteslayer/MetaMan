@@ -69,24 +69,51 @@ public class AudioFile extends MetaManFile {
 	}
 
 	/**
+	 * Decodes raw user input as FieldKeys for MetaData tags
+	 * 
+	 * @param key
+	 *            The user input to decode. Examples include "TITLE", "ARTIST",
+	 *            ext.
+	 * @return The true Field key
+	 * @throws MetaManException
+	 */
+	private FieldKey decodeFieldKey(String key) throws MetaManException {
+		if (key.toUpperCase().equals("ARTIST")) {
+			return FieldKey.ARTIST;
+		} else if (key.toUpperCase().equals("TITLE")) {
+			return FieldKey.TITLE;
+		} else if (key.toUpperCase().equals("ALBUM")) {
+			return FieldKey.ALBUM;
+		} else if (key.toUpperCase().equals("TRACK")) {
+			return FieldKey.TRACK;
+		} else if (key.toUpperCase().equals("YEAR")) {
+			return FieldKey.YEAR;
+		}
+		throw new MetaManException("Key Not Found");
+	}
+
+	/**
+	 * @throws MetaManException
 	 * @see MetaManFile Documentation
 	 */
 	@Override
-	public String getMetaData(FieldKey key) {
+	public String getMetaData(String key) throws MetaManException {
 		try {
-			return this.metaData.getTag().getFirst(key);
+			return this.metaData.getTag().getFirst(this.decodeFieldKey(key));
 		} catch (final KeyNotFoundException e) {
 			return null;
 		}
 	}
 
 	/**
+	 * @throws MetaManException
 	 * @see MetaManFile Documentation
 	 */
 	@Override
-	public boolean setMetaDataHelper(FieldKey key, String newValue) {
+	public boolean setMetaDataHelper(String key, String newValue)
+			throws MetaManException {
 		try {
-			this.metaData.getTag().setField(key, newValue);
+			this.metaData.getTag().setField(this.decodeFieldKey(key), newValue);
 			this.metaData.commit();
 			return true;
 		} catch (final KeyNotFoundException e) {
@@ -99,16 +126,17 @@ public class AudioFile extends MetaManFile {
 	}
 
 	/**
+	 * @throws MetaManException
 	 * @see MetaManFile Documentation
 	 */
 	@Override
-	public String view() {
+	public String view() throws MetaManException {
 		String retVal = "";
-		final String title = this.getMetaData(FieldKey.TITLE);
-		final String artist = this.getMetaData(FieldKey.ARTIST);
-		final String track = this.getMetaData(FieldKey.TRACK);
-		final String album = this.getMetaData(FieldKey.ALBUM);
-		final String year = this.getMetaData(FieldKey.YEAR);
+		final String title = this.getMetaData("TITLE");
+		final String artist = this.getMetaData("ARTIST");
+		final String track = this.getMetaData("TRACK");
+		final String album = this.getMetaData("ALBUM");
+		final String year = this.getMetaData("YEAR");
 		retVal += "*****************************\n";
 		retVal += "TITLE: " + title + "\n";
 		retVal += "ARTIST: " + artist + "\n";

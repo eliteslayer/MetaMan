@@ -2,8 +2,6 @@ package org.coms362.group7.MetaMan;
 
 import java.io.IOException;
 
-import org.jaudiotagger.tag.FieldKey;
-
 /**
  * An abstract version of a file that MetaMan Supports. See java.io.File. Known
  * subclasses are AudioFile.
@@ -45,8 +43,9 @@ abstract class MetaManFile extends java.io.File {
 	 * @param key
 	 *            key to retrieve
 	 * @return String of retrieved data or null if it does not exist
+	 * @throws MetaManException
 	 */
-	public abstract String getMetaData(FieldKey key);
+	public abstract String getMetaData(String key) throws MetaManException;
 
 	/**
 	 * Locks the file from being modified by meta man
@@ -75,7 +74,8 @@ abstract class MetaManFile extends java.io.File {
 		return true;
 	}
 
-	public boolean setMetaData(FieldKey key, String value) {
+	public boolean setMetaData(String key, String value)
+			throws MetaManException {
 		if (!this.canWrite()) {
 			return false;
 		}
@@ -90,8 +90,10 @@ abstract class MetaManFile extends java.io.File {
 	 * @param value
 	 *            value to set to
 	 * @return true if successful
+	 * @throws MetaManException
 	 */
-	protected abstract boolean setMetaDataHelper(FieldKey key, String value);
+	protected abstract boolean setMetaDataHelper(String key, String value)
+			throws MetaManException;
 
 	/**
 	 * @return
@@ -105,6 +107,7 @@ abstract class MetaManFile extends java.io.File {
 	 * Gets a string view of the files metadata
 	 * 
 	 * @return string of metadata
+	 * @throws MetaManException
 	 */
-	public abstract String view();
+	public abstract String view() throws MetaManException;
 }
