@@ -2,11 +2,12 @@ package org.coms362.group7.MetaMan;
 
 import java.io.IOException;
 
-import com.drew.imaging.ImageMetadataReader;
-import com.drew.imaging.ImageProcessingException;
-import com.drew.metadata.Directory;
-import com.drew.metadata.Tag;
-import com.drew.metadata.exif.ExifIFD0Directory;
+import org.apache.sanselan.ImageInfo;
+import org.apache.sanselan.ImageReadException;
+import org.apache.sanselan.Sanselan;
+import org.apache.sanselan.formats.jpeg.JpegImageMetadata;
+import org.apache.sanselan.formats.tiff.TiffField;
+import org.apache.sanselan.formats.tiff.constants.ExifTagConstants;
 
 /**
  * An ImageFile, extended from MetaManFile, file is any File that can fit
@@ -25,12 +26,20 @@ public class ImageFile extends MetaManFile {
 	private static final long serialVersionUID = -8191065022586621996L;
 
 	/**
+	 * The image info of 'this' image file. NOTE: This is taken from an external
+	 * library called Metadata-Extractor
+	 * 
+	 * @see http://code.google.com/p/metadata-extractor/
+	 */
+	private ImageInfo imageInfo;
+
+	/**
 	 * The meta data of 'this' image file. NOTE: This is taken from an external
 	 * library called Metadata-Extractor
 	 * 
 	 * @see http://code.google.com/p/metadata-extractor/
 	 */
-	private com.drew.metadata.Metadata metaData;
+	private JpegImageMetadata metaData;
 
 	/**
 	 * Constructs a new ImageFile
@@ -43,15 +52,14 @@ public class ImageFile extends MetaManFile {
 	public ImageFile(String pathname) throws MetaManException {
 		super(pathname);
 		try {
-			this.metaData = ImageMetadataReader.readMetadata(this);
-		} catch (final ImageProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			this.imageInfo = Sanselan.getImageInfo(this);
+			this.metaData = (JpegImageMetadata) Sanselan.getMetadata(this);
+			// this.metaData = Sanselan.getMetadata(bytes);
+		} catch (final ImageReadException e) {
+			throw new MetaManException(e.getMessage());
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new MetaManException(e.getMessage());
 		}
-
 	}
 
 	/**
@@ -59,14 +67,23 @@ public class ImageFile extends MetaManFile {
 	 */
 	@Override
 	public String getMetaData(String key) {
-		try {
-			return this.metaData.getDirectory(ExifIFD0Directory.class)
-					.getDate(ExifIFD0Directory.TAG_IMAGE_DESCRIPTION)
-					.toString();
-		} catch (final NullPointerException e) {
-			return "N/A";
+		if (key.equals("HEIGHT")) {
+			return this.imageInfo.getHeight() + "";
+		} else if (key.equals("WIDTH")) {
+			return this.imageInfo.getWidth() + "";
+		} else if (key.equals("DATE")) {
+			final TiffField field = this.metaData
+					.findEXIFValue(ExifTagConstants.EXIF_TAG_CREATE_DATE);
+			if (field != null) {
+				return field
+						.getValueDescription()
+						.toString()
+						.substring(
+								1,
+								field.getValueDescription().toString().length() - 1);
+			}
 		}
-
+		return "N/A";
 	}
 
 	/**
@@ -74,8 +91,8 @@ public class ImageFile extends MetaManFile {
 	 */
 	@Override
 	protected boolean setMetaDataHelper(String key, String value) {
-		// TODO Auto-generated method stub
-		return true;
+		throw new UnsupportedOperationException(
+				"Setting the MetaData of an Image file is not Supported Yet");
 	}
 
 	/**
@@ -83,13 +100,17 @@ public class ImageFile extends MetaManFile {
 	 */
 	@Override
 	public String view() {
-		String toReturn = "";
-		for (final Directory directory : this.metaData.getDirectories()) {
-			for (final Tag tag : directory.getTags()) {
-				toReturn = toReturn + tag + "\n";
-			}
-		}
-		return toReturn;
+		String retVal = "";
+		final String height = this.getMetaData("HEIGHT");
+		final String width = this.getMetaData("WIDTH");
+		final String date = this.getMetaData("DATE");
+		retVal += "*****************************\n";
+		retVal += "WIDTH: " + width + "\n";
+		retVal += "HEIGHT: " + height + "\n";
+		retVal += "DATE: " + date + "\n";
+		retVal += "*****************************\n";
+
+		return retVal;
 	}
 
 }
