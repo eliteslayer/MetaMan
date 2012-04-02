@@ -65,12 +65,8 @@ public class MetaManController {
 	 * @return list of all supported audio files in the directory
 	 * @throws MetaManException
 	 */
-	public List<AudioFile> listingAudioOnly() throws MetaManException {
-		final ArrayList<AudioFile> list = new ArrayList<AudioFile>();
-		for (final MetaManFile f : this.metaMan.listingAudioOnly()) {
-			list.add((AudioFile) f);
-		}
-		return list;
+	public List<MetaManFile> listingAudioOnly() throws MetaManException {
+		return this.metaMan.listingAudioOnly();
 	}
 
 	/**
