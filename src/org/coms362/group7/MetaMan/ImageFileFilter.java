@@ -15,7 +15,7 @@ public class ImageFileFilter implements FileFilter {
 	@Override
 	public boolean accept(File file) {
 		final String name = file.getName();
-		if (name.endsWith(".jpg")) {
+		if (name.endsWith(".jpg") || name.endsWith(".JPG")) {
 			return true;
 		}
 		return false;
