@@ -153,4 +153,13 @@ public class MetaManController {
 	public String viewMetaDataOfSelectedFile() throws MetaManException {
 		return this.metaMan.viewMetaDataOfSelectedFile();
 	}
+	
+	/**
+	 * Deletes the currently selected file.
+	 * 
+	 * @return True if the file is deleted
+	 */
+	public boolean deleteSelectedFile() {
+		return this.metaMan.deleteSelectedFile();
+	}
 }

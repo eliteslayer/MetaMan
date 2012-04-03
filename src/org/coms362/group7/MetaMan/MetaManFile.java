@@ -110,4 +110,14 @@ abstract class MetaManFile extends java.io.File {
 	 * @throws MetaManException
 	 */
 	public abstract String view() throws MetaManException;
+	
+	/**
+	 * Deletes this MetaManFile from the FileSystem.  Note this function simply overrides the parent function delete() inherited from File--This was mainly implemented for readability of the program.
+	 * 
+	 * @return True if the this MetaManFile was deleted successfully.
+	 */
+	@Override
+	public boolean delete() {
+		return super.delete();
+	}
 }

@@ -83,12 +83,17 @@ public class MetaManCommandLineView {
 				this.pwd();
 			} else if (this.operation_map.get(this.userCmd).equals("exit")) {
 				this.exit();
-			} else if (this.operation_map.get(this.userCmd).equals("ls")) {
+			} 
+			else if (this.operation_map.get(this.userCmd).equals("ls")) {
 				this.ls();
 			} else if (this.operation_map.get(this.userCmd).equals("up")) {
 				this.up();
 			} else if (this.operation_map.get(this.userCmd).equals("cd")) {
-				this.cd(this.userParams[0]);
+				String newValue = "";
+				for (int i = 0; i < this.userParams.length; i++) {
+					newValue += this.userParams[i] + " ";
+				}
+				this.cd(newValue.trim());
 			} else if (this.operation_map.get(this.userCmd).equals("help")) {
 				this.help();
 			} else if (this.operation_map.get(this.userCmd).equals("lsao")) {
@@ -103,7 +108,11 @@ public class MetaManCommandLineView {
 			} else if (this.operation_map.get(this.userCmd).equals("open")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				this.open();
-			} else if (this.operation_map.get(this.userCmd).equals("mod")) {
+			}else if (this.operation_map.get(this.userCmd).equals("delete")) {
+				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
+				this.delete();
+			} 
+			else if (this.operation_map.get(this.userCmd).equals("mod")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				String newValue = "";
 				for (int i = 2; i < this.userParams.length; i++) {
@@ -194,6 +203,8 @@ public class MetaManCommandLineView {
 		this.println();
 		this.println("OPEN {index}:");
 		this.println("     opens the file at index");
+		this.println("DELETE {index}:");
+		this.println("     deletes the file at index");
 		this.println();
 		this.println("EXIT :");
 		this.println("     exits the program");
@@ -416,9 +427,9 @@ public class MetaManCommandLineView {
 		this.operation_map.put("exit", "exit");
 		this.operation_map.put("e", "exit");
 		this.operation_map.put("ls", "ls");
-		this.operation_map.put("../", "up");
+		this.operation_map.put("cd ../", "up");
 		this.operation_map.put("up", "up");
-		this.operation_map.put("..", "up");
+		this.operation_map.put("cd ..", "up");
 		this.operation_map.put("cd", "cd");
 		this.operation_map.put("help", "help");
 		this.operation_map.put("lsao", "lsao");
@@ -430,6 +441,7 @@ public class MetaManCommandLineView {
 		this.operation_map.put("unlock", "unlock");
 		this.operation_map.put("quit", "exit");
 		this.operation_map.put("lsio", "lsio");
+		this.operation_map.put("delete", "delete");
 	}
 
 	/**
@@ -559,9 +571,9 @@ public class MetaManCommandLineView {
 	 */
 	private void unlockSelected() {
 		if (this.controller.unlockSelectedFile()) {
-			System.out.println("FILE WAS UNLOCKED");
+			this.println("File was unlocked.");
 		} else {
-			System.out.println("FILE WAS NOT UNLOCKED");
+			this.println("File Was NOT Unlocked.  Try again later.");
 		}
 	}
 
@@ -581,6 +593,20 @@ public class MetaManCommandLineView {
 	 */
 	private void view() throws MetaManException {
 		this.println(this.controller.viewMetaDataOfSelectedFile());
+	}
+	
+	/**
+	 * Deletes the selected file
+	 * 
+	 */
+	private void delete() {
+		if(this.controller.deleteSelectedFile()){
+			this.println("File was deleted.");
+		}
+		else{
+			this.println("File was NOT deleted.  Try again later.");
+		}
+		
 	}
 
 	/**
