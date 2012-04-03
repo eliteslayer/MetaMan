@@ -38,6 +38,15 @@ public class MetaManController {
 	}
 
 	/**
+	 * Deletes the currently selected file.
+	 * 
+	 * @return True if the file is deleted
+	 */
+	public boolean deleteSelectedFile() {
+		return this.metaMan.deleteSelectedFile();
+	}
+
+	/**
 	 * Bumps the current working directory up one level
 	 * 
 	 * @return True is the move up was successful.
@@ -152,14 +161,5 @@ public class MetaManController {
 	 */
 	public String viewMetaDataOfSelectedFile() throws MetaManException {
 		return this.metaMan.viewMetaDataOfSelectedFile();
-	}
-	
-	/**
-	 * Deletes the currently selected file.
-	 * 
-	 * @return True if the file is deleted
-	 */
-	public boolean deleteSelectedFile() {
-		return this.metaMan.deleteSelectedFile();
 	}
 }

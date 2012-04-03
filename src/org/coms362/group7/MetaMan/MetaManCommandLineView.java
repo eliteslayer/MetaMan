@@ -72,6 +72,19 @@ public class MetaManCommandLineView {
 	}
 
 	/**
+	 * Deletes the selected file
+	 * 
+	 */
+	private void delete() {
+		if (this.controller.deleteSelectedFile()) {
+			this.println("File was deleted.");
+		} else {
+			this.println("File was NOT deleted.  Try again later.");
+		}
+
+	}
+
+	/**
 	 * Executes the users command
 	 * 
 	 * @throws IOException
@@ -83,15 +96,14 @@ public class MetaManCommandLineView {
 				this.pwd();
 			} else if (this.operation_map.get(this.userCmd).equals("exit")) {
 				this.exit();
-			} 
-			else if (this.operation_map.get(this.userCmd).equals("ls")) {
+			} else if (this.operation_map.get(this.userCmd).equals("ls")) {
 				this.ls();
 			} else if (this.operation_map.get(this.userCmd).equals("up")) {
 				this.up();
 			} else if (this.operation_map.get(this.userCmd).equals("cd")) {
 				String newValue = "";
-				for (int i = 0; i < this.userParams.length; i++) {
-					newValue += this.userParams[i] + " ";
+				for (final String userParam : this.userParams) {
+					newValue += userParam + " ";
 				}
 				this.cd(newValue.trim());
 			} else if (this.operation_map.get(this.userCmd).equals("help")) {
@@ -108,11 +120,10 @@ public class MetaManCommandLineView {
 			} else if (this.operation_map.get(this.userCmd).equals("open")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				this.open();
-			}else if (this.operation_map.get(this.userCmd).equals("delete")) {
+			} else if (this.operation_map.get(this.userCmd).equals("delete")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				this.delete();
-			} 
-			else if (this.operation_map.get(this.userCmd).equals("mod")) {
+			} else if (this.operation_map.get(this.userCmd).equals("mod")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				String newValue = "";
 				for (int i = 2; i < this.userParams.length; i++) {
@@ -593,20 +604,6 @@ public class MetaManCommandLineView {
 	 */
 	private void view() throws MetaManException {
 		this.println(this.controller.viewMetaDataOfSelectedFile());
-	}
-	
-	/**
-	 * Deletes the selected file
-	 * 
-	 */
-	private void delete() {
-		if(this.controller.deleteSelectedFile()){
-			this.println("File was deleted.");
-		}
-		else{
-			this.println("File was NOT deleted.  Try again later.");
-		}
-		
 	}
 
 	/**

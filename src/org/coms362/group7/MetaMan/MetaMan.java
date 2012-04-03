@@ -49,11 +49,11 @@ public class MetaMan {
 	 */
 	public boolean changeDirectory(String dir) {
 		File file;
-		if(dir.equals("..") || dir.equals("../")){
+		if (dir.equals("..") || dir.equals("../")) {
 			this.goUpOneDirectory();
 			return true;
 		}
-		if(dir.equals("../../")||dir.equals("../..")){
+		if (dir.equals("../../") || dir.equals("../..")) {
 			this.goUpOneDirectory();
 			this.goUpOneDirectory();
 			return true;
@@ -72,14 +72,26 @@ public class MetaMan {
 	}
 
 	/**
+	 * Deletes the currently selected file.
+	 * 
+	 * @return True if the file is deleted
+	 */
+	public boolean deleteSelectedFile() {
+		if (this.selectedFile == null) {
+			throw new NullPointerException();
+		}
+		return this.selectedFile.delete();
+	}
+
+	/**
 	 * Move to the parent directory
 	 * 
 	 * @return true if the move was successful
 	 */
 	public boolean goUpOneDirectory() {
-		String inCaseOfNull = this.workingDirectory.getAbsolutePath();
+		final String inCaseOfNull = this.workingDirectory.getAbsolutePath();
 		this.workingDirectory = this.workingDirectory.getParentFile();
-		if(this.workingDirectory == null){
+		if (this.workingDirectory == null) {
 			this.workingDirectory = new File(inCaseOfNull);
 			return false;
 		}
@@ -240,18 +252,6 @@ public class MetaMan {
 			throw new NullPointerException();
 		}
 		return this.selectedFile.view();
-	}
-	
-	/**
-	 * Deletes the currently selected file.
-	 * 
-	 * @return True if the file is deleted
-	 */
-	public boolean deleteSelectedFile() {
-		if (this.selectedFile == null) {
-			throw new NullPointerException();
-		}
-		return this.selectedFile.delete();
 	}
 
 }
