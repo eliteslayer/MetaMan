@@ -1,5 +1,6 @@
 package org.coms362.group7.MetaMan;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -94,7 +95,7 @@ abstract class MetaManFile extends java.io.File {
 	 * @return true if the file rename was successful
 	 */
 	public boolean rename(String newName) {
-		return this.rename(newName);
+		return this.renameTo(new File(newName));
 	}
 
 	public boolean setMetaData(String key, String value)

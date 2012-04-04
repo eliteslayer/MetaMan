@@ -253,5 +253,17 @@ public class MetaMan {
 		}
 		return this.selectedFile.view();
 	}
+	
+	/**
+	 * Renames the selected file
+	 * 
+	 * @return True if the filename was changed
+	 */
+	public boolean renameSelectedFile(String newName) {
+		if (this.selectedFile == null) {
+			throw new NullPointerException();
+		}
+		return this.selectedFile.rename(newName);
+	}
 
 }
