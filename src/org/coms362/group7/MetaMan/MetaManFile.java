@@ -110,4 +110,14 @@ abstract class MetaManFile extends java.io.File {
 	 * @throws MetaManException
 	 */
 	public abstract String view() throws MetaManException;
+	
+	/**
+	 * Renames the file
+	 * File remains in its current directory.
+	 * @param newName Name to give the file
+	 * @return true if the file rename was successful
+	 */
+	public boolean rename(String newName){
+		return this.rename(newName);
+	}
 }
