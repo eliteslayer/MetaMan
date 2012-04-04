@@ -212,6 +212,26 @@ public class MetaMan {
 	}
 
 	/**
+	 * Renames the selected file
+	 * 
+	 * @return True if the filename was changed
+	 */
+	public boolean renameSelectedFile(String newName) {
+		if (this.selectedFile == null) {
+			throw new NullPointerException();
+		}
+		return this.selectedFile
+				.rename(this.printWorkingDirectory().toString()
+						+ "\\"
+						+ newName.trim()
+						+ this.selectedFile
+								.getName()
+								.substring(
+										this.selectedFile.getName()
+												.lastIndexOf('.')).trim());
+	}
+
+	/**
 	 * Sets the selected audio file
 	 * 
 	 * @param index
@@ -252,18 +272,6 @@ public class MetaMan {
 			throw new NullPointerException();
 		}
 		return this.selectedFile.view();
-	}
-	
-	/**
-	 * Renames the selected file
-	 * 
-	 * @return True if the filename was changed
-	 */
-	public boolean renameSelectedFile(String newName) {
-		if (this.selectedFile == null) {
-			throw new NullPointerException();
-		}
-		return this.selectedFile.rename(this.printWorkingDirectory().toString() + "\\" + newName.trim() + this.selectedFile.getName().substring(this.selectedFile.getName().lastIndexOf('.')).trim());
 	}
 
 }

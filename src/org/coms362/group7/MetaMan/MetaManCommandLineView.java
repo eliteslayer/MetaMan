@@ -123,15 +123,14 @@ public class MetaManCommandLineView {
 			} else if (this.operation_map.get(this.userCmd).equals("delete")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				this.delete();
-			}else if (this.operation_map.get(this.userCmd).equals("rename")) {
+			} else if (this.operation_map.get(this.userCmd).equals("rename")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				String newValue = "";
 				for (int i = 1; i < this.userParams.length; i++) {
 					newValue += this.userParams[i] + " ";
 				}
 				this.rename(newValue);
-			}
-			else if (this.operation_map.get(this.userCmd).equals("mod")) {
+			} else if (this.operation_map.get(this.userCmd).equals("mod")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				String newValue = "";
 				for (int i = 2; i < this.userParams.length; i++) {
@@ -149,21 +148,13 @@ public class MetaManCommandLineView {
 			}
 		} catch (final NullPointerException e) {
 			this.unknownCmd();
-			 e.printStackTrace();
+			e.printStackTrace();
 		} catch (final MetaManException e) {
 			this.printError(e.getMessage());
-			 e.printStackTrace();
+			e.printStackTrace();
 		} catch (final UnsupportedOperationException e) {
 			this.printError(e.getMessage());
-			 e.printStackTrace();
-		}
-	}
-
-	private void rename(String newValue) {
-		if (this.controller.renameSelectedFile(newValue)) {
-			this.println("File was renamed.");
-		} else {
-			this.println("File was NOT renamed.  Try again later.");
+			e.printStackTrace();
 		}
 	}
 
@@ -540,6 +531,14 @@ public class MetaManCommandLineView {
 	 */
 	private void pwd() {
 		this.println(this.controller.printWorkingDirectory());
+	}
+
+	private void rename(String newValue) {
+		if (this.controller.renameSelectedFile(newValue)) {
+			this.println("File was renamed.");
+		} else {
+			this.println("File was NOT renamed.  Try again later.");
+		}
 	}
 
 	/**

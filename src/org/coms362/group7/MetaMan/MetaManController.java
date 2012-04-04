@@ -132,6 +132,15 @@ public class MetaManController {
 	}
 
 	/**
+	 * Renames the selected file
+	 * 
+	 * @return True if the filename was changed
+	 */
+	public boolean renameSelectedFile(String newName) {
+		return this.metaMan.renameSelectedFile(newName);
+	}
+
+	/**
 	 * Sets the selected audio file
 	 * 
 	 * @param index
@@ -161,14 +170,5 @@ public class MetaManController {
 	 */
 	public String viewMetaDataOfSelectedFile() throws MetaManException {
 		return this.metaMan.viewMetaDataOfSelectedFile();
-	}
-	
-	/**
-	 * Renames the selected file
-	 * 
-	 * @return True if the filename was changed
-	 */
-	public boolean renameSelectedFile(String newName) {
-		return this.metaMan.renameSelectedFile(newName);
 	}
 }
