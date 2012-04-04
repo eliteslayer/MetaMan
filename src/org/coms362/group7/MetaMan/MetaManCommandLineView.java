@@ -126,7 +126,7 @@ public class MetaManCommandLineView {
 			}else if (this.operation_map.get(this.userCmd).equals("rename")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				String newValue = "";
-				for (int i = 2; i < this.userParams.length; i++) {
+				for (int i = 1; i < this.userParams.length; i++) {
 					newValue += this.userParams[i] + " ";
 				}
 				this.rename(newValue);

@@ -263,7 +263,7 @@ public class MetaMan {
 		if (this.selectedFile == null) {
 			throw new NullPointerException();
 		}
-		return this.selectedFile.rename(newName);
+		return this.selectedFile.rename(this.printWorkingDirectory().toString() + "\\" + newName.trim() + this.selectedFile.getName().substring(this.selectedFile.getName().lastIndexOf('.')).trim());
 	}
 
 }
