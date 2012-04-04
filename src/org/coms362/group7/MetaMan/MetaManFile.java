@@ -86,6 +86,17 @@ abstract class MetaManFile extends java.io.File {
 		return true;
 	}
 
+	/**
+	 * Renames the file File remains in its current directory.
+	 * 
+	 * @param newName
+	 *            Name to give the file
+	 * @return true if the file rename was successful
+	 */
+	public boolean rename(String newName) {
+		return this.rename(newName);
+	}
+
 	public boolean setMetaData(String key, String value)
 			throws MetaManException {
 		if (!this.canWrite()) {
