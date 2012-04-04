@@ -78,16 +78,16 @@ public class AudioFile extends MetaManFile {
 	 * @return The true Field key
 	 * @throws MetaManException
 	 */
-	private FieldKey decodeFieldKey(String key) throws MetaManException {
-		if (key.toUpperCase().equals("ARTIST")) {
+	private FieldKey decodeFieldKey(String tag) throws MetaManException {
+		if (tag.toUpperCase().equals("ARTIST")) {
 			return FieldKey.ARTIST;
-		} else if (key.toUpperCase().equals("TITLE")) {
+		} else if (tag.toUpperCase().equals("TITLE")) {
 			return FieldKey.TITLE;
-		} else if (key.toUpperCase().equals("ALBUM")) {
+		} else if (tag.toUpperCase().equals("ALBUM")) {
 			return FieldKey.ALBUM;
-		} else if (key.toUpperCase().equals("TRACK")) {
+		} else if (tag.toUpperCase().equals("TRACK")) {
 			return FieldKey.TRACK;
-		} else if (key.toUpperCase().equals("YEAR")) {
+		} else if (tag.toUpperCase().equals("YEAR")) {
 			return FieldKey.YEAR;
 		}
 		throw new MetaManException("Key Not Found");
@@ -98,9 +98,9 @@ public class AudioFile extends MetaManFile {
 	 * @see MetaManFile Documentation
 	 */
 	@Override
-	public String getMetaData(String key) throws MetaManException {
+	public String getMetaData(String tag) throws MetaManException {
 		try {
-			return this.metaData.getTag().getFirst(this.decodeFieldKey(key));
+			return this.metaData.getTag().getFirst(this.decodeFieldKey(tag));
 		} catch (final KeyNotFoundException e) {
 			return "N/A";
 		}
@@ -111,10 +111,10 @@ public class AudioFile extends MetaManFile {
 	 * @see MetaManFile Documentation
 	 */
 	@Override
-	public boolean setMetaDataHelper(String key, String newValue)
+	public boolean setMetaDataHelper(String tag, String newValue)
 			throws MetaManException {
 		try {
-			this.metaData.getTag().setField(this.decodeFieldKey(key), newValue);
+			this.metaData.getTag().setField(this.decodeFieldKey(tag), newValue);
 			this.metaData.commit();
 			return true;
 		} catch (final KeyNotFoundException e) {

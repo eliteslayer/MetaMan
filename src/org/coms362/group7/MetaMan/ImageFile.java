@@ -77,29 +77,29 @@ public class ImageFile extends MetaManFile {
 	 * @see MetaManFile Documentation
 	 */
 	@Override
-	public String getMetaData(String key) {
+	public String getMetaData(String tag) {
 		try {
-			if (key.equals("HEIGHT")) {
+			if (tag.equals("HEIGHT")) {
 				return this.imageInfo.getHeight() + "";
-			} else if (key.equals("WIDTH")) {
+			} else if (tag.equals("WIDTH")) {
 				return this.imageInfo.getWidth() + "";
-			} else if (key.equals("LAT")) {
+			} else if (tag.equals("LAT")) {
 
 				final TiffField field = this.metaData
 						.findEXIFValue(GPSTagConstants.GPS_TAG_GPS_LATITUDE);
 				if (field != null) {
 					return field.toString();
 				}
-			} else if (key.equals("LONG")) {
+			} else if (tag.equals("LONG")) {
 
 				final TiffField field = this.metaData
 						.findEXIFValue(GPSTagConstants.GPS_TAG_GPS_LONGITUDE);
 				if (field != null) {
 					return field.toString();
 				}
-			} else if (key.equals("NAME")) {
+			} else if (tag.equals("NAME")) {
 				return this.getName();
-			} else if (key.equals("DATE")) {
+			} else if (tag.equals("DATE")) {
 				final TiffField field = this.metaData
 						.findEXIFValue(ExifTagConstants.EXIF_TAG_CREATE_DATE);
 				if (field != null) {
@@ -189,8 +189,8 @@ public class ImageFile extends MetaManFile {
 	 * @see MetaManFile Documentation
 	 */
 	@Override
-	protected boolean setMetaDataHelper(String key, String value) {
-		if (key.equals("LAT")) {
+	protected boolean setMetaDataHelper(String tag, String value) {
+		if (tag.equals("LAT")) {
 			try {
 				this.setGPS(Double.parseDouble(this.getMetaData("LONG")),
 						Double.parseDouble(value.split(",")[0]));
@@ -207,7 +207,7 @@ public class ImageFile extends MetaManFile {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else if (key.equals("LONG")) {
+		} else if (tag.equals("LONG")) {
 			try {
 				this.setGPS(Double.parseDouble(value.split(",")[1]),
 						Double.parseDouble(this.getMetaData("LAT")));

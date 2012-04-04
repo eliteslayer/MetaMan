@@ -54,12 +54,12 @@ abstract class MetaManFile extends java.io.File {
 	/**
 	 * Gets the specified meta data
 	 * 
-	 * @param key
-	 *            key to retrieve
+	 * @param tag
+	 *            tag to retrieve
 	 * @return String of retrieved data or null if it does not exist
 	 * @throws MetaManException
 	 */
-	public abstract String getMetaData(String key) throws MetaManException;
+	public abstract String getMetaData(String tag) throws MetaManException;
 
 	/**
 	 * Locks the file from being modified by meta man
@@ -99,25 +99,25 @@ abstract class MetaManFile extends java.io.File {
 		return this.renameTo(new File(newName));
 	}
 
-	public boolean setMetaData(String key, String value)
+	public boolean setMetaData(String tag, String value)
 			throws MetaManException {
 		if (!this.canWrite()) {
 			return false;
 		}
-		return this.setMetaDataHelper(key, value);
+		return this.setMetaDataHelper(tag, value);
 	}
 
 	/**
 	 * Set meta data
 	 * 
-	 * @param key
-	 *            key to set
+	 * @param tag
+	 *            tag to set
 	 * @param value
 	 *            value to set to
 	 * @return true if successful
 	 * @throws MetaManException
 	 */
-	protected abstract boolean setMetaDataHelper(String key, String value)
+	protected abstract boolean setMetaDataHelper(String tag, String value)
 			throws MetaManException;
 
 	/**

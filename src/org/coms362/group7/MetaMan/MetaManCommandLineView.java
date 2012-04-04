@@ -412,15 +412,15 @@ public class MetaManCommandLineView {
 	/**
 	 * Modifies the selected files meta data
 	 * 
-	 * @param key
-	 *            key to be set
+	 * @param tag
+	 *            tag to be set
 	 * @param newValue
-	 *            the value to set the key to
+	 *            the value to set the tag to
 	 * @throws MetaManException
 	 */
-	private void modSelected(String key, String newValue)
+	private void modSelected(String tag, String newValue)
 			throws MetaManException {
-		if (this.controller.modMetaDataOfSelectedFile(key, newValue)) {
+		if (this.controller.modMetaDataOfSelectedFile(tag, newValue)) {
 			this.print("File was modified successfylly");
 			this.println();
 		} else {

@@ -39,7 +39,7 @@ public class MetaManDirectory extends MetaManFile {
 	 * @see MetaManFile Documentation
 	 */
 	@Override
-	public String getMetaData(String key) {
+	public String getMetaData(String tag) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -47,7 +47,7 @@ public class MetaManDirectory extends MetaManFile {
 	 * @see MetaManFile Documentation
 	 */
 	@Override
-	public boolean setMetaDataHelper(String key, String value) {
+	public boolean setMetaDataHelper(String tag, String value) {
 		throw new UnsupportedOperationException();
 	}
 

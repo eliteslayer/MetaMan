@@ -191,19 +191,19 @@ public class MetaMan {
 	/**
 	 * Modifies the metadata tag with the newValue
 	 * 
-	 * @param key
-	 *            The meta data key to be changed
+	 * @param tag
+	 *            The meta data tag to be changed
 	 * @param newValue
-	 *            The value the key will be changed to
+	 *            The value the tag will be changed to
 	 * @return
 	 * @throws MetaManException
 	 */
-	public boolean modMetaDataOfSelectedFile(String key, String newValue)
+	public boolean modMetaDataOfSelectedFile(String tag, String newValue)
 			throws MetaManException {
 		if (this.selectedFile == null) {
 			throw new NullPointerException();
 		}
-		return this.selectedFile.setMetaData(key, newValue);
+		return this.selectedFile.setMetaData(tag, newValue);
 	}
 
 	/**
