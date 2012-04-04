@@ -363,7 +363,7 @@ public class MetaManCommandLineView {
 		this.println();
 		this.println("     SUPORTED IMAGE FILES/DIRS");
 		this.println("------------------------------");
-		this.println("#         WIDTH         HEIGHT");
+		this.println("#         NAME                ");
 		this.println("------------------------------");
 
 		int count = 0;
@@ -378,13 +378,13 @@ public class MetaManCommandLineView {
 			this.print(count + "");
 			final String count_s = count + "";
 			this.printSpace(10 - count_s.length());
-			String name = f.getMetaData("WIDTH");
-			if (name.length() > 10) {
-				name = name.substring(0, 10) + "...";
+			String name = f.getMetaData("NAME");
+			if (name.length() > 20) {
+				name = name.substring(0, 20) + "...";
 			}
 			this.print(name);
 			this.printSpace(15 - name.length());
-			this.print(f.getMetaData("HEIGHT"));
+			// this.print(f.getMetaData("HEIGHT"));
 			this.print("\n");
 			count++;
 		}
@@ -408,7 +408,7 @@ public class MetaManCommandLineView {
 			this.println();
 		} else {
 			throw new MetaManException(
-					"File could not be opened because it is locked form MetaMan");
+					"File could not be opened because it is locked from MetaMan");
 		}
 	}
 
