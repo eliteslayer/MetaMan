@@ -2,6 +2,7 @@ package org.coms362.group7.MetaMan;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * An abstract version of a file that MetaMan Supports. See java.io.File. Known
@@ -134,4 +135,13 @@ abstract class MetaManFile extends java.io.File {
 	 * @throws MetaManException
 	 */
 	public abstract String view() throws MetaManException;
+
+	/**
+	 * Returns the null tags of the currently selected MetaManFile
+	 * 
+	 * @return a List MetaDataTags (in string form) which are empty within the
+	 *         currently selected file.
+	 * @throws MetaManException
+	 */
+	public abstract ArrayList<String> viewNullTags() throws MetaManException;
 }

@@ -117,6 +117,9 @@ public class MetaManCommandLineView {
 			} else if (this.operation_map.get(this.userCmd).equals("view")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				this.view();
+			} else if (this.operation_map.get(this.userCmd).equals("viewnull")) {
+				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
+				this.viewNullTags();
 			} else if (this.operation_map.get(this.userCmd).equals("open")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				this.open();
@@ -148,13 +151,13 @@ public class MetaManCommandLineView {
 			}
 		} catch (final NullPointerException e) {
 			this.unknownCmd();
-			e.printStackTrace();
+			// e.printStackTrace();
 		} catch (final MetaManException e) {
 			this.printError(e.getMessage());
-			e.printStackTrace();
+			// e.printStackTrace();
 		} catch (final UnsupportedOperationException e) {
 			this.printError(e.getMessage());
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 
@@ -220,12 +223,19 @@ public class MetaManCommandLineView {
 		this.println("     Lists all the directorys within the current directory");
 		this.println();
 		this.println("OPEN {index}:");
-		this.println("     opens the file at index");
+		this.println("     Opens the file at index");
+		this.println();
+		this.println("VIEW NULL {index}:");
+		this.println("     Lists the null tags of the the file at index");
+		this.println();
+		this.println("RENAME {index}:");
+		this.println("     Renames the file at index");
+		this.println();
 		this.println("DELETE {index}:");
-		this.println("     deletes the file at index");
+		this.println("     Deletes the file at index");
 		this.println();
 		this.println("EXIT :");
-		this.println("     exits the program");
+		this.println("     Exits the program");
 		this.println();
 
 	}
@@ -461,6 +471,7 @@ public class MetaManCommandLineView {
 		this.operation_map.put("lsio", "lsio");
 		this.operation_map.put("delete", "delete");
 		this.operation_map.put("rename", "rename");
+		this.operation_map.put("viewnull", "viewnull");
 	}
 
 	/**
@@ -620,6 +631,21 @@ public class MetaManCommandLineView {
 	 */
 	private void view() throws MetaManException {
 		this.println(this.controller.viewMetaDataOfSelectedFile());
+	}
+
+	/**
+	 * Prints a list of important empty MetaData tags of the currently selected
+	 * file.
+	 * 
+	 * @throws MetaManException
+	 */
+	private void viewNullTags() throws MetaManException {
+		this.println("Null Tags:");
+		for (final String s : this.controller
+				.listNullMetaDataTagsOfSelectedFile()) {
+			this.println("\t" + s);
+		}
+		this.println();
 	}
 
 	/**

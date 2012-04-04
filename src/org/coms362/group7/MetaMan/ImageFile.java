@@ -4,6 +4,7 @@ import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import org.apache.sanselan.ImageInfo;
 import org.apache.sanselan.ImageReadException;
@@ -65,7 +66,6 @@ public class ImageFile extends MetaManFile {
 		try {
 			this.imageInfo = Sanselan.getImageInfo(this);
 			this.metaData = (JpegImageMetadata) Sanselan.getMetadata(this);
-			// this.metaData = Sanselan.getMetadata(bytes);
 		} catch (final ImageReadException e) {
 			throw new MetaManException(e.getMessage());
 		} catch (final IOException e) {
@@ -135,14 +135,6 @@ public class ImageFile extends MetaManFile {
 				final TiffImageMetadata exif = jpegMetadata.getExif();
 
 				if (null != exif) {
-					// TiffImageMetadata class is immutable (read-only).
-					// TiffOutputSet class represents the Exif data to write.
-					//
-					// Usually, we want to update existing Exif metadata by
-					// changing
-					// the values of a few fields, or adding a field.
-					// In these cases, it is easiest to use getOutputSet() to
-					// start with a "copy" of the fields read from the image.
 					try {
 						outputSet = exif.getOutputSet();
 					} catch (final ImageWriteException e) {
@@ -152,30 +144,11 @@ public class ImageFile extends MetaManFile {
 				}
 			}
 
-			// if file does not contain any exif metadata, we create an empty
-			// set of exif metadata. Otherwise, we keep all of the other
-			// existing tags.
 			if (null == outputSet) {
 				outputSet = new TiffOutputSet();
 			}
 
 			{
-				// Example of how to add a field/tag to the output set.
-				//
-				// Note that you should first remove the field/tag if it already
-				// exists in this directory, or you may end up with duplicate
-				// tags. See above.
-				//
-				// Certain fields/tags are expected in certain Exif directories;
-				// Others can occur in more than one directory (and often have a
-				// different meaning in different directories).
-				//
-				// TagInfo constants often contain a description of what
-				// directories are associated with a given tag.
-				//
-				// see
-				// org.apache.sanselan.formats.tiff.constants.AllTagConstants
-				//
 				final TiffOutputField aperture = TiffOutputField.create(
 						ExifTagConstants.EXIF_TAG_APERTURE_VALUE,
 						outputSet.byteOrder, new Double(0.3));
@@ -190,17 +163,9 @@ public class ImageFile extends MetaManFile {
 			}
 
 			{
-				// Example of how to add/update GPS info to output set.
-
-				// New York City
-				// double longitude = -74.0; // 74 degrees W (in Degrees East)
-				// double latitude = 40 + 43 / 60.0; // 40 degrees N (in Degrees
-				// North)
 				outputSet.setGPSInDegrees(longitude, latitude);
 
 			}
-
-			// printTagValue(jpegMetadata, TiffConstants.TIFF_TAG_DATE_TIME);
 
 			os = new FileOutputStream(this);
 			os = new BufferedOutputStream(os);
@@ -283,8 +248,43 @@ public class ImageFile extends MetaManFile {
 		retVal += "LATITUDE: " + latitude + "\n";
 		retVal += "LONGITUDE: " + longitude + "\n";
 		retVal += "*****************************\n";
-
 		return retVal;
+	}
+
+	/**
+	 * @see MetaManFile Documentation
+	 */
+	@Override
+	public ArrayList<String> viewNullTags() {
+
+		final ArrayList<String> list = new ArrayList<String>();
+
+		final String name = this.getMetaData("NAME");
+		final String width = this.getMetaData("WIDTH");
+		final String height = this.getMetaData("HEIGHT");
+		final String date = this.getMetaData("DATE");
+		final String latitude = this.getMetaData("LAT");
+		final String logitude = this.getMetaData("LOG");
+
+		if (name.equals("N/A")) {
+			list.add("Name");
+		}
+		if (width.equals("N/A")) {
+			list.add("Width");
+		}
+		if (height.equals("N/A")) {
+			list.add("Height");
+		}
+		if (date.equals("N/A")) {
+			list.add("Date");
+		}
+		if (latitude.equals("N/A")) {
+			list.add("Latitude");
+		}
+		if (logitude.equals("N/A")) {
+			list.add("Logitude");
+		}
+		return list;
 	}
 
 }

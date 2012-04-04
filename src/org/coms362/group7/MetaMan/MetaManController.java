@@ -89,6 +89,18 @@ public class MetaManController {
 	}
 
 	/**
+	 * Returns the null tags of the currently selected MetaManFile
+	 * 
+	 * @return a List MetaDataTags (in string form) which are empty within the
+	 *         currently selected file.
+	 * @throws MetaManException
+	 */
+	public List<String> listNullMetaDataTagsOfSelectedFile()
+			throws MetaManException {
+		return this.metaMan.listsNullMetaDataTagsOfSelectedFile();
+	}
+
+	/**
 	 * Locks the selected file
 	 * 
 	 * @return true if locked

@@ -1,6 +1,7 @@
 package org.coms362.group7.MetaMan;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -101,7 +102,7 @@ public class AudioFile extends MetaManFile {
 		try {
 			return this.metaData.getTag().getFirst(this.decodeFieldKey(key));
 		} catch (final KeyNotFoundException e) {
-			return null;
+			return "N/A";
 		}
 	}
 
@@ -148,6 +149,35 @@ public class AudioFile extends MetaManFile {
 		retVal += "*****************************\n";
 
 		return retVal;
+	}
+
+	@Override
+	public ArrayList<String> viewNullTags() throws MetaManException {
+
+		final ArrayList<String> list = new ArrayList<String>();
+
+		final String title = this.getMetaData("TITLE");
+		final String artist = this.getMetaData("ARTIST");
+		final String track = this.getMetaData("TRACK");
+		final String album = this.getMetaData("ALBUM");
+		final String year = this.getMetaData("YEAR");
+
+		if (title.equals("N/A")) {
+			list.add("Title");
+		}
+		if (artist.equals("N/A")) {
+			list.add("Artist");
+		}
+		if (track.equals("N/A")) {
+			list.add("Track");
+		}
+		if (album.equals("N/A")) {
+			list.add("Album");
+		}
+		if (year.equals("N/A")) {
+			list.add("Year");
+		}
+		return list;
 	}
 
 }

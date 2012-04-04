@@ -161,6 +161,22 @@ public class MetaMan {
 	}
 
 	/**
+	 * Returns the null tags of the currently selected MetaManFile
+	 * 
+	 * @return a List MetaDataTags (in string form) which are empty within the
+	 *         currently selected file.
+	 * @throws MetaManException
+	 */
+	public List<String> listsNullMetaDataTagsOfSelectedFile()
+			throws MetaManException {
+		if (this.selectedFile == null) {
+			throw new NullPointerException();
+		}
+		return this.selectedFile.viewNullTags();
+
+	}
+
+	/**
 	 * Locks the selected file
 	 * 
 	 * @return true if locked
