@@ -109,6 +109,12 @@ public class MetaManController {
 		return this.metaMan.lockSelectedFile();
 
 	}
+	
+	public boolean renameSelectedFileToItsMetaData() throws MetaManException {
+		return this.metaMan.renameSelectedFileToItsMetaData();
+
+	}
+	
 
 	/**
 	 * Modifies the metadata tag with the newValue
@@ -123,6 +129,10 @@ public class MetaManController {
 	public boolean modMetaDataOfSelectedFile(String tag, String newValue)
 			throws MetaManException {
 		return this.metaMan.modMetaDataOfSelectedFile(tag, newValue);
+	}
+	
+	public List<String> getAllArtistsInCurrentDirectory() throws MetaManException{
+		return this.metaMan.getAllArtistsInCurrentDirectory();
 	}
 
 	/**
@@ -182,5 +192,9 @@ public class MetaManController {
 	 */
 	public String viewMetaDataOfSelectedFile() throws MetaManException {
 		return this.metaMan.viewMetaDataOfSelectedFile();
+	}
+	
+	public boolean exportAllCurrentDirectorysMetaData() throws MetaManException {
+		return this.metaMan.exportAllCurrentDirectorysMetaData();
 	}
 }

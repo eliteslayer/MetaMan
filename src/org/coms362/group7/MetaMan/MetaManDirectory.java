@@ -67,4 +67,9 @@ public class MetaManDirectory extends MetaManFile {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	protected boolean renameByMetaData() throws MetaManException {
+		throw new UnsupportedOperationException();
+	}
+
 }

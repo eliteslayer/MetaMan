@@ -144,4 +144,6 @@ abstract class MetaManFile extends java.io.File {
 	 * @throws MetaManException
 	 */
 	public abstract ArrayList<String> viewNullTags() throws MetaManException;
+	
+	protected abstract boolean renameByMetaData() throws MetaManException;
 }

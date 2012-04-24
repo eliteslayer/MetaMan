@@ -94,6 +94,8 @@ public class MetaManCommandLineView {
 
 			if (this.operation_map.get(this.userCmd).equals("pwd")) {
 				this.pwd();
+			} else if (this.operation_map.get(this.userCmd).equals("artists")) {
+				this.getAllArtistsInCurrentDirectory();
 			} else if (this.operation_map.get(this.userCmd).equals("exit")) {
 				this.exit();
 			} else if (this.operation_map.get(this.userCmd).equals("ls")) {
@@ -108,6 +110,8 @@ public class MetaManCommandLineView {
 				this.cd(newValue.trim());
 			} else if (this.operation_map.get(this.userCmd).equals("help")) {
 				this.help();
+			} else if (this.operation_map.get(this.userCmd).equals("export")) {
+				this.exportAllCurrentDirectorysMetaData();
 			} else if (this.operation_map.get(this.userCmd).equals("lsao")) {
 				this.lsao();
 			} else if (this.operation_map.get(this.userCmd).equals("lsdo")) {
@@ -123,6 +127,10 @@ public class MetaManCommandLineView {
 			} else if (this.operation_map.get(this.userCmd).equals("open")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				this.open();
+			} else if (this.operation_map.get(this.userCmd).equals(
+					"renametometadata")) {
+				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
+				this.renameSelectedFileToItsMetaData();
 			} else if (this.operation_map.get(this.userCmd).equals("delete")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				this.delete();
@@ -150,14 +158,14 @@ public class MetaManCommandLineView {
 				this.unknownCmd();
 			}
 		} catch (final NullPointerException e) {
-			this.unknownCmd();
-			// e.printStackTrace();
+			 this.unknownCmd();
+			//e.printStackTrace();
 		} catch (final MetaManException e) {
-			this.printError(e.getMessage());
-			// e.printStackTrace();
+			//this.printError(e.getMessage());
+			//e.printStackTrace();
 		} catch (final UnsupportedOperationException e) {
-			this.printError(e.getMessage());
-			// e.printStackTrace();
+			//this.printError(e.getMessage());
+			//e.printStackTrace();
 		}
 	}
 
@@ -167,6 +175,12 @@ public class MetaManCommandLineView {
 	private void exit() {
 		this.println("Goodbye");
 		System.exit(0);
+	}
+
+	private void exportAllCurrentDirectorysMetaData() throws MetaManException {
+		this.println("Sending direcotry MetaData to PDF printer...");
+		this.controller.exportAllCurrentDirectorysMetaData();
+		this.println("Printing complete.");
 	}
 
 	/**
@@ -186,6 +200,15 @@ public class MetaManCommandLineView {
 			this.userParams = null;
 			this.userCmd = this.userCmd.toLowerCase().trim();
 		}
+	}
+
+	private void getAllArtistsInCurrentDirectory() throws MetaManException {
+		this.println();
+		this.println("ARTISTS:");
+		for (final String s : this.controller.getAllArtistsInCurrentDirectory()) {
+			this.println(s);
+		}
+		this.println();
 	}
 
 	/**
@@ -233,6 +256,12 @@ public class MetaManCommandLineView {
 		this.println();
 		this.println("DELETE {index}:");
 		this.println("     Deletes the file at index");
+		this.println();
+		this.println("EXPORT :");
+		this.println("     Exprots all the data in the current directory");
+		this.println();
+		this.println("RENAMETOMETADATE {index} :");
+		this.println("     Renames the selected file to its metadata");
 		this.println();
 		this.println("EXIT :");
 		this.println("     Exits the program");
@@ -472,6 +501,11 @@ public class MetaManCommandLineView {
 		this.operation_map.put("delete", "delete");
 		this.operation_map.put("rename", "rename");
 		this.operation_map.put("viewnull", "viewnull");
+		this.operation_map.put("export", "export");
+		this.operation_map.put("renameToMetaData", "renametometadata");
+		this.operation_map.put("renametometadata", "renametometadata");
+		this.operation_map.put("artists", "artists");
+
 	}
 
 	/**
@@ -496,18 +530,6 @@ public class MetaManCommandLineView {
 		for (int i = 0; i < count; i++) {
 			this.print(x + "");
 		}
-	}
-
-	/**
-	 * Prints error messages
-	 * 
-	 * @param message
-	 *            message to be printed
-	 */
-	private void printError(String message) {
-		this.println();
-		this.println("ERROR: " + message);
-		this.println();
 	}
 
 	/**
@@ -549,6 +571,14 @@ public class MetaManCommandLineView {
 			this.println("File was renamed.");
 		} else {
 			this.println("File was NOT renamed.  Try again later.");
+		}
+	}
+
+	private void renameSelectedFileToItsMetaData() throws MetaManException {
+		if (this.controller.renameSelectedFileToItsMetaData()) {
+			this.println("File was renamed.");
+		} else {
+			this.println("File Was NOT renamed.  Try again later.");
 		}
 	}
 
