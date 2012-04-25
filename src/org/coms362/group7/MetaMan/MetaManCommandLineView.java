@@ -72,6 +72,19 @@ public class MetaManCommandLineView {
 	}
 
 	/**
+	 * Deletes the selected file
+	 * 
+	 */
+	private void delete() {
+		if (this.controller.deleteSelectedFile()) {
+			this.println("File was deleted.");
+		} else {
+			this.println("File was NOT deleted.  Try again later.");
+		}
+
+	}
+
+	/**
 	 * Executes the users command
 	 * 
 	 * @throws IOException
@@ -81,6 +94,10 @@ public class MetaManCommandLineView {
 
 			if (this.operation_map.get(this.userCmd).equals("pwd")) {
 				this.pwd();
+			} else if (this.operation_map.get(this.userCmd).equals("artists")) {
+				this.getAllArtistsInCurrentDirectory();
+			} else if (this.operation_map.get(this.userCmd).equals("")) {
+
 			} else if (this.operation_map.get(this.userCmd).equals("exit")) {
 				this.exit();
 			} else if (this.operation_map.get(this.userCmd).equals("ls")) {
@@ -88,21 +105,46 @@ public class MetaManCommandLineView {
 			} else if (this.operation_map.get(this.userCmd).equals("up")) {
 				this.up();
 			} else if (this.operation_map.get(this.userCmd).equals("cd")) {
-				this.cd(this.userParams[0]);
+				String newValue = "";
+				for (final String userParam : this.userParams) {
+					newValue += userParam + " ";
+				}
+				this.cd(newValue.trim());
 			} else if (this.operation_map.get(this.userCmd).equals("help")) {
 				this.help();
+			} else if (this.operation_map.get(this.userCmd).equals("export")) {
+				this.exportAllCurrentDirectorysMetaDataToPDF();
 			} else if (this.operation_map.get(this.userCmd).equals("lsao")) {
 				this.lsao();
 			} else if (this.operation_map.get(this.userCmd).equals("lsdo")) {
 				this.lsdo();
 			} else if (this.operation_map.get(this.userCmd).equals("lsio")) {
 				this.lsio();
+			} else if (this.operation_map.get(this.userCmd).equals("lsvo")) {
+				this.lsvo();
 			} else if (this.operation_map.get(this.userCmd).equals("view")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				this.view();
+			} else if (this.operation_map.get(this.userCmd).equals("viewnull")) {
+				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
+				this.viewNullTags();
 			} else if (this.operation_map.get(this.userCmd).equals("open")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				this.open();
+			} else if (this.operation_map.get(this.userCmd).equals(
+					"renametometadata")) {
+				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
+				this.renameSelectedFileToItsMetaData();
+			} else if (this.operation_map.get(this.userCmd).equals("delete")) {
+				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
+				this.delete();
+			} else if (this.operation_map.get(this.userCmd).equals("rename")) {
+				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
+				String newValue = "";
+				for (int i = 1; i < this.userParams.length; i++) {
+					newValue += this.userParams[i] + " ";
+				}
+				this.rename(newValue);
 			} else if (this.operation_map.get(this.userCmd).equals("mod")) {
 				this.setSelectedFile(Integer.parseInt(this.userParams[0]));
 				String newValue = "";
@@ -123,10 +165,10 @@ public class MetaManCommandLineView {
 			this.unknownCmd();
 			// e.printStackTrace();
 		} catch (final MetaManException e) {
-			this.printError(e.getMessage());
+			// this.printError(e.getMessage());
 			// e.printStackTrace();
 		} catch (final UnsupportedOperationException e) {
-			this.printError(e.getMessage());
+			// this.printError(e.getMessage());
 			// e.printStackTrace();
 		}
 	}
@@ -137,6 +179,13 @@ public class MetaManCommandLineView {
 	private void exit() {
 		this.println("Goodbye");
 		System.exit(0);
+	}
+
+	private void exportAllCurrentDirectorysMetaDataToPDF()
+			throws MetaManException {
+		this.println("Sending direcotry MetaData to PDF printer...");
+		this.controller.exportAllCurrentDirectorysMetaDataToPDF();
+		this.println("Printing complete.");
 	}
 
 	/**
@@ -156,6 +205,15 @@ public class MetaManCommandLineView {
 			this.userParams = null;
 			this.userCmd = this.userCmd.toLowerCase().trim();
 		}
+	}
+
+	private void getAllArtistsInCurrentDirectory() throws MetaManException {
+		this.println();
+		this.println("ARTISTS:");
+		for (final String s : this.controller.getAllArtistsInCurrentDirectory()) {
+			this.println(s);
+		}
+		this.println();
 	}
 
 	/**
@@ -180,6 +238,9 @@ public class MetaManCommandLineView {
 		this.println("LSIO:");
 		this.println("     Lists all the image files MetaMan supports within the current directory");
 		this.println();
+		this.println("LSVO:");
+		this.println("     Lists all the video files MetaMan supports within the current directory");
+		this.println();
 		this.println("LSDO:");
 		this.println("     Lists all the directorys within the current directory");
 		this.println();
@@ -190,13 +251,28 @@ public class MetaManCommandLineView {
 		this.println("     Lists all the directorys within the current directory");
 		this.println();
 		this.println("VIEW {index}:");
-		this.println("     Lists all the directorys within the current directory");
+		this.println("     Display the metadata of the indexed file");
 		this.println();
 		this.println("OPEN {index}:");
-		this.println("     opens the file at index");
+		this.println("     Opens the file at index");
+		this.println();
+		this.println("VIEWNULL {index}:");
+		this.println("     Lists the null tags of the the file at index");
+		this.println();
+		this.println("RENAME {index}:");
+		this.println("     Renames the file at index");
+		this.println();
+		this.println("DELETE {index}:");
+		this.println("     Deletes the file at index");
+		this.println();
+		this.println("EXPORT :");
+		this.println("     Exprots all the data in the current directory");
+		this.println();
+		this.println("RENAMETOMETADATA {index} :");
+		this.println("     Renames the selected file to its metadata");
 		this.println();
 		this.println("EXIT :");
-		this.println("     exits the program");
+		this.println("     Exits the program");
 		this.println();
 
 	}
@@ -275,7 +351,7 @@ public class MetaManCommandLineView {
 	private void lsao() throws MetaManException {
 
 		this.println();
-		this.println("     SUPORTED AUDIO FILES/DIRS");
+		this.println("     SUPORTED AUDIO FILES");
 		this.println("------------------------------");
 		this.println("#         TITLE          ARTIST");
 		this.println("------------------------------");
@@ -339,9 +415,9 @@ public class MetaManCommandLineView {
 
 	private void lsio() throws MetaManException {
 		this.println();
-		this.println("     SUPORTED IMAGE FILES/DIRS");
+		this.println("     SUPORTED VIDEO FILES");
 		this.println("------------------------------");
-		this.println("#         WIDTH         HEIGHT");
+		this.println("#         NAME                ");
 		this.println("------------------------------");
 
 		int count = 0;
@@ -356,13 +432,46 @@ public class MetaManCommandLineView {
 			this.print(count + "");
 			final String count_s = count + "";
 			this.printSpace(10 - count_s.length());
-			String name = f.getMetaData("WIDTH");
-			if (name.length() > 10) {
-				name = name.substring(0, 10) + "...";
+			String name = f.getMetaData("NAME");
+			if (name.length() > 20) {
+				name = name.substring(0, 20) + "...";
 			}
 			this.print(name);
 			this.printSpace(15 - name.length());
-			this.print(f.getMetaData("HEIGHT"));
+			// this.print(f.getMetaData("HEIGHT"));
+			this.print("\n");
+			count++;
+		}
+		this.println();
+
+	}
+
+	private void lsvo() throws MetaManException {
+		this.println();
+		this.println("     SUPORTED IMAGE FILES");
+		this.println("------------------------------");
+		this.println("#         NAME                ");
+		this.println("------------------------------");
+
+		int count = 0;
+		ArrayList<MetaManFile> list;
+		final ArrayList<VideoFile> volist = new ArrayList<VideoFile>();
+		list = (ArrayList<MetaManFile>) this.controller.listingVideosOnly();
+		for (int i = 0; i < list.size(); i++) {
+			volist.add((VideoFile) list.get(i));
+		}
+
+		for (final VideoFile f : volist) {
+			this.print(count + "");
+			final String count_s = count + "";
+			this.printSpace(10 - count_s.length());
+			String name = f.getName();
+			if (name.length() > 20) {
+				name = name.substring(0, 20) + "...";
+			}
+			this.print(name);
+			this.printSpace(15 - name.length());
+			// this.print(f.getMetaData("HEIGHT"));
 			this.print("\n");
 			count++;
 		}
@@ -373,20 +482,20 @@ public class MetaManCommandLineView {
 	/**
 	 * Modifies the selected files meta data
 	 * 
-	 * @param key
-	 *            key to be set
+	 * @param tag
+	 *            tag to be set
 	 * @param newValue
-	 *            the value to set the key to
+	 *            the value to set the tag to
 	 * @throws MetaManException
 	 */
-	private void modSelected(String key, String newValue)
+	private void modSelected(String tag, String newValue)
 			throws MetaManException {
-		if (this.controller.modMetaDataOfSelectedFile(key, newValue)) {
+		if (this.controller.modMetaDataOfSelectedFile(tag, newValue)) {
 			this.print("File was modified successfylly");
 			this.println();
 		} else {
 			throw new MetaManException(
-					"File could not be opened because it is locked form MetaMan");
+					"File could not be opened because it is locked from MetaMan");
 		}
 	}
 
@@ -416,9 +525,9 @@ public class MetaManCommandLineView {
 		this.operation_map.put("exit", "exit");
 		this.operation_map.put("e", "exit");
 		this.operation_map.put("ls", "ls");
-		this.operation_map.put("../", "up");
+		this.operation_map.put("cd ../", "up");
 		this.operation_map.put("up", "up");
-		this.operation_map.put("..", "up");
+		this.operation_map.put("cd ..", "up");
 		this.operation_map.put("cd", "cd");
 		this.operation_map.put("help", "help");
 		this.operation_map.put("lsao", "lsao");
@@ -430,6 +539,16 @@ public class MetaManCommandLineView {
 		this.operation_map.put("unlock", "unlock");
 		this.operation_map.put("quit", "exit");
 		this.operation_map.put("lsio", "lsio");
+		this.operation_map.put("lsvo", "lsvo");
+		this.operation_map.put("delete", "delete");
+		this.operation_map.put("rename", "rename");
+		this.operation_map.put("viewnull", "viewnull");
+		this.operation_map.put("export", "export");
+		this.operation_map.put("", "");
+		this.operation_map.put("renameToMetaData", "renametometadata");
+		this.operation_map.put("renametometadata", "renametometadata");
+		this.operation_map.put("artists", "artists");
+
 	}
 
 	/**
@@ -454,18 +573,6 @@ public class MetaManCommandLineView {
 		for (int i = 0; i < count; i++) {
 			this.print(x + "");
 		}
-	}
-
-	/**
-	 * Prints error messages
-	 * 
-	 * @param message
-	 *            message to be printed
-	 */
-	private void printError(String message) {
-		this.println();
-		this.println("ERROR: " + message);
-		this.println();
 	}
 
 	/**
@@ -500,6 +607,22 @@ public class MetaManCommandLineView {
 	 */
 	private void pwd() {
 		this.println(this.controller.printWorkingDirectory());
+	}
+
+	private void rename(String newValue) {
+		if (this.controller.renameSelectedFile(newValue)) {
+			this.println("File was renamed.");
+		} else {
+			this.println("File was NOT renamed.  Try again later.");
+		}
+	}
+
+	private void renameSelectedFileToItsMetaData() throws MetaManException {
+		if (this.controller.renameSelectedFileToItsMetaData()) {
+			this.println("File was renamed.");
+		} else {
+			this.println("File Was NOT renamed.  Try again later.");
+		}
 	}
 
 	/**
@@ -559,9 +682,9 @@ public class MetaManCommandLineView {
 	 */
 	private void unlockSelected() {
 		if (this.controller.unlockSelectedFile()) {
-			System.out.println("FILE WAS UNLOCKED");
+			this.println("File was unlocked.");
 		} else {
-			System.out.println("FILE WAS NOT UNLOCKED");
+			this.println("File Was NOT Unlocked.  Try again later.");
 		}
 	}
 
@@ -581,6 +704,21 @@ public class MetaManCommandLineView {
 	 */
 	private void view() throws MetaManException {
 		this.println(this.controller.viewMetaDataOfSelectedFile());
+	}
+
+	/**
+	 * Prints a list of important empty MetaData tags of the currently selected
+	 * file.
+	 * 
+	 * @throws MetaManException
+	 */
+	private void viewNullTags() throws MetaManException {
+		this.println("Null Tags:");
+		for (final String s : this.controller
+				.listNullMetaDataTagsOfSelectedFile()) {
+			this.println("\t" + s);
+		}
+		this.println();
 	}
 
 	/**

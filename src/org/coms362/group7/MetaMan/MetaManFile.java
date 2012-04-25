@@ -1,6 +1,8 @@
 package org.coms362.group7.MetaMan;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * An abstract version of a file that MetaMan Supports. See java.io.File. Known
@@ -26,6 +28,18 @@ abstract class MetaManFile extends java.io.File {
 		super(pathname);
 	}
 
+	/**
+	 * Deletes this MetaManFile from the FileSystem. Note this function simply
+	 * overrides the parent function delete() inherited from File--This was
+	 * mainly implemented for readability of the program.
+	 * 
+	 * @return True if the this MetaManFile was deleted successfully.
+	 */
+	@Override
+	public boolean delete() {
+		return super.delete();
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (!o.getClass().equals(this.getClass())) {
@@ -40,12 +54,12 @@ abstract class MetaManFile extends java.io.File {
 	/**
 	 * Gets the specified meta data
 	 * 
-	 * @param key
-	 *            key to retrieve
+	 * @param tag
+	 *            tag to retrieve
 	 * @return String of retrieved data or null if it does not exist
 	 * @throws MetaManException
 	 */
-	public abstract String getMetaData(String key) throws MetaManException;
+	public abstract String getMetaData(String tag) throws MetaManException;
 
 	/**
 	 * Locks the file from being modified by meta man
@@ -74,25 +88,38 @@ abstract class MetaManFile extends java.io.File {
 		return true;
 	}
 
-	public boolean setMetaData(String key, String value)
+	/**
+	 * Renames the file File remains in its current directory.
+	 * 
+	 * @param newName
+	 *            Name to give the file
+	 * @return true if the file rename was successful
+	 */
+	public boolean rename(String newName) {
+		return this.renameTo(new File(newName));
+	}
+
+	protected abstract boolean renameByMetaData() throws MetaManException;
+
+	public boolean setMetaData(String tag, String value)
 			throws MetaManException {
 		if (!this.canWrite()) {
 			return false;
 		}
-		return this.setMetaDataHelper(key, value);
+		return this.setMetaDataHelper(tag, value);
 	}
 
 	/**
 	 * Set meta data
 	 * 
-	 * @param key
-	 *            key to set
+	 * @param tag
+	 *            tag to set
 	 * @param value
 	 *            value to set to
 	 * @return true if successful
 	 * @throws MetaManException
 	 */
-	protected abstract boolean setMetaDataHelper(String key, String value)
+	protected abstract boolean setMetaDataHelper(String tag, String value)
 			throws MetaManException;
 
 	/**
@@ -110,14 +137,25 @@ abstract class MetaManFile extends java.io.File {
 	 * @throws MetaManException
 	 */
 	public abstract String view() throws MetaManException;
-	
+//
+//	/**
+//	 * Renames the file File remains in its current directory.
+//	 * 
+//	 * @param newName
+//	 *            Name to give the file
+//	 * @return true if the file rename was successful
+//	 */
+//	public boolean rename(String newName) {
+//		return this.rename(newName);
+//	}
+
 	/**
-	 * Renames the file
-	 * File remains in its current directory.
-	 * @param newName Name to give the file
-	 * @return true if the file rename was successful
+	 * Returns the null tags of the currently selected MetaManFile
+	 * 
+	 * @return a List MetaDataTags (in string form) which are empty within the
+	 *         currently selected file.
+	 * @throws MetaManException
 	 */
-	public boolean rename(String newName){
-		return this.rename(newName);
-	}
+	public abstract ArrayList<String> viewNullTags() throws MetaManException;
+
 }

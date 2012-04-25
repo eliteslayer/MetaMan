@@ -1,6 +1,7 @@
 package org.coms362.group7.MetaMan;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.jaudiotagger.audio.exceptions.CannotReadException;
 import org.jaudiotagger.audio.exceptions.InvalidAudioFrameException;
@@ -38,7 +39,12 @@ public class MetaManDirectory extends MetaManFile {
 	 * @see MetaManFile Documentation
 	 */
 	@Override
-	public String getMetaData(String key) {
+	public String getMetaData(String tag) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	protected boolean renameByMetaData() throws MetaManException {
 		throw new UnsupportedOperationException();
 	}
 
@@ -46,7 +52,7 @@ public class MetaManDirectory extends MetaManFile {
 	 * @see MetaManFile Documentation
 	 */
 	@Override
-	public boolean setMetaDataHelper(String key, String value) {
+	public boolean setMetaDataHelper(String tag, String value) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -55,6 +61,14 @@ public class MetaManDirectory extends MetaManFile {
 	 */
 	@Override
 	public String view() {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * @see MetaManFile Documentation
+	 */
+	@Override
+	public ArrayList<String> viewNullTags() {
 		throw new UnsupportedOperationException();
 	}
 

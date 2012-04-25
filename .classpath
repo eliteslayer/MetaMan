@@ -8,5 +8,6 @@
 	<classpathentry kind="lib" path="sanselan-0.97-incubator-javadoc.jar"/>
 	<classpathentry kind="lib" path="sanselan-0.97-incubator-sources.jar"/>
 	<classpathentry kind="lib" path="sanselan-0.97-incubator.jar"/>
+	<classpathentry kind="lib" path="com.springsource.com.lowagie.text-2.0.8.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

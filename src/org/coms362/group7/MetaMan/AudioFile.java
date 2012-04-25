@@ -1,6 +1,7 @@
 package org.coms362.group7.MetaMan;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -77,16 +78,16 @@ public class AudioFile extends MetaManFile {
 	 * @return The true Field key
 	 * @throws MetaManException
 	 */
-	private FieldKey decodeFieldKey(String key) throws MetaManException {
-		if (key.toUpperCase().equals("ARTIST")) {
+	private FieldKey decodeFieldKey(String tag) throws MetaManException {
+		if (tag.toUpperCase().equals("ARTIST")) {
 			return FieldKey.ARTIST;
-		} else if (key.toUpperCase().equals("TITLE")) {
+		} else if (tag.toUpperCase().equals("TITLE")) {
 			return FieldKey.TITLE;
-		} else if (key.toUpperCase().equals("ALBUM")) {
+		} else if (tag.toUpperCase().equals("ALBUM")) {
 			return FieldKey.ALBUM;
-		} else if (key.toUpperCase().equals("TRACK")) {
+		} else if (tag.toUpperCase().equals("TRACK")) {
 			return FieldKey.TRACK;
-		} else if (key.toUpperCase().equals("YEAR")) {
+		} else if (tag.toUpperCase().equals("YEAR")) {
 			return FieldKey.YEAR;
 		}
 		throw new MetaManException("Key Not Found");
@@ -97,12 +98,34 @@ public class AudioFile extends MetaManFile {
 	 * @see MetaManFile Documentation
 	 */
 	@Override
-	public String getMetaData(String key) throws MetaManException {
+	public String getMetaData(String tag) throws MetaManException {
 		try {
-			return this.metaData.getTag().getFirst(this.decodeFieldKey(key));
+			return this.metaData.getTag().getFirst(this.decodeFieldKey(tag));
 		} catch (final KeyNotFoundException e) {
-			return null;
+			return "N/A";
 		}
+	}
+
+	@Override
+	public boolean renameByMetaData() throws MetaManException {
+		String trackNo = this.getMetaData("TRACK");
+		String title = this.getMetaData("TITLE");
+		String artist = this.getMetaData("ARTIST");
+		try {
+			Integer.parseInt(trackNo);
+		} catch (final NumberFormatException e) {
+			trackNo = "0";
+		}
+		if (title.equals("N/A")) {
+			title = "UnknownTitle";
+		}
+		if (artist.equals("N/A")) {
+			artist = "UnknownArtist";
+		}
+		this.rename(this.getParentFile() + "/" + trackNo + ". " + title + " - "
+				+ artist
+				+ this.getName().substring(this.getName().lastIndexOf('.')));
+		return true;
 	}
 
 	/**
@@ -110,10 +133,10 @@ public class AudioFile extends MetaManFile {
 	 * @see MetaManFile Documentation
 	 */
 	@Override
-	public boolean setMetaDataHelper(String key, String newValue)
+	public boolean setMetaDataHelper(String tag, String newValue)
 			throws MetaManException {
 		try {
-			this.metaData.getTag().setField(this.decodeFieldKey(key), newValue);
+			this.metaData.getTag().setField(this.decodeFieldKey(tag), newValue);
 			this.metaData.commit();
 			return true;
 		} catch (final KeyNotFoundException e) {
@@ -137,7 +160,7 @@ public class AudioFile extends MetaManFile {
 		final String track = this.getMetaData("TRACK");
 		final String album = this.getMetaData("ALBUM");
 		final String year = this.getMetaData("YEAR");
-		retVal += "*****************************\n";
+		// retVal += "*****************************\n";
 		retVal += "TITLE: " + title + "\n";
 		retVal += "ARTIST: " + artist + "\n";
 		retVal += "FILENAME: " + this.getName() + "\n";
@@ -145,9 +168,38 @@ public class AudioFile extends MetaManFile {
 		retVal += "YEAR: " + year + "\n";
 		retVal += "ALBUM: " + album + "\n";
 		retVal += "LOCKED?: " + !this.canWrite() + "\n";
-		retVal += "*****************************\n";
+		// retVal += "*****************************\n";
 
 		return retVal;
+	}
+
+	@Override
+	public ArrayList<String> viewNullTags() throws MetaManException {
+
+		final ArrayList<String> list = new ArrayList<String>();
+
+		final String title = this.getMetaData("TITLE");
+		final String artist = this.getMetaData("ARTIST");
+		final String track = this.getMetaData("TRACK");
+		final String album = this.getMetaData("ALBUM");
+		final String year = this.getMetaData("YEAR");
+
+		if (title.equals("N/A")) {
+			list.add("Title");
+		}
+		if (artist.equals("N/A")) {
+			list.add("Artist");
+		}
+		if (track.equals("N/A")) {
+			list.add("Track");
+		}
+		if (album.equals("N/A")) {
+			list.add("Album");
+		}
+		if (year.equals("N/A")) {
+			list.add("Year");
+		}
+		return list;
 	}
 
 }

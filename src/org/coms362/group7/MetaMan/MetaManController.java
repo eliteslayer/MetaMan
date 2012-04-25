@@ -38,6 +38,25 @@ public class MetaManController {
 	}
 
 	/**
+	 * Deletes the currently selected file.
+	 * 
+	 * @return True if the file is deleted
+	 */
+	public boolean deleteSelectedFile() {
+		return this.metaMan.deleteSelectedFile();
+	}
+
+	public boolean exportAllCurrentDirectorysMetaDataToPDF()
+			throws MetaManException {
+		return this.metaMan.exportAllCurrentDirectorysMetaDataToPDF();
+	}
+
+	public List<String> getAllArtistsInCurrentDirectory()
+			throws MetaManException {
+		return this.metaMan.getAllArtistsInCurrentDirectory();
+	}
+
+	/**
 	 * Bumps the current working directory up one level
 	 * 
 	 * @return True is the move up was successful.
@@ -79,6 +98,22 @@ public class MetaManController {
 		return this.metaMan.listingImagesOnly();
 	}
 
+	public List<MetaManFile> listingVideosOnly() throws MetaManException {
+		return this.metaMan.listingVideosOnly();
+	}
+
+	/**
+	 * Returns the null tags of the currently selected MetaManFile
+	 * 
+	 * @return a List MetaDataTags (in string form) which are empty within the
+	 *         currently selected file.
+	 * @throws MetaManException
+	 */
+	public List<String> listNullMetaDataTagsOfSelectedFile()
+			throws MetaManException {
+		return this.metaMan.listsNullMetaDataTagsOfSelectedFile();
+	}
+
 	/**
 	 * Locks the selected file
 	 * 
@@ -92,16 +127,16 @@ public class MetaManController {
 	/**
 	 * Modifies the metadata tag with the newValue
 	 * 
-	 * @param key
-	 *            The meta data key to be changed
+	 * @param tag
+	 *            The meta data tag to be changed
 	 * @param newValue
-	 *            The value the key will be changed to
+	 *            The value the tag will be changed to
 	 * @return
 	 * @throws MetaManException
 	 */
-	public boolean modMetaDataOfSelectedFile(String key, String newValue)
+	public boolean modMetaDataOfSelectedFile(String tag, String newValue)
 			throws MetaManException {
-		return this.metaMan.modMetaDataOfSelectedFile(key, newValue);
+		return this.metaMan.modMetaDataOfSelectedFile(tag, newValue);
 	}
 
 	/**
@@ -120,6 +155,20 @@ public class MetaManController {
 	 */
 	public String printWorkingDirectory() {
 		return this.metaMan.printWorkingDirectory();
+	}
+
+	/**
+	 * Renames the selected file
+	 * 
+	 * @return True if the filename was changed
+	 */
+	public boolean renameSelectedFile(String newName) {
+		return this.metaMan.renameSelectedFile(newName);
+	}
+
+	public boolean renameSelectedFileToItsMetaData() throws MetaManException {
+		return this.metaMan.renameSelectedFileToItsMetaData();
+
 	}
 
 	/**
