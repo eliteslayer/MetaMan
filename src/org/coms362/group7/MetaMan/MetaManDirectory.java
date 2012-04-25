@@ -43,6 +43,11 @@ public class MetaManDirectory extends MetaManFile {
 		throw new UnsupportedOperationException();
 	}
 
+	@Override
+	protected boolean renameByMetaData() throws MetaManException {
+		throw new UnsupportedOperationException();
+	}
+
 	/**
 	 * @see MetaManFile Documentation
 	 */
@@ -64,11 +69,6 @@ public class MetaManDirectory extends MetaManFile {
 	 */
 	@Override
 	public ArrayList<String> viewNullTags() {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	protected boolean renameByMetaData() throws MetaManException {
 		throw new UnsupportedOperationException();
 	}
 

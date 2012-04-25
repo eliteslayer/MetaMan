@@ -99,6 +99,8 @@ abstract class MetaManFile extends java.io.File {
 		return this.renameTo(new File(newName));
 	}
 
+	protected abstract boolean renameByMetaData() throws MetaManException;
+
 	public boolean setMetaData(String tag, String value)
 			throws MetaManException {
 		if (!this.canWrite()) {
@@ -144,6 +146,4 @@ abstract class MetaManFile extends java.io.File {
 	 * @throws MetaManException
 	 */
 	public abstract ArrayList<String> viewNullTags() throws MetaManException;
-	
-	protected abstract boolean renameByMetaData() throws MetaManException;
 }

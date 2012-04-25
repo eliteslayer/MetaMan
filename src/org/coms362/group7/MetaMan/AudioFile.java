@@ -106,6 +106,28 @@ public class AudioFile extends MetaManFile {
 		}
 	}
 
+	@Override
+	public boolean renameByMetaData() throws MetaManException {
+		String trackNo = this.getMetaData("TRACK");
+		String title = this.getMetaData("TITLE");
+		String artist = this.getMetaData("ARTIST");
+		try {
+			Integer.parseInt(trackNo);
+		} catch (final NumberFormatException e) {
+			trackNo = "0";
+		}
+		if (title.equals("N/A")) {
+			title = "UnknownTitle";
+		}
+		if (artist.equals("N/A")) {
+			artist = "UnknownArtist";
+		}
+		this.rename(this.getParentFile() + "/" + trackNo + ". " + title + " - "
+				+ artist
+				+ this.getName().substring(this.getName().lastIndexOf('.')));
+		return true;
+	}
+
 	/**
 	 * @throws MetaManException
 	 * @see MetaManFile Documentation
@@ -138,7 +160,7 @@ public class AudioFile extends MetaManFile {
 		final String track = this.getMetaData("TRACK");
 		final String album = this.getMetaData("ALBUM");
 		final String year = this.getMetaData("YEAR");
-		//retVal += "*****************************\n";
+		// retVal += "*****************************\n";
 		retVal += "TITLE: " + title + "\n";
 		retVal += "ARTIST: " + artist + "\n";
 		retVal += "FILENAME: " + this.getName() + "\n";
@@ -146,7 +168,7 @@ public class AudioFile extends MetaManFile {
 		retVal += "YEAR: " + year + "\n";
 		retVal += "ALBUM: " + album + "\n";
 		retVal += "LOCKED?: " + !this.canWrite() + "\n";
-		//retVal += "*****************************\n";
+		// retVal += "*****************************\n";
 
 		return retVal;
 	}
@@ -178,26 +200,6 @@ public class AudioFile extends MetaManFile {
 			list.add("Year");
 		}
 		return list;
-	}
-	
-	@Override
-	public boolean renameByMetaData() throws MetaManException{
-		String trackNo = this.getMetaData("TRACK");
-		String title = this.getMetaData("TITLE");
-		String artist = this.getMetaData("ARTIST");
-		try{
-			Integer.parseInt(trackNo);
-		}catch(NumberFormatException e){
-			trackNo = "0";
-		}
-		if(title.equals("N/A")){
-			title = "UnknownTitle";
-		}
-		if(artist.equals("N/A")){
-			artist = "UnknownArtist";
-		}
-		this.rename(this.getParentFile()+ "/"+trackNo + ". " + title + " - " + artist+this.getName().substring(this.getName().lastIndexOf('.')));
-	return true;
 	}
 
 }

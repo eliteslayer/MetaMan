@@ -1,17 +1,17 @@
 package org.coms362.group7.MetaMan;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import java.io.*;
-import java.awt.*;
-import com.lowagie.text.*;
-import com.lowagie.text.pdf.*;
-import java.util.zip.*;
+import com.lowagie.text.Document;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfWriter;
 
 /**
  * 
@@ -93,6 +93,92 @@ public class MetaMan {
 	}
 
 	/**
+	 * Export Current Directory's Data.
+	 * 
+	 * @return All the Meta Data Of the Current Directory
+	 * @throws MetaManException
+	 */
+	public boolean exportAllCurrentDirectorysMetaDataToPDF()
+			throws MetaManException {
+		// Print a Header
+		String toPrint = "MetaMan Version 1.0 Exportation Document\n";
+		toPrint += "DIRECTORY: " + this.printWorkingDirectory() + "\n";
+		final DateFormat dateFormat = new SimpleDateFormat(
+				"yyyy/MM/dd HH:mm:ss");
+		final Date date = new Date();
+		toPrint += "TIMESTAMP OF PRINTOUT: " + dateFormat.format(date);
+		toPrint += "\n";
+		toPrint += ("\n");
+		toPrint += ("                            Audio Files                                  \n");
+		toPrint += ("                            -----------                                  \n");
+
+		// Print all Audio Files
+		int i = 1;
+		for (final MetaManFile f : this.listingAudioOnly()) {
+			toPrint += i + ".)\n";
+			try {
+				toPrint += (f.view() + "\n");
+			} catch (final ClassCastException e) {
+
+			}
+			i++;
+		}
+		toPrint += ("\n");
+		toPrint += ("                            Image Files                                  \n");
+		toPrint += ("                            -----------                                  \n");
+
+		// Print all Image Files
+		i = 0;
+		for (final MetaManFile f : this.listingImagesOnly()) {
+			toPrint += i + ".)\n";
+			try {
+				toPrint += (f.view() + "\n");
+			} catch (final ClassCastException e) {
+
+			}
+			i++;
+		}
+
+		// Print file to PDF
+		try {
+			final String text = toPrint;
+			final Document document = new Document(PageSize.A4, 36, 72, 108,
+					180);
+			PdfWriter.getInstance(document, new FileOutputStream("temp.pdf"));
+			document.open();
+			document.add(new Paragraph(text));
+			document.close();
+
+			try {
+				Runtime.getRuntime().exec(
+						//
+						String.format("cmd /C \"start %1s\"", "temp.pdf"),
+						null, //
+						null);
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
+
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+
+		return true;
+	}
+
+	public List<String> getAllArtistsInCurrentDirectory()
+			throws MetaManException {
+		final ArrayList<String> toReturn = new ArrayList<String>();
+		for (final MetaManFile f : this.listingAudioOnly()) {
+			final String artist = f.getMetaData("ARTIST");
+			if (!artist.equals("NA")) {
+				toReturn.add(artist);
+			}
+		}
+		return toReturn;
+	}
+
+	/**
 	 * Move to the parent directory
 	 * 
 	 * @return true if the move was successful
@@ -169,6 +255,17 @@ public class MetaMan {
 		return list;
 	}
 
+	public List<MetaManFile> listingVideosOnly() throws MetaManException {
+		final List<MetaManFile> list = new ArrayList<MetaManFile>();
+		for (final File f : this.workingDirectory
+				.listFiles(new VideoFileFilter())) {
+			list.add(new VideoFile(f.getAbsolutePath()));
+		}
+		this.cache = list;
+		this.listingMethodHasBeenCalled = true;
+		return list;
+	}
+
 	/**
 	 * Returns the null tags of the currently selected MetaManFile
 	 * 
@@ -195,13 +292,6 @@ public class MetaMan {
 			throw new NullPointerException();
 		}
 		return this.selectedFile.lock();
-	}
-	
-	public boolean renameSelectedFileToItsMetaData() throws MetaManException {
-		if (this.selectedFile == null) {
-			throw new NullPointerException();
-		}
-		return this.selectedFile.renameByMetaData();
 	}
 
 	/**
@@ -263,6 +353,13 @@ public class MetaMan {
 												.lastIndexOf('.')).trim());
 	}
 
+	public boolean renameSelectedFileToItsMetaData() throws MetaManException {
+		if (this.selectedFile == null) {
+			throw new NullPointerException();
+		}
+		return this.selectedFile.renameByMetaData();
+	}
+
 	/**
 	 * Sets the selected audio file
 	 * 
@@ -304,92 +401,6 @@ public class MetaMan {
 			throw new NullPointerException();
 		}
 		return this.selectedFile.view();
-	}
-	
-	/**
-	 * Export Current Directory's Data.
-	 * 
-	 * @return All the Meta Data Of the Current Directory
-	 * @throws MetaManException
-	 */
-	public boolean exportAllCurrentDirectorysMetaData() throws MetaManException {
-		//Print a Header
-		String toPrint = "MetaMan Version 1.0 Exportation Document\n";
-		toPrint += "DIRECTORY: " + this.printWorkingDirectory() +"\n";
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		Date date = new Date();
-		toPrint += "TIMESTAMP OF PRINTOUT: " + dateFormat.format(date);
-		toPrint += "\n";
-		toPrint += ("\n");
-		toPrint += ("                            Audio Files                                  \n");
-		toPrint += ("                            -----------                                  \n");
-		
-		//Print all Audio Files
-		int i = 1;
-		for(MetaManFile f: this.listingAudioOnly()){
-		    toPrint += i + ".)\n";
-			try{
-				toPrint += (f.view()+"\n");
-			}catch (ClassCastException e){
-				
-			}
-			i++;
-		}
-		toPrint += ("\n");
-		toPrint += ("                            Image Files                                  \n");
-		toPrint += ("                            -----------                                  \n");
-		
-		//Print all Image Files
-		i = 0;
-		for(MetaManFile f: this.listingImagesOnly()){
-			toPrint += i + ".)\n";
-			try{
-				toPrint += (f.view() + "\n");
-			}catch (ClassCastException e){
-				
-			}
-			i++;
-		}
-		
-		//Print file to PDF
-		try{ 
-		        String text=toPrint;
-		        Document document = new Document(PageSize.A4, 36, 72, 108, 180);
-		        PdfWriter.getInstance(document,new FileOutputStream("temp.pdf"));
-		        document.open();
-		        document.add(new Paragraph(text));
-		        document.close();
-		       
-		        
-		        try
-		    	{
-		    		Runtime.getRuntime().exec( //
-		    		         String.format("cmd /C \"start %1s\"", "temp.pdf"), 
-		    		         null, //
-		    		         null);
-		    	} catch (final Exception e)
-		    	{
-		    		e.printStackTrace();
-		    	}
-		        
-		        
-		        
-		    }catch(Exception e){
-		    	e.printStackTrace();
-		    }
-		
-		return true;
-	}
-	
-	public List<String> getAllArtistsInCurrentDirectory() throws MetaManException{
-		ArrayList<String> toReturn = new ArrayList<String>();
-		for(MetaManFile f: this.listingAudioOnly()){
-			String artist = f.getMetaData("ARTIST");
-			if(!artist.equals("NA")){
-				toReturn.add(artist);
-			}	
-		}
-		return toReturn;
 	}
 
 }

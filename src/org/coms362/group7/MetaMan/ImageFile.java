@@ -121,6 +121,29 @@ public class ImageFile extends MetaManFile {
 		return "N/A";
 	}
 
+	@Override
+	protected boolean renameByMetaData() throws MetaManException {
+		String name = this.getMetaData("NAME");
+		String width = this.getMetaData("WIDTH");
+		String height = this.getMetaData("HEIGHT");
+		String date = this.getMetaData("DATE");
+		if (name.equals("N/A")) {
+			name = "UnknownName";
+		}
+		if (width.equals("N/A")) {
+			width = "0";
+		}
+		if (height.equals("N/A")) {
+			height = "0";
+		}
+		if (date.equals("N/A")) {
+			date = "UnknownDate";
+		}
+		this.rename(this.getParentFile() + "/" + width + "x" + height + "DATE-"
+				+ date + name.substring(name.lastIndexOf('.')));
+		return true;
+	}
+
 	private void setGPS(double longitude, double latitude) throws IOException,
 			ImageReadException, ImageWriteException {
 		OutputStream os = null;
@@ -240,14 +263,14 @@ public class ImageFile extends MetaManFile {
 		final String latitude = this.getMetaData("LAT");
 		final String longitude = this.getMetaData("LONG");
 		final String name = this.getName();
-		//retVal += "*****************************\n";
+		// retVal += "*****************************\n";
 		retVal += "NAME: " + name + "\n";
 		retVal += "WIDTH: " + width + "\n";
 		retVal += "HEIGHT: " + height + "\n";
 		retVal += "DATE: " + date + "\n";
 		retVal += "LATITUDE: " + latitude + "\n";
 		retVal += "LONGITUDE: " + longitude + "\n";
-		//retVal += "*****************************\n";
+		// retVal += "*****************************\n";
 		return retVal;
 	}
 
@@ -285,28 +308,6 @@ public class ImageFile extends MetaManFile {
 			list.add("Logitude");
 		}
 		return list;
-	}
-
-	@Override
-	protected boolean renameByMetaData() throws MetaManException {
-		String name = this.getMetaData("NAME");
-		String width = this.getMetaData("WIDTH");
-		String height = this.getMetaData("HEIGHT");
-		String date = this.getMetaData("DATE");
-		if(name.equals("N/A")){
-			name = "UnknownName";
-		}
-		if(width.equals("N/A")){
-			width = "0";
-		}
-		if(height.equals("N/A")){
-			height = "0";
-		}
-		if(date.equals("N/A")){
-			date = "UnknownDate";
-		}
-		this.rename(this.getParentFile()+ "/"+width+"x"+height + "DATE-"+date+name.substring(name.lastIndexOf('.')));
-		return true;
 	}
 
 }

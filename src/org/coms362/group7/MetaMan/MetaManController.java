@@ -46,6 +46,16 @@ public class MetaManController {
 		return this.metaMan.deleteSelectedFile();
 	}
 
+	public boolean exportAllCurrentDirectorysMetaDataToPDF()
+			throws MetaManException {
+		return this.metaMan.exportAllCurrentDirectorysMetaDataToPDF();
+	}
+
+	public List<String> getAllArtistsInCurrentDirectory()
+			throws MetaManException {
+		return this.metaMan.getAllArtistsInCurrentDirectory();
+	}
+
 	/**
 	 * Bumps the current working directory up one level
 	 * 
@@ -88,6 +98,10 @@ public class MetaManController {
 		return this.metaMan.listingImagesOnly();
 	}
 
+	public List<MetaManFile> listingVideosOnly() throws MetaManException {
+		return this.metaMan.listingVideosOnly();
+	}
+
 	/**
 	 * Returns the null tags of the currently selected MetaManFile
 	 * 
@@ -109,12 +123,6 @@ public class MetaManController {
 		return this.metaMan.lockSelectedFile();
 
 	}
-	
-	public boolean renameSelectedFileToItsMetaData() throws MetaManException {
-		return this.metaMan.renameSelectedFileToItsMetaData();
-
-	}
-	
 
 	/**
 	 * Modifies the metadata tag with the newValue
@@ -129,10 +137,6 @@ public class MetaManController {
 	public boolean modMetaDataOfSelectedFile(String tag, String newValue)
 			throws MetaManException {
 		return this.metaMan.modMetaDataOfSelectedFile(tag, newValue);
-	}
-	
-	public List<String> getAllArtistsInCurrentDirectory() throws MetaManException{
-		return this.metaMan.getAllArtistsInCurrentDirectory();
 	}
 
 	/**
@@ -160,6 +164,11 @@ public class MetaManController {
 	 */
 	public boolean renameSelectedFile(String newName) {
 		return this.metaMan.renameSelectedFile(newName);
+	}
+
+	public boolean renameSelectedFileToItsMetaData() throws MetaManException {
+		return this.metaMan.renameSelectedFileToItsMetaData();
+
 	}
 
 	/**
@@ -192,9 +201,5 @@ public class MetaManController {
 	 */
 	public String viewMetaDataOfSelectedFile() throws MetaManException {
 		return this.metaMan.viewMetaDataOfSelectedFile();
-	}
-	
-	public boolean exportAllCurrentDirectorysMetaData() throws MetaManException {
-		return this.metaMan.exportAllCurrentDirectorysMetaData();
 	}
 }
